@@ -80,7 +80,11 @@ class ProductsController extends Controller
 
     public function edit(Product $product): Response
     {
-        $product->load(['features' => fn ($q) => $q->orderBy('sort_order'), 'pricingTiers']);
+        $product->load([
+            'features' => fn ($q) => $q->orderBy('sort_order'),
+            'pricingTiers',
+            'screenshots' => fn ($q) => $q->orderBy('sort_order'),
+        ]);
 
         return Inertia::render('Admin/Products/Edit', compact('product'));
     }
@@ -153,5 +157,36 @@ class ProductsController extends Controller
         $product->update(['status' => $product->status === 'active' ? 'inactive' : 'active']);
 
         return back()->with('success', 'Product status toggled.');
+    }
+
+    public function storeScreenshot(Request $request, Product $product): \Illuminate\Http\JsonResponse
+    {
+        $validated = $request->validate([
+            'image_path'  => ['required', 'string', 'max:1000'],
+            'caption'     => ['nullable', 'string', 'max:255'],
+            'sort_order'  => ['integer', 'min:0'],
+        ]);
+
+        $screenshot = $product->screenshots()->create([
+            'image_path' => $validated['image_path'],
+            'caption'    => $validated['caption'] ?? null,
+            'sort_order' => $validated['sort_order'] ?? $product->screenshots()->count(),
+        ]);
+
+        return response()->json(['screenshot' => $screenshot], 201);
+    }
+
+    public function destroyScreenshot(Product $product, \App\Models\ProductScreenshot $screenshot): \Illuminate\Http\JsonResponse
+    {
+        abort_unless($screenshot->product_id === $product->id, 403);
+        $screenshot->delete();
+        return response()->json(['ok' => true]);
+    }
+
+    public function uploadScreenshot(Request $request, Product $product): \Illuminate\Http\JsonResponse
+    {
+        $request->validate(['file' => ['required', 'image', 'max:5120']]);
+        $path = $request->file('file')->store('products/' . $product->id, 'public');
+        return response()->json(['url' => asset('storage/' . $path)]);
     }
 }

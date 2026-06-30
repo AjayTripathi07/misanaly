@@ -1,5 +1,6 @@
-import { Head, Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import PublicLayout from '@/Layouts/PublicLayout';
+import SeoHead from '@/Components/SeoHead';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
 import { Card, CardContent } from '@/Components/ui/card';
@@ -30,7 +31,11 @@ interface Props {
 export default function Index({ services }: Props) {
     return (
         <PublicLayout>
-            <Head title="Our Services" />
+            <SeoHead
+                title="Our IT Services"
+                description="Explore our IT services: web development, mobile apps, custom software, AI/ML solutions, and more. Serving businesses across India."
+                keywords="IT services India, web development, mobile app development, custom software, AI solutions"
+            />
 
             {/* Hero Section */}
             <section className="relative overflow-hidden bg-gradient-to-br from-[#E8F4FD] via-white to-[#F0F7FF] pt-20 pb-24">

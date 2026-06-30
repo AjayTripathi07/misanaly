@@ -16,7 +16,6 @@ const navLinks = [
     { label: 'Home', href: '/' },
     { label: 'Services', href: '/services' },
     { label: 'Products', href: '/products' },
-    { label: 'Portfolio', href: '/portfolio' },
     { label: 'About', href: '/about' },
     { label: 'Blog', href: '/blog' },
 ];
@@ -33,9 +32,16 @@ const serviceLinks = [
 export default function PublicLayout({ children }: PublicLayoutProps) {
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
+    const [scrollProgress, setScrollProgress] = useState(0);
 
     useEffect(() => {
-        const onScroll = () => setScrolled(window.scrollY > 10);
+        const onScroll = () => {
+            setScrolled(window.scrollY > 10);
+            const doc = document.documentElement;
+            const scrollTop = window.scrollY;
+            const docHeight = doc.scrollHeight - doc.clientHeight;
+            setScrollProgress(docHeight > 0 ? scrollTop / docHeight : 0);
+        };
         window.addEventListener('scroll', onScroll, { passive: true });
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
@@ -51,6 +57,11 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                         : 'bg-white/90 backdrop-blur-sm',
                 )}
             >
+                {/* Scroll progress bar */}
+                <div
+                    className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-[#2563EB] via-[#10B981] to-[#F59E0B] transition-all duration-75 z-50"
+                    style={{ width: `${scrollProgress * 100}%` }}
+                />
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-16">
                         {/* Logo */}

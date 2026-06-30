@@ -1,5 +1,6 @@
-import { Head, useForm } from '@inertiajs/react';
+import { useForm } from '@inertiajs/react';
 import PublicLayout from '@/Layouts/PublicLayout';
+import SeoHead from '@/Components/SeoHead';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
 import { Input } from '@/Components/ui/input';
@@ -13,6 +14,7 @@ import {
     SelectValue,
 } from '@/Components/ui/select';
 import { Send, CheckCircle2 } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface Props {
     products: { id: number; name: string }[];
@@ -40,7 +42,10 @@ export default function RequestDemo({ products }: Props) {
 
     return (
         <PublicLayout>
-            <Head title="Request a Demo" />
+            <SeoHead
+                title="Request a Demo"
+                description="See our software products in action — request a free demo of Bank2Books and our other tools today."
+            />
 
             {/* Hero */}
             <section className="bg-gradient-to-br from-[#E8F4FD] via-white to-[#F0F7FF] py-16 text-center">
@@ -105,12 +110,17 @@ export default function RequestDemo({ products }: Props) {
                         <h2 className="text-2xl font-bold text-[#0F172A] mb-6">Schedule Your Demo</h2>
 
                         {recentlySuccessful && (
-                            <div className="p-4 bg-green-50 border border-green-200 rounded-xl flex items-center gap-3 mb-6">
-                                <CheckCircle2 className="h-5 w-5 text-green-600 flex-shrink-0" />
-                                <p className="text-green-700 text-sm font-medium">
-                                    Thank you! We'll get back to you within 24 hours.
-                                </p>
-                            </div>
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className="flex flex-col items-center gap-3 py-6 text-center mb-6"
+                            >
+                                <div className="animate-success-pop">
+                                    <CheckCircle2 className="h-16 w-16 text-[#10B981]" />
+                                </div>
+                                <h3 className="text-xl font-bold text-[#0F172A]">Message sent!</h3>
+                                <p className="text-[#0F172A]/60 text-sm">We'll get back to you within 24 hours.</p>
+                            </motion.div>
                         )}
 
                         <form onSubmit={handleSubmit} className="grid gap-4">

@@ -10,12 +10,15 @@ class ProductsSeeder extends Seeder
 {
     public function run(): void
     {
+        // Clean up old slug if it exists
+        Product::where('slug', 'tally-automation')->update(['slug' => 'bank2books']);
+
         $product = Product::updateOrCreate(
-            ['slug' => 'tally-automation'],
+            ['slug' => 'bank2books'],
             [
-                'name'          => 'Tally Automation',
-                'tagline'       => 'Automate Tally ERP data entry for CA firms',
-                'description'   => "Tally Automation is MSI Analytics' flagship desktop application built specifically for Chartered Accountant firms and accounting professionals. It eliminates the manual, error-prone process of entering data into Tally ERP by automating the entire workflow.\n\nThe software reads data from PDFs, Excel sheets, and JSON exports, intelligently categorises transactions using 160+ auto-tagging rules, and pushes the entries directly into Tally—saving hours of repetitive work every day.\n\nWith multi-company support, batch processing, and a clean audit trail, Tally Automation is the productivity tool every CA firm needs.",
+                'name'          => 'Bank2Books',
+                'tagline'       => 'Convert Bank Statements into Tally Entries in Seconds',
+                'description'   => "Bank2Books is MSI Analytics' flagship desktop application that converts bank statements from all major Indian banks — SBI, HDFC, Punjab National Bank, ICICI, Axis, Kotak, and more — directly into Tally-ready accounting entries.\n\nUpload your bank statement in PDF, Excel, or CSV format. Bank2Books AI engine reads the transactions, intelligently categorises them using 160+ auto-tagging rules, and generates the correct journal entries in seconds. No cloud. No data upload. Everything runs fully offline on your machine.\n\nBuilt for Chartered Accountant firms and accounting professionals who are tired of spending hours manually entering bank data into Tally ERP. Bank2Books eliminates the drudgery so you can focus on higher-value work.\n\nSupports multi-company Tally setups, batch processing of multiple statements, and exports a clean audit trail before pushing entries to Tally — giving you full control with zero errors.",
                 'status'        => 'active',
                 'pricing_model' => 'one-time',
                 'demo_url'      => null,
@@ -25,26 +28,26 @@ class ProductsSeeder extends Seeder
 
         $features = [
             [
-                'title'       => '160+ Auto-Tagging Rules',
-                'description' => 'Intelligent rule engine that automatically categorises transactions into the correct ledger heads—covering salary, GST, TDS, expenses, and more.',
-                'icon'        => 'Tags',
+                'title'       => 'All Major Indian Banks Supported',
+                'description' => 'Import bank statements from SBI, HDFC, Punjab National Bank, ICICI, Axis, Kotak, Bank of Baroda, and 20+ other Indian banks. PDF, Excel, and CSV formats all accepted.',
+                'icon'        => 'Building2',
                 'sort_order'  => 1,
             ],
             [
-                'title'       => 'Multi-Company Support',
-                'description' => 'Manage data entry for unlimited Tally companies from a single interface. Switch contexts instantly without re-entering credentials.',
-                'icon'        => 'Building2',
+                'title'       => '160+ AI Auto-Tagging Rules',
+                'description' => 'Intelligent rule engine automatically categorises every transaction into the correct Tally ledger — salary, GST, TDS, vendor payments, bank charges, and more.',
+                'icon'        => 'Brain',
                 'sort_order'  => 2,
             ],
             [
-                'title'       => 'PDF & JSON Import',
-                'description' => 'Import bank statements, invoices, and payroll data from PDF and JSON formats. The parser handles multiple bank formats out of the box.',
-                'icon'        => 'FileJson',
+                'title'       => '100% Offline — Your Data Stays Local',
+                'description' => 'Bank2Books runs entirely on your machine. No cloud upload, no internet dependency after installation. Your clients\' financial data never leaves your computer.',
+                'icon'        => 'Shield',
                 'sort_order'  => 3,
             ],
             [
-                'title'       => 'Audit Trail & Export',
-                'description' => 'Every automated entry is logged with a full audit trail. Export processed data to Excel or PDF for review before pushing to Tally.',
+                'title'       => 'Audit Trail & One-Click Tally Export',
+                'description' => 'Every auto-matched entry is logged with a full audit trail. Review and edit before exporting directly to Tally XML — clean, accurate, and compliant.',
                 'icon'        => 'ClipboardCheck',
                 'sort_order'  => 4,
             ],
@@ -57,6 +60,11 @@ class ProductsSeeder extends Seeder
             );
         }
 
+        // Remove old feature titles that no longer apply
+        ProductFeature::where('product_id', $product->id)
+            ->whereNotIn('title', array_column($features, 'title'))
+            ->delete();
+
         $tiers = [
             [
                 'name'          => 'Basic',
@@ -64,8 +72,9 @@ class ProductsSeeder extends Seeder
                 'features_json' => [
                     'Single company',
                     'Up to 500 entries/month',
+                    'SBI, HDFC, PNB support',
+                    'PDF & Excel import',
                     '50 auto-tagging rules',
-                    'PDF import',
                     'Email support',
                 ],
                 'is_popular'    => false,
@@ -76,8 +85,9 @@ class ProductsSeeder extends Seeder
                 'features_json' => [
                     'Up to 5 companies',
                     'Unlimited entries',
+                    'All 25+ Indian banks',
+                    'PDF, Excel & CSV import',
                     '160+ auto-tagging rules',
-                    'PDF & JSON import',
                     'Batch processing',
                     'Priority support',
                     'Free updates for 1 year',
@@ -90,8 +100,8 @@ class ProductsSeeder extends Seeder
                 'features_json' => [
                     'Unlimited companies',
                     'Unlimited entries',
+                    'All banks + custom formats',
                     'Custom tagging rules',
-                    'All import formats',
                     'API access',
                     'On-site training',
                     'Dedicated account manager',

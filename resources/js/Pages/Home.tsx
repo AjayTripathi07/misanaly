@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Head, Link } from '@inertiajs/react';
+import SeoHead from '@/Components/SeoHead';
 import {
     Globe, Smartphone, Code2, Brain, Network, Palette,
     Cloud, Wrench, HeadphonesIcon, Building2, Star,
@@ -139,9 +140,35 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
     const ctaRef = useRef(null);
     const ctaInView = useInView(ctaRef, { once: true, margin: '-100px' });
 
+    const SERVICE_COLORS = [
+        { bg: 'bg-blue-500/10', icon: 'text-[#2563EB]', border: 'border-blue-500/20' },
+        { bg: 'bg-emerald-500/10', icon: 'text-[#10B981]', border: 'border-emerald-500/20' },
+        { bg: 'bg-violet-500/10', icon: 'text-[#6366F1]', border: 'border-violet-500/20' },
+        { bg: 'bg-amber-500/10', icon: 'text-[#F59E0B]', border: 'border-amber-500/20' },
+    ];
+
     return (
         <PublicLayout>
-            <Head title="MSI Analytics — IT Services & Software Products" />
+            <SeoHead
+                title="IT Services & Software Products for Modern Businesses"
+                description="Custom software development, web & mobile apps, and AI-powered tools. MSI Analytics — trusted by businesses across India."
+                keywords="IT services India, custom software development, web development, mobile app development, Tally automation, CA firm software"
+            />
+            <Head>
+                <script type="application/ld+json">{JSON.stringify({
+                    '@context': 'https://schema.org',
+                    '@type': 'Organization',
+                    name: 'MSI Analytics',
+                    url: 'https://misanaly.in',
+                    description: 'IT Services and Software Products company based in India',
+                    contactPoint: {
+                        '@type': 'ContactPoint',
+                        email: 'info@misanaly.in',
+                        contactType: 'customer service',
+                    },
+                    sameAs: [],
+                })}</script>
+            </Head>
 
             {/* ═══════════════════════════════════════════════
                 SECTION 1 — HERO
@@ -152,6 +179,34 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                 <div className="absolute top-20 left-10 w-72 h-72 bg-blue-600/20 rounded-full blur-3xl animate-float pointer-events-none" />
                 <div className="absolute bottom-32 right-16 w-96 h-96 bg-indigo-500/15 rounded-full blur-3xl animate-float-delay pointer-events-none" />
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-800/10 rounded-full blur-[100px] animate-float-slow pointer-events-none" />
+
+                {/* Floating particles */}
+                {!prefersReduced && (
+                    <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+                        {[
+                            { top: '15%', left: '8%', size: 4, dur: '7s', delay: '0s', color: '#3B82F6' },
+                            { top: '70%', left: '5%', size: 3, dur: '9s', delay: '1s', color: '#10B981' },
+                            { top: '30%', left: '90%', size: 5, dur: '11s', delay: '2s', color: '#6366F1' },
+                            { top: '80%', left: '85%', size: 3, dur: '8s', delay: '0.5s', color: '#F59E0B' },
+                            { top: '50%', left: '95%', size: 2, dur: '13s', delay: '3s', color: '#3B82F6' },
+                            { top: '10%', left: '50%', size: 3, dur: '10s', delay: '1.5s', color: '#10B981' },
+                            { top: '90%', left: '45%', size: 4, dur: '6s', delay: '2.5s', color: '#6366F1' },
+                            { top: '40%', left: '2%', size: 2, dur: '12s', delay: '4s', color: '#F59E0B' },
+                        ].map((p, i) => (
+                            <div
+                                key={i}
+                                className="absolute rounded-full animate-particle opacity-50"
+                                style={{
+                                    top: p.top, left: p.left,
+                                    width: p.size, height: p.size,
+                                    backgroundColor: p.color,
+                                    '--duration': p.dur,
+                                    '--delay': p.delay,
+                                } as React.CSSProperties}
+                            />
+                        ))}
+                    </div>
+                )}
 
                 <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -245,8 +300,8 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                                         <div className="w-3 h-3 rounded-full bg-red-500" />
                                         <div className="w-3 h-3 rounded-full bg-yellow-500" />
                                         <div className="w-3 h-3 rounded-full bg-green-500" />
-                                        <span className="ml-3 text-xs text-gray-400 font-mono">Tally Automation v1.3</span>
-                                        <span className="ml-auto flex items-center gap-1.5 text-xs text-green-400">
+                                        <span className="ml-3 text-xs text-gray-400 font-mono">Bank2Books v1.3</span>
+                                        <span className="ml-auto flex items-center gap-1.5 text-xs text-[#10B981]">
                                             <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
                                             Processing...
                                         </span>
@@ -266,7 +321,7 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                                                         <p className="text-xs font-medium text-gray-300 font-mono truncate">{row.company}</p>
                                                         <p className="text-xs text-gray-500 font-mono">{row.entries} entries</p>
                                                     </div>
-                                                    <span className="ml-3 text-xs bg-green-500/20 text-green-400 border border-green-500/30 rounded-full px-2 py-0.5 font-mono flex-shrink-0">
+                                                    <span className="ml-3 text-xs bg-green-500/20 text-[#10B981] border border-green-500/30 rounded-full px-2 py-0.5 font-mono flex-shrink-0">
                                                         ✓ {row.status}
                                                     </span>
                                                 </motion.div>
@@ -357,19 +412,21 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                         initial="hidden"
                         animate={servicesInView ? 'visible' : 'hidden'}
                     >
-                        {services.map(service => (
+                        {services.map((service, i) => {
+                            const svcColor = SERVICE_COLORS[i % SERVICE_COLORS.length];
+                            return (
                             <motion.div key={service.id} variants={fadeUp}>
                                 <Link href={`/services/${service.slug}`}>
                                     <motion.div
-                                        className="group h-full border border-gray-100 rounded-2xl bg-white p-6 cursor-pointer flex flex-col"
+                                        className="card-gradient-border group h-full border border-gray-100 rounded-2xl bg-white p-6 cursor-pointer flex flex-col"
                                         whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(37,99,235,0.15)' }}
                                         transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                                     >
                                         <motion.div
-                                            className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mb-4"
-                                            whileHover={{ scale: 1.1, backgroundColor: '#2563EB' }}
+                                            className={`icon-bounce w-12 h-12 rounded-xl ${svcColor.bg} flex items-center justify-center mb-4`}
+                                            whileHover={{ scale: 1.1 }}
                                         >
-                                            <ServiceIcon name={service.icon} className="h-6 w-6 text-[#2563EB] group-hover:text-white transition-colors" />
+                                            <ServiceIcon name={service.icon} className={`h-6 w-6 ${svcColor.icon}`} />
                                         </motion.div>
                                         <h3 className="font-semibold text-[#0F172A] text-base mb-2">{service.name}</h3>
                                         <p className="text-[#0F172A]/55 text-sm flex-1">{service.tagline}</p>
@@ -382,7 +439,8 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                                     </motion.div>
                                 </Link>
                             </motion.div>
-                        ))}
+                            );
+                        })}
                     </motion.div>
 
                     {/* View all */}
@@ -400,6 +458,20 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                     </motion.div>
                 </div>
             </section>
+
+            {/* ═══════════════════════════════════════════════
+                MARQUEE STRIP — TECH & SERVICES
+            ═══════════════════════════════════════════════ */}
+            <div className="bg-[#0F172A] py-4 overflow-hidden border-y border-white/5">
+                <div className="flex animate-scroll-left" style={{ width: 'max-content' }}>
+                    {[...['Laravel', 'React', 'AI / ML', 'Bank2Books', 'Tally Integration', 'MSI Analytics', 'Mobile Apps', 'Cloud Solutions', 'Custom Software', 'REST APIs', 'UI / UX Design'], ...['Laravel', 'React', 'AI / ML', 'Bank2Books', 'Tally Integration', 'MSI Analytics', 'Mobile Apps', 'Cloud Solutions', 'Custom Software', 'REST APIs', 'UI / UX Design']].map((item, i) => (
+                        <span key={i} className="flex items-center gap-3 mx-6 text-sm font-medium text-white/50 whitespace-nowrap">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB] flex-shrink-0" />
+                            {item}
+                        </span>
+                    ))}
+                </div>
+            </div>
 
             {/* ═══════════════════════════════════════════════
                 SECTION 3 — FEATURED PRODUCT
@@ -445,7 +517,7 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                                         variants={fadeUp}
                                         className="flex items-start gap-3"
                                     >
-                                        <CheckCircle2 className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
+                                        <CheckCircle2 className="h-5 w-5 text-[#10B981] mt-0.5 flex-shrink-0" />
                                         <div>
                                             <span className="font-semibold text-white">{f.title}</span>
                                             <span className="text-gray-400 text-sm"> — {f.description}</span>
@@ -512,8 +584,8 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                                         <div className="w-3 h-3 rounded-full bg-red-500" />
                                         <div className="w-3 h-3 rounded-full bg-yellow-500" />
                                         <div className="w-3 h-3 rounded-full bg-green-500" />
-                                        <span className="ml-3 text-xs text-gray-400 font-mono">Tally Automation v1.3</span>
-                                        <span className="ml-auto flex items-center gap-1.5 text-xs text-green-400">
+                                        <span className="ml-3 text-xs text-gray-400 font-mono">Bank2Books v1.3</span>
+                                        <span className="ml-auto flex items-center gap-1.5 text-xs text-[#10B981]">
                                             <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
                                             Processing...
                                         </span>
@@ -533,7 +605,7 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                                                         <p className="text-xs font-medium text-gray-300 font-mono truncate">{row.company}</p>
                                                         <p className="text-xs text-gray-500 font-mono">{row.entries} entries</p>
                                                     </div>
-                                                    <span className="ml-3 text-xs bg-green-500/20 text-green-400 border border-green-500/30 rounded-full px-2 py-0.5 font-mono flex-shrink-0">
+                                                    <span className="ml-3 text-xs bg-green-500/20 text-[#10B981] border border-green-500/30 rounded-full px-2 py-0.5 font-mono flex-shrink-0">
                                                         ✓ {row.status}
                                                     </span>
                                                 </motion.div>

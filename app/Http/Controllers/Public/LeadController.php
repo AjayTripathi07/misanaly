@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
+use App\Mail\LeadConfirmation;
+use App\Mail\NewLeadNotification;
 use App\Models\Lead;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class LeadController extends Controller
 {
@@ -25,7 +29,28 @@ class LeadController extends Controller
             'source'       => ['nullable', 'string', 'max:100'],
         ]);
 
-        Lead::create($validated);
+        $lead = Lead::create($validated);
+
+        // Notify admin
+        try {
+            $adminEmail = env('ADMIN_NOTIFICATION_EMAIL', 'admin@misanaly.in');
+            Mail::to($adminEmail)->send(new NewLeadNotification($lead));
+        } catch (\Throwable $e) {
+            Log::error('Failed to send admin lead notification', [
+                'lead_id' => $lead->id,
+                'error'   => $e->getMessage(),
+            ]);
+        }
+
+        // Confirm receipt to the lead
+        try {
+            Mail::to($lead->email, $lead->name)->send(new LeadConfirmation($lead));
+        } catch (\Throwable $e) {
+            Log::error('Failed to send lead confirmation email', [
+                'lead_id' => $lead->id,
+                'error'   => $e->getMessage(),
+            ]);
+        }
 
         return back()->with('success', "Thank you! We'll get back to you within 24 hours.");
     }

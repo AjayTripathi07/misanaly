@@ -1,5 +1,6 @@
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
 import PublicLayout from '@/Layouts/PublicLayout';
+import SeoHead from '@/Components/SeoHead';
 import { Button } from '@/Components/ui/button';
 import { Card, CardContent } from '@/Components/ui/card';
 import { Badge } from '@/Components/ui/badge';
@@ -7,6 +8,7 @@ import { Input } from '@/Components/ui/input';
 import { Label } from '@/Components/ui/label';
 import { Textarea } from '@/Components/ui/textarea';
 import { Mail, Phone, MapPin, Send, CheckCircle2 } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function Contact() {
     const { data, setData, post, processing, errors, reset, recentlySuccessful } = useForm({
@@ -30,7 +32,10 @@ export default function Contact() {
 
     return (
         <PublicLayout>
-            <Head title="Contact Us" />
+            <SeoHead
+                title="Contact Us"
+                description="Get in touch with MSI Analytics for your IT service needs or product inquiries. We respond within 24 hours."
+            />
 
             {/* Hero */}
             <section className="bg-gradient-to-br from-[#E8F4FD] via-white to-[#F0F7FF] py-16 text-center">
@@ -104,12 +109,17 @@ export default function Contact() {
                         <h2 className="text-2xl font-bold text-[#0F172A] mb-6">Send Us a Message</h2>
 
                         {recentlySuccessful && (
-                            <div className="p-4 bg-green-50 border border-green-200 rounded-xl flex items-center gap-3 mb-6">
-                                <CheckCircle2 className="h-5 w-5 text-green-600 flex-shrink-0" />
-                                <p className="text-green-700 text-sm font-medium">
-                                    Thank you! We'll get back to you within 24 hours.
-                                </p>
-                            </div>
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className="flex flex-col items-center gap-3 py-6 text-center mb-6"
+                            >
+                                <div className="animate-success-pop">
+                                    <CheckCircle2 className="h-16 w-16 text-[#10B981]" />
+                                </div>
+                                <h3 className="text-xl font-bold text-[#0F172A]">Message sent!</h3>
+                                <p className="text-[#0F172A]/60 text-sm">We'll get back to you within 24 hours.</p>
+                            </motion.div>
                         )}
 
                         <form onSubmit={handleSubmit} className="grid gap-4">

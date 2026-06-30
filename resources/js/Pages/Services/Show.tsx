@@ -1,5 +1,6 @@
-import { Head, Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import PublicLayout from '@/Layouts/PublicLayout';
+import SeoHead from '@/Components/SeoHead';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
 import { Card, CardContent } from '@/Components/ui/card';
@@ -48,7 +49,10 @@ interface Props {
 export default function Show({ service, relatedServices }: Props) {
     return (
         <PublicLayout>
-            <Head title={service.name} />
+            <SeoHead
+                title={service.name}
+                description={service.tagline}
+            />
 
             {/* Hero Section */}
             <section className="relative overflow-hidden bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#0F172A] text-white py-24">

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Button } from '@/Components/ui/button';
@@ -21,6 +22,13 @@ interface PricingTierRow {
     is_popular: boolean;
 }
 
+interface ScreenshotRow {
+    id: number;
+    image_path: string;
+    caption: string;
+    sort_order: number;
+}
+
 interface ProductData {
     id: number;
     name: string;
@@ -33,6 +41,7 @@ interface ProductData {
     sort_order: number;
     features: { title: string; description: string; icon: string | null }[];
     pricing_tiers: { name: string; price: string | null; features_json: string[]; is_popular: boolean }[];
+    screenshots: { id: number; image_path: string; caption: string | null; sort_order: number }[];
 }
 
 interface Props {
@@ -97,6 +106,60 @@ export default function Edit({ product }: Props) {
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         put(route('admin.products.update', product.id));
+    }
+
+    // Screenshots state (managed separately from the main form, via fetch)
+    const [screenshots, setScreenshots] = useState<ScreenshotRow[]>(
+        product.screenshots.map(s => ({ id: s.id, image_path: s.image_path, caption: s.caption ?? '', sort_order: s.sort_order }))
+    );
+    const [newScreenshot, setNewScreenshot] = useState({ image_path: '', caption: '', sort_order: 0 });
+    const [uploading, setUploading] = useState(false);
+    const [screenshotError, setScreenshotError] = useState('');
+
+    function getCsrfToken(): string {
+        return (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content ?? '';
+    }
+
+    async function handleAddScreenshot() {
+        if (!newScreenshot.image_path.trim()) { setScreenshotError('Image URL is required'); return; }
+        setScreenshotError('');
+        const res = await fetch(`/admin/products/${product.id}/screenshots`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': getCsrfToken(), 'Accept': 'application/json' },
+            body: JSON.stringify({ ...newScreenshot, sort_order: screenshots.length }),
+        });
+        if (res.ok) {
+            const { screenshot } = await res.json();
+            setScreenshots([...screenshots, { ...screenshot, caption: screenshot.caption ?? '' }]);
+            setNewScreenshot({ image_path: '', caption: '', sort_order: 0 });
+        }
+    }
+
+    async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setUploading(true);
+        const form = new FormData();
+        form.append('file', file);
+        const res = await fetch(`/admin/products/${product.id}/screenshots/upload`, {
+            method: 'POST',
+            headers: { 'X-CSRF-TOKEN': getCsrfToken(), 'Accept': 'application/json' },
+            body: form,
+        });
+        if (res.ok) {
+            const { url } = await res.json();
+            setNewScreenshot(prev => ({ ...prev, image_path: url }));
+        }
+        setUploading(false);
+    }
+
+    async function handleRemoveScreenshot(id: number) {
+        if (!confirm('Remove this screenshot?')) return;
+        const res = await fetch(`/admin/products/${product.id}/screenshots/${id}`, {
+            method: 'DELETE',
+            headers: { 'X-CSRF-TOKEN': getCsrfToken(), 'Accept': 'application/json' },
+        });
+        if (res.ok) setScreenshots(screenshots.filter(s => s.id !== id));
     }
 
     return (
@@ -333,6 +396,98 @@ export default function Edit({ product }: Props) {
                                     ))}
                                 </>
                             )}
+                        </div>
+
+                        {/* Screenshots Card */}
+                        <div className="bg-white border rounded-xl p-6">
+                            <h2 className="font-semibold text-[#0F172A] mb-5">Screenshots</h2>
+
+                            {/* Current screenshots */}
+                            {screenshots.length > 0 && (
+                                <div className="space-y-3 mb-6">
+                                    {screenshots.map((s) => (
+                                        <div key={s.id} className="flex items-center gap-3 p-3 border border-gray-100 rounded-lg bg-gray-50">
+                                            <img
+                                                src={s.image_path}
+                                                alt={s.caption || 'Screenshot'}
+                                                className="w-20 h-14 object-cover rounded border border-gray-200 flex-shrink-0"
+                                                onError={(e) => { (e.target as HTMLImageElement).src = 'https://placehold.co/80x56?text=?'; }}
+                                            />
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-sm text-[#0F172A] truncate">{s.caption || <span className="text-gray-400 italic">No caption</span>}</p>
+                                                <p className="text-xs text-gray-400 truncate mt-0.5">{s.image_path}</p>
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={() => handleRemoveScreenshot(s.id)}
+                                                className="text-red-400 hover:text-red-600 transition-colors flex-shrink-0"
+                                                title="Remove screenshot"
+                                            >
+                                                <X className="h-4 w-4" />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+
+                            {screenshots.length === 0 && (
+                                <p className="text-sm text-gray-400 mb-4">No screenshots yet.</p>
+                            )}
+
+                            {/* Add new screenshot */}
+                            <div className="border border-dashed border-gray-200 rounded-lg p-4 space-y-3">
+                                <p className="text-sm font-medium text-[#0F172A]">Add Screenshot</p>
+
+                                {/* File upload */}
+                                <div>
+                                    <Label className="text-xs text-gray-500">Upload image file</Label>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleFileUpload}
+                                        disabled={uploading}
+                                        className="mt-1 block w-full text-sm text-gray-500 file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:text-xs file:font-medium file:bg-blue-50 file:text-[#2563EB] hover:file:bg-blue-100 cursor-pointer"
+                                    />
+                                    {uploading && <p className="text-xs text-blue-500 mt-1">Uploading…</p>}
+                                </div>
+
+                                {/* OR external URL */}
+                                <div>
+                                    <Label htmlFor="ss_url" className="text-xs text-gray-500">Or paste image URL</Label>
+                                    <Input
+                                        id="ss_url"
+                                        value={newScreenshot.image_path}
+                                        onChange={e => setNewScreenshot(p => ({ ...p, image_path: e.target.value }))}
+                                        placeholder="https://example.com/screenshot.png"
+                                        className="mt-1 text-sm"
+                                    />
+                                </div>
+
+                                {/* Caption */}
+                                <div>
+                                    <Label htmlFor="ss_caption" className="text-xs text-gray-500">Caption (optional)</Label>
+                                    <Input
+                                        id="ss_caption"
+                                        value={newScreenshot.caption}
+                                        onChange={e => setNewScreenshot(p => ({ ...p, caption: e.target.value }))}
+                                        placeholder="Dashboard overview"
+                                        className="mt-1 text-sm"
+                                    />
+                                </div>
+
+                                {screenshotError && <p className="text-xs text-red-500">{screenshotError}</p>}
+
+                                <Button
+                                    type="button"
+                                    onClick={handleAddScreenshot}
+                                    size="sm"
+                                    variant="outline"
+                                    className="border-[#2563EB] text-[#2563EB] hover:bg-blue-50"
+                                >
+                                    <Plus className="h-3.5 w-3.5 mr-1.5" />
+                                    Add Screenshot
+                                </Button>
+                            </div>
                         </div>
                     </div>
 

@@ -2,12 +2,15 @@
 
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\Public\AboutController;
+use App\Http\Controllers\Public\BlogController;
 use App\Http\Controllers\Public\ContactController;
 use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Public\LeadController;
 use App\Http\Controllers\Public\ProductsController;
 use App\Http\Controllers\Public\ServicesController;
+use App\Http\Controllers\Public\WaitlistController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -23,9 +26,18 @@ Route::get('/get-quote', [ContactController::class, 'quote'])->name('get-quote')
 Route::get('/request-demo', [ContactController::class, 'demo'])->name('request-demo');
 Route::post('/leads', [LeadController::class, 'store'])->name('leads.store');
 
+// Blog (public)
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
+
+// Waitlist
+Route::post('/waitlist', [WaitlistController::class, 'store'])->name('waitlist.store');
+
+// Sitemap
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+
 // Placeholder pages
 Route::get('/portfolio', fn () => Inertia::render('Placeholder', ['page' => 'Portfolio']))->name('portfolio');
-Route::get('/blog', fn () => Inertia::render('Placeholder', ['page' => 'Blog']))->name('blog');
 Route::get('/privacy', fn () => Inertia::render('Placeholder', ['page' => 'Privacy Policy']))->name('privacy');
 Route::get('/terms', fn () => Inertia::render('Placeholder', ['page' => 'Terms of Service']))->name('terms');
 
@@ -69,6 +81,30 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::put('/products/{product}', [Admin\ProductsController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [Admin\ProductsController::class, 'destroy'])->name('products.destroy');
     Route::patch('/products/{product}/toggle-status', [Admin\ProductsController::class, 'toggleStatus'])->name('products.toggle-status');
+
+    // Product Screenshots
+    Route::post('/products/{product}/screenshots', [Admin\ProductsController::class, 'storeScreenshot'])->name('products.screenshots.store');
+    Route::delete('/products/{product}/screenshots/{screenshot}', [Admin\ProductsController::class, 'destroyScreenshot'])->name('products.screenshots.destroy');
+    Route::post('/products/{product}/screenshots/upload', [Admin\ProductsController::class, 'uploadScreenshot'])->name('products.screenshots.upload');
+
+    // Blog CRUD
+    Route::get('/blog', [Admin\BlogController::class, 'index'])->name('blog.index');
+    Route::get('/blog/create', [Admin\BlogController::class, 'create'])->name('blog.create');
+    Route::post('/blog', [Admin\BlogController::class, 'store'])->name('blog.store');
+    Route::get('/blog/{post}/edit', [Admin\BlogController::class, 'edit'])->name('blog.edit');
+    Route::put('/blog/{post}', [Admin\BlogController::class, 'update'])->name('blog.update');
+    Route::delete('/blog/{post}', [Admin\BlogController::class, 'destroy'])->name('blog.destroy');
+    Route::patch('/blog/{post}/toggle-publish', [Admin\BlogController::class, 'togglePublish'])->name('blog.toggle-publish');
+
+    // Blog Categories (JSON endpoints for inline add)
+    Route::get('/blog-categories', [Admin\BlogCategoryController::class, 'index'])->name('blog-categories.index');
+    Route::post('/blog-categories', [Admin\BlogCategoryController::class, 'store'])->name('blog-categories.store');
+
+    // Waitlist
+    Route::get('/waitlist', [Admin\WaitlistController::class, 'index'])->name('waitlist.index');
+    Route::get('/waitlist/export', [Admin\WaitlistController::class, 'export'])->name('waitlist.export');
+    Route::patch('/waitlist/{waitlist}/status', [Admin\WaitlistController::class, 'updateStatus'])->name('waitlist.update-status');
+
 });
 
 require __DIR__.'/auth.php';

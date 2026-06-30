@@ -4,7 +4,7 @@ import {
     LayoutDashboard, Briefcase, Package, Users, MessageSquare,
     Settings, LogOut, ChevronRight, Bell, Menu, X,
     FileText, Image, HelpCircle, Star, UserCircle, ChevronDown,
-    Layers, FolderOpen,
+    Layers, FolderOpen, ClipboardList,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/Components/ui/button';
@@ -28,38 +28,49 @@ interface NavSection {
     items: NavItem[];
 }
 
-const navSections: NavSection[] = [
-    {
-        title: 'OVERVIEW',
-        items: [
-            { label: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
-        ],
-    },
-    {
-        title: 'CONTENT',
-        items: [
-            { label: 'Services', href: '/admin/services', icon: Briefcase },
-            { label: 'Products', href: '/admin/products', icon: Package },
-            { label: 'Portfolio', href: '/admin/portfolio', icon: FolderOpen },
-            { label: 'Blog', href: '/admin/blog', icon: FileText },
-        ],
-    },
-    {
-        title: 'LEADS',
-        items: [
-            { label: 'All Leads', href: '/admin/leads', icon: MessageSquare },
-        ],
-    },
-    {
-        title: 'SETTINGS',
-        items: [
-            { label: 'Team Members', href: '/admin/team', icon: Users },
-            { label: 'Testimonials', href: '/admin/testimonials', icon: Star },
-            { label: 'FAQs', href: '/admin/faqs', icon: HelpCircle },
-            { label: 'Site Settings', href: '/admin/settings', icon: Settings },
-        ],
-    },
-];
+function useNavSections(): NavSection[] {
+    const { props } = usePage<{ auth: { user: User }; waitlist_pending?: number }>();
+    const waitlistPending = props.waitlist_pending;
+
+    return [
+        {
+            title: 'OVERVIEW',
+            items: [
+                { label: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
+            ],
+        },
+        {
+            title: 'CONTENT',
+            items: [
+                { label: 'Services', href: '/admin/services', icon: Briefcase },
+                { label: 'Products', href: '/admin/products', icon: Package },
+                { label: 'Portfolio', href: '/admin/portfolio', icon: FolderOpen },
+                { label: 'Blog', href: '/admin/blog', icon: FileText },
+            ],
+        },
+        {
+            title: 'LEADS',
+            items: [
+                { label: 'All Leads', href: '/admin/leads', icon: MessageSquare },
+                {
+                    label: 'Waitlist',
+                    href: '/admin/waitlist',
+                    icon: ClipboardList,
+                    ...(waitlistPending ? { badge: waitlistPending } : {}),
+                },
+            ],
+        },
+        {
+            title: 'SETTINGS',
+            items: [
+                { label: 'Team Members', href: '/admin/team', icon: Users },
+                { label: 'Testimonials', href: '/admin/testimonials', icon: Star },
+                { label: 'FAQs', href: '/admin/faqs', icon: HelpCircle },
+                { label: 'Site Settings', href: '/admin/settings', icon: Settings },
+            ],
+        },
+    ];
+}
 
 function NavLink({ item, onClick }: { item: NavItem; onClick?: () => void }) {
     const { url } = usePage();
@@ -88,8 +99,9 @@ function NavLink({ item, onClick }: { item: NavItem; onClick?: () => void }) {
 }
 
 function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
-    const { props } = usePage<{ auth: { user: User } }>();
+    const { props } = usePage<{ auth: { user: User }; waitlist_pending?: number }>();
     const user = props.auth?.user;
+    const navSections = useNavSections();
 
     return (
         <div className="flex flex-col h-full">

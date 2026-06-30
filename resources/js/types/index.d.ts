@@ -100,15 +100,25 @@ export interface Testimonial {
     product_id: number | null;
 }
 
+export interface BlogCategory {
+    id: number;
+    name: string;
+    slug: string;
+}
+
 export interface BlogPost {
     id: number;
     title: string;
     slug: string;
     excerpt: string;
+    body: string;
     cover_image: string | null;
     status: 'draft' | 'published';
     published_at: string | null;
     category_id: number | null;
+    author_id: number;
+    category?: BlogCategory | null;
+    author?: { id: number; name: string; email: string } | null;
 }
 
 export interface TeamMember {

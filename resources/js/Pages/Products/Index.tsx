@@ -1,5 +1,6 @@
-import { Head, Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import PublicLayout from '@/Layouts/PublicLayout';
+import SeoHead from '@/Components/SeoHead';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
 import { Card, CardContent } from '@/Components/ui/card';
@@ -30,7 +31,11 @@ interface Props {
 export default function ProductsIndex({ products }: Props) {
     return (
         <PublicLayout>
-            <Head title="Our Products" />
+            <SeoHead
+                title="Our Software Products"
+                description="Discover MSI Analytics software products including Bank2Books — built for CA firms and finance teams across India."
+                keywords="Bank2Books, bank statement to Tally, CA firm software, accounting automation, MSI Analytics products"
+            />
 
             {/* Hero */}
             <section className="bg-gradient-to-br from-[#E8F4FD] via-white to-[#F0F7FF] pt-20 pb-24 relative overflow-hidden text-center">

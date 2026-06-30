@@ -1,5 +1,6 @@
-import { Head, Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import PublicLayout from '@/Layouts/PublicLayout';
+import SeoHead from '@/Components/SeoHead';
 import { Button } from '@/Components/ui/button';
 import { Card, CardContent } from '@/Components/ui/card';
 import { Badge } from '@/Components/ui/badge';
@@ -99,7 +100,10 @@ const values = [
 export default function About({ teamMembers }: Props) {
     return (
         <PublicLayout>
-            <Head title="About Us" />
+            <SeoHead
+                title="About Us"
+                description="Learn about MSI Analytics — our mission, team, and commitment to delivering quality IT solutions and software products for Indian businesses."
+            />
 
             {/* Hero */}
             <section className="bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#0F172A] text-white py-24 text-center">
@@ -170,9 +174,11 @@ export default function About({ teamMembers }: Props) {
                                             className="w-full h-full object-cover"
                                         />
                                     ) : (
-                                        <div className="w-20 h-20 rounded-full bg-[#2563EB] flex items-center justify-center text-white text-3xl font-bold">
-                                            {member.name.charAt(0)}
-                                        </div>
+                                        <img
+                                            src="/images/team/placeholder-avatar.png"
+                                            alt={member.name}
+                                            className="w-24 h-24 object-cover rounded-full"
+                                        />
                                     )}
                                 </div>
 
