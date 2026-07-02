@@ -33,8 +33,8 @@ export default function ProductsIndex({ products }: Props) {
         <PublicLayout>
             <SeoHead
                 title="Our Software Products"
-                description="Discover MSI Analytics software products including Bank2Books — built for CA firms and finance teams across India."
-                keywords="Bank2Books, bank statement to Tally, CA firm software, accounting automation, MSI Analytics products"
+                description="Discover MIS Analytics software products including Bank2Books — built for CA firms and finance teams across India."
+                keywords="Bank2Books, bank statement to Tally, CA firm software, accounting automation, MIS Analytics products"
             />
 
             {/* Hero */}

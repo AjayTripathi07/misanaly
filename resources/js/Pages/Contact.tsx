@@ -34,7 +34,7 @@ export default function Contact() {
         <PublicLayout>
             <SeoHead
                 title="Contact Us"
-                description="Get in touch with MSI Analytics for your IT service needs or product inquiries. We respond within 24 hours."
+                description="Get in touch with MIS Analytics for your IT service needs or product inquiries. We respond within 24 hours."
             />
 
             {/* Hero */}

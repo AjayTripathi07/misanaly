@@ -102,7 +102,7 @@ export default function About({ teamMembers }: Props) {
         <PublicLayout>
             <SeoHead
                 title="About Us"
-                description="Learn about MSI Analytics — our mission, team, and commitment to delivering quality IT solutions and software products for Indian businesses."
+                description="Learn about MIS Analytics — our mission, team, and commitment to delivering quality IT solutions and software products for Indian businesses."
             />
 
             {/* Hero */}
@@ -155,7 +155,7 @@ export default function About({ teamMembers }: Props) {
                         <Badge className="mb-4">The People</Badge>
                         <h2 className="text-3xl font-bold text-[#0F172A]">Meet Our Team</h2>
                         <p className="text-[#0F172A]/60 mt-3 max-w-xl mx-auto">
-                            The talented individuals behind MSI Analytics who make it all happen.
+                            The talented individuals behind MIS Analytics who make it all happen.
                         </p>
                     </div>
 
@@ -211,7 +211,7 @@ export default function About({ teamMembers }: Props) {
                 <div className="max-w-6xl mx-auto px-4">
                     <div className="text-center mb-4">
                         <Badge className="mb-4">Why Us</Badge>
-                        <h2 className="text-3xl font-bold text-[#0F172A]">8 Reasons to Choose MSI Analytics</h2>
+                        <h2 className="text-3xl font-bold text-[#0F172A]">8 Reasons to Choose MIS Analytics</h2>
                         <p className="text-[#0F172A]/60 mt-3 max-w-xl mx-auto">
                             We bring together expertise, commitment, and results to every engagement.
                         </p>
@@ -273,7 +273,7 @@ export default function About({ teamMembers }: Props) {
                 <div className="max-w-2xl mx-auto px-4">
                     <h2 className="text-3xl font-bold mb-4">Work With Us</h2>
                     <p className="text-white/80 mb-8 text-lg">
-                        Join 50+ businesses that trust MSI Analytics to power their technology.
+                        Join 50+ businesses that trust MIS Analytics to power their technology.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Link href="/get-quote">

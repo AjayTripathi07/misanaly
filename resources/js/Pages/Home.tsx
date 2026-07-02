@@ -151,14 +151,14 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
         <PublicLayout>
             <SeoHead
                 title="IT Services & Software Products for Modern Businesses"
-                description="Custom software development, web & mobile apps, and AI-powered tools. MSI Analytics — trusted by businesses across India."
+                description="Custom software development, web & mobile apps, and AI-powered tools. MIS Analytics — trusted by businesses across India."
                 keywords="IT services India, custom software development, web development, mobile app development, Tally automation, CA firm software"
             />
             <Head>
                 <script type="application/ld+json">{JSON.stringify({
                     '@context': 'https://schema.org',
                     '@type': 'Organization',
-                    name: 'MSI Analytics',
+                    name: 'MIS Analytics',
                     url: 'https://misanaly.in',
                     description: 'IT Services and Software Products company based in India',
                     contactPoint: {
@@ -464,7 +464,7 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
             ═══════════════════════════════════════════════ */}
             <div className="bg-[#0F172A] py-4 overflow-hidden border-y border-white/5">
                 <div className="flex animate-scroll-left" style={{ width: 'max-content' }}>
-                    {[...['Laravel', 'React', 'AI / ML', 'Bank2Books', 'Tally Integration', 'MSI Analytics', 'Mobile Apps', 'Cloud Solutions', 'Custom Software', 'REST APIs', 'UI / UX Design'], ...['Laravel', 'React', 'AI / ML', 'Bank2Books', 'Tally Integration', 'MSI Analytics', 'Mobile Apps', 'Cloud Solutions', 'Custom Software', 'REST APIs', 'UI / UX Design']].map((item, i) => (
+                    {[...['Laravel', 'React', 'AI / ML', 'Bank2Books', 'Tally Integration', 'MIS Analytics', 'Mobile Apps', 'Cloud Solutions', 'Custom Software', 'REST APIs', 'UI / UX Design'], ...['Laravel', 'React', 'AI / ML', 'Bank2Books', 'Tally Integration', 'MIS Analytics', 'Mobile Apps', 'Cloud Solutions', 'Custom Software', 'REST APIs', 'UI / UX Design']].map((item, i) => (
                         <span key={i} className="flex items-center gap-3 mx-6 text-sm font-medium text-white/50 whitespace-nowrap">
                             <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB] flex-shrink-0" />
                             {item}
@@ -663,7 +663,7 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                         transition={{ duration: dur ?? 0.6 }}
                     >
                         <h2 className="text-3xl sm:text-4xl font-bold text-[#0F172A] mb-4">
-                            Why Choose MSI Analytics?
+                            Why Choose MIS Analytics?
                         </h2>
                         <p className="text-[#0F172A]/60 text-lg max-w-2xl mx-auto">
                             We combine technical excellence with deep business understanding to deliver results that matter.
@@ -721,7 +721,7 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                             Trusted by Businesses Across India
                         </h2>
                         <p className="text-[#0F172A]/60 text-lg max-w-2xl mx-auto">
-                            Hear from the teams that rely on MSI Analytics every day.
+                            Hear from the teams that rely on MIS Analytics every day.
                         </p>
                     </motion.div>
                 </div>
@@ -752,7 +752,7 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             {[
-                                { name: 'Ramesh Gupta', role: 'CA', company: 'Gupta & Co', quote: 'MSI Analytics transformed the way we handle Tally entries. What used to take half a day now takes minutes.', rating: 5 },
+                                { name: 'Ramesh Gupta', role: 'CA', company: 'Gupta & Co', quote: 'MIS Analytics transformed the way we handle Tally entries. What used to take half a day now takes minutes.', rating: 5 },
                                 { name: 'Priya Sharma', role: 'Finance Manager', company: 'Sharma Exports', quote: 'Excellent web application built on time. The team understood our requirements perfectly.', rating: 5 },
                                 { name: 'Anil Patel', role: 'Director', company: 'Patel Industries', quote: 'Outstanding support and a product that genuinely works. Highly recommend for any CA firm.', rating: 5 },
                             ].map((t, i) => (
@@ -799,7 +799,7 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                                     Latest Insights
                                 </h2>
                                 <p className="text-[#0F172A]/60 text-lg">
-                                    Tips, guides, and updates from the MSI Analytics team.
+                                    Tips, guides, and updates from the MIS Analytics team.
                                 </p>
                             </div>
                             <Link href="/blog">
@@ -890,7 +890,7 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                     </h2>
 
                     <p className="text-white/75 text-lg mb-10 leading-relaxed max-w-xl mx-auto">
-                        Join 500+ businesses and CA firms across India who trust MSI Analytics for their technology needs. Let's build something great together.
+                        Join 500+ businesses and CA firms across India who trust MIS Analytics for their technology needs. Let's build something great together.
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">

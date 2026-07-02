@@ -70,7 +70,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                                 <span className="text-white font-bold text-sm">M</span>
                             </div>
                             <span className="text-[#0F172A] font-bold text-lg leading-none">
-                                MSI<span className="text-[#2563EB]">Analytics</span>
+                                MIS<span className="text-[#2563EB]">Analytics</span>
                             </span>
                         </Link>
 
@@ -126,7 +126,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                                     <span className="text-white font-bold text-xs">M</span>
                                 </div>
                                 <span className="text-[#0F172A] font-bold text-base">
-                                    MSI<span className="text-[#2563EB]">Analytics</span>
+                                    MIS<span className="text-[#2563EB]">Analytics</span>
                                 </span>
                             </Link>
                             <SheetClose className="rounded-sm opacity-70 hover:opacity-100 transition-opacity">
@@ -179,7 +179,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                                     <span className="text-white font-bold text-sm">M</span>
                                 </div>
                                 <span className="text-white font-bold text-lg">
-                                    MSI<span className="text-[#60A5FA]">Analytics</span>
+                                    MIS<span className="text-[#60A5FA]">Analytics</span>
                                 </span>
                             </Link>
                             <p className="text-gray-400 text-sm leading-relaxed mb-5">
@@ -272,7 +272,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                     <Separator className="bg-white/10 mb-6" />
 
                     <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-gray-500">
-                        <p>© {new Date().getFullYear()} MSI Analytics. All rights reserved.</p>
+                        <p>© {new Date().getFullYear()} MIS Analytics. All rights reserved.</p>
                         <div className="flex gap-4">
                             <Link href="/privacy" className="hover:text-gray-300 transition-colors">Privacy Policy</Link>
                             <Link href="/terms" className="hover:text-gray-300 transition-colors">Terms of Service</Link>

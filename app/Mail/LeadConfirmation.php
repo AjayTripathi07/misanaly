@@ -20,7 +20,7 @@ class LeadConfirmation extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Thank you for contacting MSI Analytics',
+            subject: 'Thank you for contacting MIS Analytics',
         );
     }
 

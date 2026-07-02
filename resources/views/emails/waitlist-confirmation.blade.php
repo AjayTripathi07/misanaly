@@ -29,7 +29,7 @@ Learn More About Bank2Books
 Stay tuned — big things are coming!
 
 Warm regards,
-**Team MSI Analytics**
+**Team MIS Analytics**
 
 ---
 *You registered with email: {{ $entry->email }}. To unsubscribe, reply with "remove me" in the subject line.*

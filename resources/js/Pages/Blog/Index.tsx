@@ -103,7 +103,7 @@ function PostCard({ post, index }: { post: BlogPost; index: number }) {
                             </div>
                             <div className="min-w-0">
                                 <p className="text-xs font-medium text-[#0F172A] truncate">
-                                    {post.author?.name ?? 'MSI Analytics'}
+                                    {post.author?.name ?? 'MIS Analytics'}
                                 </p>
                                 <p className="text-xs text-[#0F172A]/40">
                                     {post.published_at ? formatDate(post.published_at) : 'Coming soon'}

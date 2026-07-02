@@ -111,7 +111,7 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
                     <span className="text-white font-bold text-sm">M</span>
                 </div>
                 <div>
-                    <p className="text-white font-bold text-sm leading-none">MSIAnalytics</p>
+                    <p className="text-white font-bold text-sm leading-none">MISAnalytics</p>
                     <p className="text-slate-500 text-xs mt-0.5">Admin Panel</p>
                 </div>
             </div>

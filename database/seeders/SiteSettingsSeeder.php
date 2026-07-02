@@ -9,7 +9,7 @@ class SiteSettingsSeeder extends Seeder
     public function run(): void
     {
         $settings = [
-            'site_name'   => 'MSI Analytics',
+            'site_name'   => 'MIS Analytics',
             'tagline'     => 'Innovative IT Solutions & Products',
             'email'       => 'info@misanaly.in',
             'phone'       => '+91-XXXXXXXXXX',
@@ -18,7 +18,7 @@ class SiteSettingsSeeder extends Seeder
             'twitter'     => '',
             'linkedin'    => '',
             'instagram'   => '',
-            'description' => 'MSI Analytics delivers end-to-end IT services and software products designed to transform businesses through technology.',
+            'description' => 'MIS Analytics delivers end-to-end IT services and software products designed to transform businesses through technology.',
         ];
 
         foreach ($settings as $key => $value) {
