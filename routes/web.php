@@ -108,6 +108,35 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('/waitlist/export', [Admin\WaitlistController::class, 'export'])->name('waitlist.export');
     Route::patch('/waitlist/{waitlist}/status', [Admin\WaitlistController::class, 'updateStatus'])->name('waitlist.update-status');
 
+    // Team Members
+    Route::get('/team', [Admin\TeamController::class, 'index'])->name('team.index');
+    Route::get('/team/create', [Admin\TeamController::class, 'create'])->name('team.create');
+    Route::post('/team', [Admin\TeamController::class, 'store'])->name('team.store');
+    Route::post('/team/reorder', [Admin\TeamController::class, 'reorder'])->name('team.reorder');
+    Route::get('/team/{team}/edit', [Admin\TeamController::class, 'edit'])->name('team.edit');
+    Route::put('/team/{team}', [Admin\TeamController::class, 'update'])->name('team.update');
+    Route::delete('/team/{team}', [Admin\TeamController::class, 'destroy'])->name('team.destroy');
+
+    // Testimonials
+    Route::get('/testimonials', [Admin\TestimonialsController::class, 'index'])->name('testimonials.index');
+    Route::get('/testimonials/create', [Admin\TestimonialsController::class, 'create'])->name('testimonials.create');
+    Route::post('/testimonials', [Admin\TestimonialsController::class, 'store'])->name('testimonials.store');
+    Route::get('/testimonials/{testimonial}/edit', [Admin\TestimonialsController::class, 'edit'])->name('testimonials.edit');
+    Route::put('/testimonials/{testimonial}', [Admin\TestimonialsController::class, 'update'])->name('testimonials.update');
+    Route::delete('/testimonials/{testimonial}', [Admin\TestimonialsController::class, 'destroy'])->name('testimonials.destroy');
+
+    // FAQs
+    Route::get('/faqs', [Admin\FaqsController::class, 'index'])->name('faqs.index');
+    Route::get('/faqs/create', [Admin\FaqsController::class, 'create'])->name('faqs.create');
+    Route::post('/faqs', [Admin\FaqsController::class, 'store'])->name('faqs.store');
+    Route::get('/faqs/{faq}/edit', [Admin\FaqsController::class, 'edit'])->name('faqs.edit');
+    Route::put('/faqs/{faq}', [Admin\FaqsController::class, 'update'])->name('faqs.update');
+    Route::delete('/faqs/{faq}', [Admin\FaqsController::class, 'destroy'])->name('faqs.destroy');
+
+    // Site Settings
+    Route::get('/settings', [Admin\SiteSettingsController::class, 'index'])->name('settings.index');
+    Route::put('/settings', [Admin\SiteSettingsController::class, 'update'])->name('settings.update');
+
 });
 
 require __DIR__.'/auth.php';
