@@ -42,8 +42,11 @@ Route::get('/privacy', fn () => Inertia::render('Placeholder', ['page' => 'Priva
 Route::get('/terms', fn () => Inertia::render('Placeholder', ['page' => 'Terms of Service']))->name('terms');
 
 // ─── Auth routes ─────────────────────────────────────────────────────────────
-Route::get('/dashboard', fn () => Inertia::render('Dashboard'))
-    ->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', function () {
+    return auth()->user()?->is_admin
+        ? redirect()->route('admin.dashboard')
+        : redirect('/');
+})->middleware(['auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
