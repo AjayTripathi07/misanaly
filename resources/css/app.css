@@ -309,3 +309,61 @@
 .link-underline:hover::after {
   width: 100%;
 }
+
+/* ── Button shine sweep on hover ─────────────────── */
+.btn-shine {
+    position: relative;
+    overflow: hidden;
+}
+.btn-shine::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transform: skewX(-15deg);
+    transition: none;
+}
+.btn-shine:hover::after {
+    animation: shine-sweep 0.5s ease forwards;
+}
+@keyframes shine-sweep {
+    to { left: 150%; }
+}
+
+/* ── Gradient text ───────────────────────────────── */
+.gradient-text-blue-violet {
+    background: linear-gradient(135deg, #2563EB, #8B5CF6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.gradient-text-teal {
+    background: linear-gradient(135deg, #10B981, #2563EB);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ── Animated gradient border card ──────────────── */
+@keyframes border-rotate {
+    from { --gradient-angle: 0deg; }
+    to { --gradient-angle: 360deg; }
+}
+
+/* ── Focus glow inputs ───────────────────────────── */
+.input-glow:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15), 0 0 0 1px #2563EB;
+}
+
+/* ── Reduced motion override ─────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    .btn-shine::after,
+    .animate-ping,
+    .animate-pulse {
+        animation: none !important;
+    }
+}

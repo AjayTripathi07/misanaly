@@ -1,6 +1,7 @@
 import { useState, useEffect, ReactNode } from 'react';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { Menu, X, Phone, Mail, MapPin, ChevronRight } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Button } from '@/Components/ui/button';
 import { Sheet, SheetContent, SheetClose } from '@/Components/ui/sheet';
 import { Separator } from '@/Components/ui/separator';
@@ -30,9 +31,20 @@ const serviceLinks = [
 ];
 
 export default function PublicLayout({ children }: PublicLayoutProps) {
+    const { url } = usePage();
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const [scrollProgress, setScrollProgress] = useState(0);
+    const [showStickyCta, setShowStickyCta] = useState(false);
+    const [barDismissed, setBarDismissed] = useState(() => {
+        if (typeof window === 'undefined') return false;
+        return sessionStorage.getItem('bar_dismissed') === '1';
+    });
+
+    function dismissBar() {
+        sessionStorage.setItem('bar_dismissed', '1');
+        setBarDismissed(true);
+    }
 
     useEffect(() => {
         const onScroll = () => {
@@ -41,13 +53,28 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
             const scrollTop = window.scrollY;
             const docHeight = doc.scrollHeight - doc.clientHeight;
             setScrollProgress(docHeight > 0 ? scrollTop / docHeight : 0);
+            setShowStickyCta(window.scrollY > 400);
         };
         window.addEventListener('scroll', onScroll, { passive: true });
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
+    const onBank2BooksPage = url.startsWith('/products/bank2books');
+
     return (
         <div className="min-h-screen flex flex-col bg-white">
+            {/* ── ANNOUNCEMENT BAR ── */}
+            {!barDismissed && !onBank2BooksPage && (
+                <div className="relative bg-gradient-to-r from-[#2563EB] via-[#6D28D9] to-[#8B5CF6] text-white text-sm py-2 px-4 flex items-center justify-center gap-3 z-50">
+                    <span className="hidden sm:inline">🚀</span>
+                    <Link href="/products/bank2books" className="hover:underline underline-offset-2 font-medium text-center">
+                        <strong>Bank2Books is here!</strong> Automate your Tally entries — Join waitlist for <strong>3 months free</strong> →
+                    </Link>
+                    <button onClick={dismissBar} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors p-1" aria-label="Dismiss">
+                        <X className="h-3.5 w-3.5" />
+                    </button>
+                </div>
+            )}
             {/* ── NAVBAR ── */}
             <header
                 className={cn(
@@ -82,7 +109,17 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                                     href={link.href}
                                     className="px-3 py-2 text-sm font-medium text-[#0F172A]/70 hover:text-[#2563EB] transition-colors rounded-md hover:bg-blue-50"
                                 >
-                                    {link.label}
+                                    {link.label === 'Products' ? (
+                                        <span className="relative inline-flex items-center gap-1">
+                                            Products
+                                            <span className="relative flex h-2 w-2">
+                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75" />
+                                                <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500" />
+                                            </span>
+                                        </span>
+                                    ) : (
+                                        link.label
+                                    )}
                                 </Link>
                             ))}
                         </nav>
@@ -281,6 +318,27 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                 </div>
             </footer>
             <BackToTop />
+
+            {/* ── STICKY BOTTOM CTA ── */}
+            <AnimatePresence>
+                {showStickyCta && !onBank2BooksPage && (
+                    <motion.div
+                        initial={{ y: 80, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: 80, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: 'easeOut' }}
+                        className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-[#0F172A] border border-white/10 text-white px-5 py-3 rounded-2xl shadow-2xl shadow-black/40 backdrop-blur-sm"
+                    >
+                        <span className="text-orange-400">🚀</span>
+                        <span className="text-sm font-medium">Bank2Books Early Access — 3 months free</span>
+                        <Link href="/products/bank2books#waitlist">
+                            <Button size="sm" className="bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-4 text-xs font-bold ml-1">
+                                Join Waitlist →
+                            </Button>
+                        </Link>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }

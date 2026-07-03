@@ -5,7 +5,7 @@ import {
     Globe, Smartphone, Code2, Brain, Network, Palette,
     Cloud, Wrench, HeadphonesIcon, Building2, Star,
     CheckCircle2, ArrowRight, Users, Lightbulb, Clock, LifeBuoy,
-    CalendarDays, ChevronRight, Layers, ChevronDown, Download, Play, Shield, Monitor,
+    CalendarDays, ChevronRight, Layers, ChevronDown, Download, Play, Shield, Monitor, Rocket,
 } from 'lucide-react';
 import { motion, useInView, useReducedMotion } from 'framer-motion';
 import NumberFlow from '@number-flow/react';
@@ -249,6 +249,19 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                                 We build custom web apps, mobile apps, and accounting automation tools that help CA firms and businesses work smarter — not harder.
                             </motion.p>
 
+                            {/* Bank2Books floating pill */}
+                            <motion.a
+                                href="/products/bank2books"
+                                className="inline-flex items-center gap-2 bg-orange-500/15 border border-orange-500/30 text-orange-300 text-xs font-semibold px-4 py-2 rounded-full hover:bg-orange-500/25 transition-colors mb-6"
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.1 }}
+                            >
+                                <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
+                                🎉 Bank2Books — Join 200+ CA firms on the waitlist
+                                <ChevronRight className="h-3 w-3" />
+                            </motion.a>
+
                             {/* CTAs */}
                             <motion.div
                                 className="flex flex-col sm:flex-row gap-4"
@@ -375,7 +388,69 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
             </section>
 
             {/* ═══════════════════════════════════════════════
-                SECTION 2 — SERVICES
+                SECTION 2 — FEATURED PRODUCT: Bank2Books
+            ═══════════════════════════════════════════════ */}
+            <section className="py-20 bg-gradient-to-br from-[#0F172A] via-[#1E3A5F] to-[#0F172A] text-white">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    {/* "New Product" eyebrow */}
+                    <div className="flex items-center justify-center mb-3">
+                        <span className="inline-flex items-center gap-2 bg-orange-500/20 border border-orange-500/30 text-orange-300 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full">
+                            <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
+                            New Product — Early Access Open
+                        </span>
+                    </div>
+                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-center mb-4">
+                        Meet <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Bank2Books</span>
+                    </h2>
+                    <p className="text-center text-gray-400 max-w-2xl mx-auto mb-12 text-lg">
+                        Convert bank statements from SBI, HDFC, ICICI &amp; 20+ banks into Tally entries in seconds. AI-powered, fully offline.
+                    </p>
+
+                    {/* Feature highlights grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12">
+                        {[
+                            { icon: '⚡', label: '10 sec per statement', color: 'text-yellow-400', bg: 'bg-yellow-500/10 border-yellow-500/20' },
+                            { icon: '🏦', label: '20+ Indian banks', color: 'text-blue-400', bg: 'bg-blue-500/10 border-blue-500/20' },
+                            { icon: '🔒', label: '100% offline & secure', color: 'text-emerald-400', bg: 'bg-emerald-500/10 border-emerald-500/20' },
+                        ].map(item => (
+                            <div key={item.label} className={`flex items-center gap-3 ${item.bg} border rounded-xl px-5 py-4`}>
+                                <span className="text-2xl">{item.icon}</span>
+                                <span className={`font-semibold ${item.color}`}>{item.label}</span>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Social proof + CTA */}
+                    <div className="flex flex-col items-center gap-4">
+                        <div className="flex items-center gap-3">
+                            <div className="flex -space-x-2">
+                                {['SK','PR','AM','VT','NJ'].map((initials, i) => (
+                                    <div key={i} className={`w-8 h-8 rounded-full border-2 border-[#0F172A] flex items-center justify-center text-xs font-bold text-white ${['bg-blue-500','bg-emerald-500','bg-violet-500','bg-orange-500','bg-pink-500'][i]}`}>
+                                        {initials}
+                                    </div>
+                                ))}
+                            </div>
+                            <span className="text-sm text-gray-400"><strong className="text-white">200+</strong> CA firms already joined</span>
+                        </div>
+                        <div className="flex flex-wrap gap-4 justify-center">
+                            <Link href="/products/bank2books#waitlist">
+                                <Button size="lg" className="bg-orange-500 hover:bg-orange-600 text-white rounded-full px-8 font-bold shadow-xl shadow-orange-900/30">
+                                    <Rocket className="mr-2 h-5 w-5" /> Get 3 Months Free →
+                                </Button>
+                            </Link>
+                            <Link href="/products/bank2books">
+                                <Button variant="outline" size="lg" className="border-white/20 text-white rounded-full px-8 bg-transparent hover:bg-white/10">
+                                    Learn More
+                                </Button>
+                            </Link>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1">No credit card • No commitment • Early access only</p>
+                    </div>
+                </div>
+            </section>
+
+            {/* ═══════════════════════════════════════════════
+                SECTION 3 — SERVICES
             ═══════════════════════════════════════════════ */}
             <section className="py-20 sm:py-24 bg-gray-50" ref={servicesRef}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

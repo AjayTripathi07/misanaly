@@ -10,7 +10,7 @@ import {
     CheckCircle2, Check, ArrowRight, ArrowLeft, MonitorPlay,
     Download, Play, ChevronDown, Shield, Monitor, Star,
     ChevronUp, ChevronRight, Zap, Database, FileText,
-    Rocket, Mail, Phone, Building2, CheckCheck, UserCircle,
+    Rocket, Mail, Phone, Building2, CheckCheck, UserCircle, X,
 } from 'lucide-react';
 
 // ─── Interfaces ───────────────────────────────────────────────────────────────
@@ -191,6 +191,14 @@ export default function ProductShow({ product, faqs }: Props) {
 
     // ── FAQ accordion ─────────────────────────────────────────────────────────
     const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+    // ── Sticky header CTA ─────────────────────────────────────────────────────
+    const [showStickyBtn, setShowStickyBtn] = useState(false);
+    useEffect(() => {
+        const onScroll = () => setShowStickyBtn(window.scrollY > 500);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
+    }, []);
 
     // ── InView refs ───────────────────────────────────────────────────────────
     const featuresRef = useRef<HTMLElement>(null);
@@ -598,6 +606,83 @@ export default function ProductShow({ product, faqs }: Props) {
             </section>
 
             {/* ═══════════════════════════════════════════════════════════════
+                SECTION — MANUAL vs BANK2BOOKS
+            ═══════════════════════════════════════════════════════════════ */}
+            <section className="py-20 bg-white">
+                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-12">
+                        <Badge variant="secondary" className="mb-3 bg-blue-50 text-[#2563EB] border-0 text-xs font-semibold uppercase tracking-wider px-4 py-1.5">
+                            The Difference
+                        </Badge>
+                        <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F172A] tracking-tight mt-3">
+                            Manual Entry vs Bank2Books
+                        </h2>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Manual side */}
+                        <div className="rounded-2xl border-2 border-red-100 bg-red-50/40 p-8">
+                            <div className="flex items-center gap-2 mb-6">
+                                <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center">
+                                    <X className="h-4 w-4 text-red-500" />
+                                </div>
+                                <h3 className="font-bold text-[#0F172A] text-lg">The Manual Way</h3>
+                            </div>
+                            {[
+                                'Download bank statement PDF/Excel',
+                                'Open Tally, navigate to vouchers',
+                                'Manually type each transaction',
+                                'Double-check every entry for errors',
+                                'Repeat for every bank, every month',
+                                '3–6 hours per client, per month',
+                            ].map((item, i) => (
+                                <motion.div key={i} className="flex items-start gap-3 mb-3"
+                                    initial={{ opacity: 0, x: -20 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: i * 0.08, duration: 0.4 }}
+                                >
+                                    <X className="h-4 w-4 text-red-400 mt-0.5 flex-shrink-0" />
+                                    <span className="text-[#0F172A]/70 text-sm">{item}</span>
+                                </motion.div>
+                            ))}
+                        </div>
+                        {/* Bank2Books side */}
+                        <div className="rounded-2xl border-2 border-emerald-200 bg-emerald-50/40 p-8">
+                            <div className="flex items-center gap-2 mb-6">
+                                <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
+                                    <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                                </div>
+                                <h3 className="font-bold text-[#0F172A] text-lg">With Bank2Books</h3>
+                            </div>
+                            {[
+                                'Upload statement (PDF/Excel/CSV)',
+                                'AI reads & categorises instantly',
+                                '160+ auto-tagging rules applied',
+                                'Review on screen — edit if needed',
+                                'Export directly to Tally in 1 click',
+                                'Done in under 60 seconds ✓',
+                            ].map((item, i) => (
+                                <motion.div key={i} className="flex items-start gap-3 mb-3"
+                                    initial={{ opacity: 0, x: 20 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: i * 0.08, duration: 0.4 }}
+                                >
+                                    <CheckCircle2 className="h-4 w-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                                    <span className="text-[#0F172A]/70 text-sm">{item}</span>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="text-center mt-8">
+                        <button onClick={scrollToWaitlist} className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-3 rounded-full text-base shadow-lg shadow-orange-900/20 transition-colors inline-flex items-center gap-2">
+                            <Rocket className="h-4 w-4" /> Start Saving Time — Join Waitlist
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            {/* ═══════════════════════════════════════════════════════════════
                 SECTION 4 — PRODUCT VISUALS
             ═══════════════════════════════════════════════════════════════ */}
             <section className="py-20 bg-[#0F172A]" ref={demoSectionRef}>
@@ -995,14 +1080,21 @@ export default function ProductShow({ product, faqs }: Props) {
                     </motion.div>
 
                     {/* Social proof */}
-                    <motion.p
-                        className="text-center text-blue-200/50 text-sm mt-6"
+                    <motion.div
+                        className="flex items-center justify-center gap-3 mt-6"
                         initial={{ opacity: 0 }}
                         animate={waitlistInView ? { opacity: 1 } : {}}
                         transition={{ duration: dur(0.4), delay: 0.4 }}
                     >
-                        Join 200+ CA firms & accountants already on the waitlist
-                    </motion.p>
+                        <div className="flex -space-x-2">
+                            {['SK','PR','AM','VT','NJ','RS'].map((initials, i) => (
+                                <div key={i} className={`w-7 h-7 rounded-full border-2 border-blue-700 flex items-center justify-center text-[10px] font-bold text-white ${['bg-blue-500','bg-emerald-500','bg-violet-500','bg-orange-500','bg-pink-500','bg-teal-500'][i]}`}>
+                                    {initials}
+                                </div>
+                            ))}
+                        </div>
+                        <span className="text-blue-200/60 text-sm"><strong className="text-white">200+</strong> CA firms &amp; accountants already on the waitlist</span>
+                    </motion.div>
                 </div>
             </section>
 
@@ -1112,6 +1204,27 @@ export default function ProductShow({ product, faqs }: Props) {
                     </div>
                 </div>
             </section>
+
+            {/* ── Sticky header CTA ── */}
+            <AnimatePresence>
+                {showStickyBtn && (
+                    <motion.div
+                        initial={{ y: -60, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: -60, opacity: 0 }}
+                        transition={{ duration: 0.25 }}
+                        className="fixed top-0 left-0 right-0 z-40 bg-[#0F172A]/95 backdrop-blur-md border-b border-white/10 px-4 py-2.5 flex items-center justify-between"
+                    >
+                        <span className="text-white text-sm font-medium hidden sm:block">Bank2Books — Early Access</span>
+                        <div className="flex items-center gap-3 mx-auto sm:mx-0">
+                            <span className="text-gray-400 text-xs hidden md:block">🎉 First 100 signups get 3 months free</span>
+                            <button onClick={scrollToWaitlist} className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold px-4 py-1.5 rounded-full transition-colors">
+                                Get Early Access →
+                            </button>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </PublicLayout>
     );
 }
