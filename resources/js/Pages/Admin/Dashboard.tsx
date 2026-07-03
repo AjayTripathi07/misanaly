@@ -1,11 +1,13 @@
 import { Head, Link } from '@inertiajs/react';
+import { useEffect, useRef, useState } from 'react';
+import { motion, useInView } from 'framer-motion';
 import {
     MessageSquare, Briefcase, Package, FileText,
     TrendingUp, AlertCircle, Plus, ArrowRight, Eye,
+    Users, ChevronRight,
 } from 'lucide-react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Card, CardContent } from '@/Components/ui/card';
-import { Badge } from '@/Components/ui/badge';
 import { Button } from '@/Components/ui/button';
 
 /* ─── types ─── */
@@ -39,42 +41,94 @@ interface Props {
     recentLeads: RecentLead[];
 }
 
-/* ─── helpers ─── */
+interface StatCardConfig {
+    key: keyof Stats;
+    label: string;
+    icon: React.ElementType;
+    gradient: string;
+    bg: string;
+    iconColor: string;
+    ring: string;
+}
+
+/* ─── stat card config ─── */
+const STAT_CARDS: StatCardConfig[] = [
+    { key: 'total_leads', label: 'Total Leads', icon: Users, gradient: 'from-blue-500 to-blue-600', bg: 'bg-blue-50', iconColor: 'text-blue-600', ring: 'ring-blue-100' },
+    { key: 'new_leads_week', label: 'New This Week', icon: TrendingUp, gradient: 'from-amber-500 to-orange-500', bg: 'bg-amber-50', iconColor: 'text-amber-600', ring: 'ring-amber-100' },
+    { key: 'new_status_leads', label: 'Needs Attention', icon: AlertCircle, gradient: 'from-red-500 to-rose-500', bg: 'bg-red-50', iconColor: 'text-red-600', ring: 'ring-red-100' },
+    { key: 'active_services', label: 'Active Services', icon: Briefcase, gradient: 'from-emerald-500 to-teal-500', bg: 'bg-emerald-50', iconColor: 'text-emerald-600', ring: 'ring-emerald-100' },
+    { key: 'active_products', label: 'Active Products', icon: Package, gradient: 'from-violet-500 to-purple-600', bg: 'bg-violet-50', iconColor: 'text-violet-600', ring: 'ring-violet-100' },
+    { key: 'published_posts', label: 'Published Posts', icon: FileText, gradient: 'from-pink-500 to-rose-500', bg: 'bg-pink-50', iconColor: 'text-pink-600', ring: 'ring-pink-100' },
+];
+
 const STATUS_COLORS: Record<string, string> = {
-    new:       'bg-blue-100 text-blue-700',
-    contacted: 'bg-yellow-100 text-yellow-700',
-    qualified: 'bg-purple-100 text-purple-700',
-    proposal:  'bg-indigo-100 text-indigo-700',
-    won:       'bg-green-100 text-green-700',
-    lost:      'bg-red-100 text-red-700',
+    new: 'bg-blue-100 text-blue-700',
+    contacted: 'bg-amber-100 text-amber-700',
+    qualified: 'bg-violet-100 text-violet-700',
+    proposal: 'bg-indigo-100 text-indigo-700',
+    converted: 'bg-emerald-100 text-emerald-700',
+    won: 'bg-emerald-100 text-emerald-700',
+    lost: 'bg-red-100 text-red-700',
 };
 
-const TYPE_COLORS: Record<string, string> = {
-    service: 'bg-cyan-100 text-cyan-700',
-    product: 'bg-violet-100 text-violet-700',
-    general: 'bg-gray-100 text-gray-600',
-};
+const AVATAR_COLORS = [
+    'bg-blue-500',
+    'bg-emerald-500',
+    'bg-amber-500',
+    'bg-violet-500',
+    'bg-pink-500',
+    'bg-cyan-500',
+    'bg-indigo-500',
+    'bg-rose-500',
+];
 
-function StatCard({
-    label, value, sub, icon: Icon, color,
-}: {
-    label: string; value: number; sub?: string; icon: React.ElementType; color: string;
-}) {
+/* ─── animated count-up hook ─── */
+function useCountUp(target: number, duration = 1200) {
+    const [count, setCount] = useState(0);
+    const ref = useRef<HTMLDivElement>(null);
+    const inView = useInView(ref, { once: true });
+
+    useEffect(() => {
+        if (!inView) return;
+        let start = 0;
+        const step = target / (duration / 16);
+        const timer = setInterval(() => {
+            start += step;
+            if (start >= target) {
+                setCount(target);
+                clearInterval(timer);
+            } else {
+                setCount(Math.floor(start));
+            }
+        }, 16);
+        return () => clearInterval(timer);
+    }, [inView, target, duration]);
+
+    return { count, ref };
+}
+
+/* ─── stat card ─── */
+function StatCard({ config, value }: { config: StatCardConfig; value: number }) {
+    const { count, ref } = useCountUp(value);
+    const Icon = config.icon;
     return (
-        <Card className="bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-            <CardContent className="p-5">
-                <div className="flex items-start justify-between">
-                    <div>
-                        <p className="text-xs font-medium text-[#0F172A]/50 uppercase tracking-wide">{label}</p>
-                        <p className="text-3xl font-bold text-[#0F172A] mt-1">{value}</p>
-                        {sub && <p className="text-xs text-[#0F172A]/40 mt-1">{sub}</p>}
-                    </div>
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${color}`}>
-                        <Icon className="h-5 w-5" />
-                    </div>
+        <motion.div
+            ref={ref}
+            whileHover={{ y: -4, boxShadow: '0 12px 40px rgba(0,0,0,0.1)' }}
+            transition={{ duration: 0.2 }}
+            className="bg-white rounded-2xl border border-gray-100 p-6 relative overflow-hidden group cursor-default"
+        >
+            <div className={`absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b ${config.gradient} rounded-l-2xl`} />
+            <div className="flex items-start justify-between">
+                <div>
+                    <p className="text-xs font-semibold text-[#0F172A]/50 uppercase tracking-wider mb-1">{config.label}</p>
+                    <p className="text-3xl font-extrabold text-[#0F172A]">{count}</p>
                 </div>
-            </CardContent>
-        </Card>
+                <div className={`w-11 h-11 rounded-xl ${config.bg} ring-4 ${config.ring} flex items-center justify-center flex-shrink-0`}>
+                    <Icon className={`h-5 w-5 ${config.iconColor}`} />
+                </div>
+            </div>
+        </motion.div>
     );
 }
 
@@ -83,18 +137,15 @@ export default function Dashboard({ stats, recentLeads }: Props) {
         <AdminLayout title="Dashboard">
             <Head title="Admin Dashboard" />
 
-            {/* ── Stats grid ── */}
+            {/* Stats grid */}
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-                <StatCard label="Total Leads"    value={stats.total_leads}     sub={`${stats.new_leads_week} this week`}  icon={MessageSquare} color="bg-blue-100 text-blue-600" />
-                <StatCard label="New / Unread"   value={stats.new_status_leads} sub="need attention"                       icon={AlertCircle}   color="bg-amber-100 text-amber-600" />
-                <StatCard label="Service Leads"  value={stats.service_leads}                                                icon={Briefcase}     color="bg-cyan-100 text-cyan-600" />
-                <StatCard label="Product Leads"  value={stats.product_leads}                                                icon={Package}       color="bg-violet-100 text-violet-600" />
-                <StatCard label="Active Services" value={stats.active_services}                                             icon={TrendingUp}    color="bg-green-100 text-green-600" />
-                <StatCard label="Published Posts" value={stats.published_posts}                                             icon={FileText}      color="bg-pink-100 text-pink-600" />
+                {STAT_CARDS.map((c) => (
+                    <StatCard key={c.key} config={c} value={stats[c.key]} />
+                ))}
             </div>
 
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-                {/* ── Recent leads table ── */}
+                {/* Recent leads */}
                 <div className="xl:col-span-2">
                     <Card className="bg-white border border-gray-100 shadow-sm">
                         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
@@ -110,7 +161,6 @@ export default function Dashboard({ stats, recentLeads }: Props) {
                                 <thead>
                                     <tr className="border-b border-gray-100">
                                         <th className="text-left px-6 py-3 text-xs font-medium text-[#0F172A]/50 uppercase tracking-wide">Name</th>
-                                        <th className="text-left px-4 py-3 text-xs font-medium text-[#0F172A]/50 uppercase tracking-wide hidden sm:table-cell">Type</th>
                                         <th className="text-left px-4 py-3 text-xs font-medium text-[#0F172A]/50 uppercase tracking-wide hidden md:table-cell">Interest</th>
                                         <th className="text-left px-4 py-3 text-xs font-medium text-[#0F172A]/50 uppercase tracking-wide">Status</th>
                                         <th className="text-left px-4 py-3 text-xs font-medium text-[#0F172A]/50 uppercase tracking-wide hidden lg:table-cell">Date</th>
@@ -118,40 +168,46 @@ export default function Dashboard({ stats, recentLeads }: Props) {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-50">
-                                    {recentLeads.map((lead) => (
-                                        <tr key={lead.id} className="hover:bg-gray-50 transition-colors">
-                                            <td className="px-6 py-3">
-                                                <p className="font-medium text-[#0F172A] text-sm">{lead.name}</p>
-                                                <p className="text-xs text-[#0F172A]/50">{lead.email}</p>
-                                            </td>
-                                            <td className="px-4 py-3 hidden sm:table-cell">
-                                                <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium capitalize ${TYPE_COLORS[lead.lead_type]}`}>
-                                                    {lead.lead_type}
-                                                </span>
-                                            </td>
-                                            <td className="px-4 py-3 text-xs text-[#0F172A]/60 hidden md:table-cell">
-                                                {lead.service?.name ?? lead.product?.name ?? '—'}
-                                            </td>
-                                            <td className="px-4 py-3">
-                                                <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium capitalize ${STATUS_COLORS[lead.status] ?? 'bg-gray-100 text-gray-600'}`}>
-                                                    {lead.status}
-                                                </span>
-                                            </td>
-                                            <td className="px-4 py-3 text-xs text-[#0F172A]/50 hidden lg:table-cell">
-                                                {new Date(lead.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
-                                            </td>
-                                            <td className="px-4 py-3">
-                                                <Link href={`/admin/leads/${lead.id}`}>
-                                                    <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-[#0F172A]/40 hover:text-[#2563EB]">
-                                                        <Eye className="h-4 w-4" />
-                                                    </Button>
-                                                </Link>
-                                            </td>
-                                        </tr>
-                                    ))}
+                                    {recentLeads.map((lead, idx) => {
+                                        const initial = lead.name?.charAt(0)?.toUpperCase() ?? '?';
+                                        const avatarColor = AVATAR_COLORS[idx % AVATAR_COLORS.length];
+                                        return (
+                                            <tr key={lead.id} className="hover:bg-gray-50/80 transition-colors">
+                                                <td className="px-6 py-3">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className={`w-9 h-9 rounded-full ${avatarColor} flex items-center justify-center text-white font-semibold text-sm flex-shrink-0`}>
+                                                            {initial}
+                                                        </div>
+                                                        <div className="min-w-0">
+                                                            <p className="font-medium text-[#0F172A] text-sm truncate">{lead.name}</p>
+                                                            <p className="text-xs text-[#0F172A]/50 truncate">{lead.email}</p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="px-4 py-3 text-xs text-[#0F172A]/60 hidden md:table-cell">
+                                                    {lead.service?.name ?? lead.product?.name ?? '—'}
+                                                </td>
+                                                <td className="px-4 py-3">
+                                                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium capitalize ${STATUS_COLORS[lead.status] ?? 'bg-gray-100 text-gray-600'}`}>
+                                                        {lead.status}
+                                                    </span>
+                                                </td>
+                                                <td className="px-4 py-3 text-xs text-[#0F172A]/50 hidden lg:table-cell">
+                                                    {new Date(lead.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                                                </td>
+                                                <td className="px-4 py-3">
+                                                    <Link href={`/admin/leads/${lead.id}`}>
+                                                        <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-[#0F172A]/40 hover:text-[#2563EB]">
+                                                            <Eye className="h-4 w-4" />
+                                                        </Button>
+                                                    </Link>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
                                     {recentLeads.length === 0 && (
                                         <tr>
-                                            <td colSpan={6} className="px-6 py-10 text-center text-sm text-[#0F172A]/40">
+                                            <td colSpan={5} className="px-6 py-10 text-center text-sm text-[#0F172A]/40">
                                                 No leads yet. They'll appear here once enquiries come in.
                                             </td>
                                         </tr>
@@ -162,30 +218,33 @@ export default function Dashboard({ stats, recentLeads }: Props) {
                     </Card>
                 </div>
 
-                {/* ── Quick Actions ── */}
+                {/* Sidebar column */}
                 <div className="space-y-4">
+                    {/* Quick Actions */}
                     <Card className="bg-white border border-gray-100 shadow-sm">
                         <div className="px-6 py-4 border-b border-gray-100">
                             <h2 className="font-semibold text-[#0F172A] text-sm">Quick Actions</h2>
                         </div>
-                        <CardContent className="p-4 space-y-2">
-                            {[
-                                { label: 'Add New Service', href: '/admin/services/create', icon: Plus, color: 'text-cyan-600' },
-                                { label: 'Add New Product', href: '/admin/products/create', icon: Plus, color: 'text-violet-600' },
-                                { label: 'View All Leads',  href: '/admin/leads',          icon: MessageSquare, color: 'text-blue-600' },
-                                { label: 'Manage Services', href: '/admin/services',       icon: Briefcase, color: 'text-green-600' },
-                            ].map(({ label, href, icon: Icon, color }) => (
-                                <Link key={href} href={href}>
-                                    <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-[#F8FAFC] transition-colors cursor-pointer">
-                                        <div className={`w-8 h-8 rounded-lg bg-current/10 flex items-center justify-center ${color} opacity-80`}
-                                             style={{ background: 'rgba(0,0,0,0.04)' }}>
-                                            <Icon className={`h-4 w-4 ${color}`} />
+                        <CardContent className="p-4">
+                            <div className="grid grid-cols-2 gap-2">
+                                {[
+                                    { label: 'View Leads', href: '/admin/leads', icon: MessageSquare, bg: 'bg-blue-100 group-hover:bg-blue-200', hover: 'hover:bg-blue-50', color: 'text-blue-600' },
+                                    { label: 'Add Service', href: '/admin/services/create', icon: Plus, bg: 'bg-emerald-100 group-hover:bg-emerald-200', hover: 'hover:bg-emerald-50', color: 'text-emerald-600' },
+                                    { label: 'Add Product', href: '/admin/products/create', icon: Package, bg: 'bg-violet-100 group-hover:bg-violet-200', hover: 'hover:bg-violet-50', color: 'text-violet-600' },
+                                    { label: 'New Post', href: '/admin/blog/create', icon: FileText, bg: 'bg-pink-100 group-hover:bg-pink-200', hover: 'hover:bg-pink-50', color: 'text-pink-600' },
+                                ].map(({ label, href, icon: Icon, bg, hover, color }) => (
+                                    <Link
+                                        key={href}
+                                        href={href}
+                                        className={`flex flex-col items-center gap-2 p-4 rounded-xl ${hover} transition-all group hover:scale-105`}
+                                    >
+                                        <div className={`w-10 h-10 rounded-xl ${bg} flex items-center justify-center transition-colors`}>
+                                            <Icon className={`h-5 w-5 ${color}`} />
                                         </div>
-                                        <span className="text-sm font-medium text-[#0F172A]">{label}</span>
-                                        <ChevronRight className="h-4 w-4 text-[#0F172A]/30 ml-auto" />
-                                    </div>
-                                </Link>
-                            ))}
+                                        <span className="text-xs font-medium text-[#0F172A]/70 text-center">{label}</span>
+                                    </Link>
+                                ))}
+                            </div>
                         </CardContent>
                     </Card>
 
@@ -215,16 +274,17 @@ export default function Dashboard({ stats, recentLeads }: Props) {
                             ))}
                         </CardContent>
                     </Card>
+
+                    {/* Small nav helper */}
+                    <Link
+                        href="/admin/services"
+                        className="flex items-center justify-between px-4 py-3 rounded-xl bg-white border border-gray-100 hover:bg-gray-50 transition-colors group"
+                    >
+                        <span className="text-sm font-medium text-[#0F172A]/80">Manage all services</span>
+                        <ChevronRight className="h-4 w-4 text-[#0F172A]/30 group-hover:text-[#2563EB] transition-colors" />
+                    </Link>
                 </div>
             </div>
         </AdminLayout>
-    );
-}
-
-function ChevronRight({ className }: { className?: string }) {
-    return (
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-            <path d="M9 18l6-6-6-6" />
-        </svg>
     );
 }
