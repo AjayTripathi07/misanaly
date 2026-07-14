@@ -5,11 +5,13 @@ import {
     Globe, Smartphone, Code2, Brain, Network, Palette,
     Cloud, Wrench, HeadphonesIcon, Building2, Star,
     CheckCircle2, ArrowRight, Users, Lightbulb, Clock, LifeBuoy,
-    CalendarDays, ChevronRight, Layers, ChevronDown, Download, Play, Shield, Monitor, Rocket,
+    CalendarDays, ChevronRight, Layers, ChevronDown, Shield, Monitor, Rocket,
 } from 'lucide-react';
 import { motion, useInView, useReducedMotion } from 'framer-motion';
 import NumberFlow from '@number-flow/react';
 import PublicLayout from '@/Layouts/PublicLayout';
+import StatementSimulatorPreview from '@/Components/Products/StatementSimulatorPreview';
+import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
 import { type Service, type Product, type Testimonial, type BlogPost, type PageProps } from '@/types';
@@ -122,6 +124,9 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
         }, 900);
         return () => clearInterval(timer);
     }, []);
+
+    /* stats bar (below hero) — count-up on scroll */
+    const { ref: statsBarRef, isVisible: statsBarVisible } = useScrollAnimation({ once: true });
 
     /* section refs */
     const servicesRef = useRef(null);
@@ -292,7 +297,7 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                                     { value: counts.years, suffix: '+', label: 'Years' },
                                 ].map(({ value, suffix, label }) => (
                                     <div key={label} className="text-center">
-                                        <p className="text-2xl sm:text-3xl font-bold text-white">
+                                        <p className="font-mono text-2xl sm:text-3xl font-bold text-white">
                                             <NumberFlow value={value} />{suffix}
                                         </p>
                                         <p className="text-xs text-gray-400 mt-1 font-medium">{label}</p>
@@ -394,71 +399,45 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
             </section>
 
             {/* ═══════════════════════════════════════════════
-                SECTION 2 — FEATURED PRODUCT: Statement2Books
+                SECTION 2 — STATS BAR
             ═══════════════════════════════════════════════ */}
-            <section className="py-20 bg-gradient-to-br from-[#0F172A] via-[#1E3A5F] to-[#0F172A] text-white">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    {/* "New Product" eyebrow */}
-                    <div className="flex items-center justify-center mb-3">
-                        <span className="inline-flex items-center gap-2 bg-orange-500/20 border border-orange-500/30 text-orange-300 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full">
-                            <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
-                            New Product — Early Access Open
-                        </span>
-                    </div>
-                    <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-center mb-4">
-                        Meet <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Statement2Books</span>
-                    </h2>
-                    <p className="text-center text-gray-400 max-w-2xl mx-auto mb-12 text-lg">
-                        Convert bank statements from SBI, HDFC, ICICI &amp; 20+ banks into Tally entries in seconds. AI-powered, fully offline.
-                    </p>
-
-                    {/* Feature highlights grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12">
-                        {[
-                            { icon: '⚡', label: '10 sec per statement', color: 'text-yellow-400', bg: 'bg-yellow-500/10 border-yellow-500/20' },
-                            { icon: '🏦', label: '20+ Indian banks', color: 'text-blue-400', bg: 'bg-blue-500/10 border-blue-500/20' },
-                            { icon: '🔒', label: '100% offline & secure', color: 'text-emerald-400', bg: 'bg-emerald-500/10 border-emerald-500/20' },
-                        ].map(item => (
-                            <div key={item.label} className={`flex items-center gap-3 ${item.bg} border rounded-xl px-5 py-4`}>
-                                <span className="text-2xl">{item.icon}</span>
-                                <span className={`font-semibold ${item.color}`}>{item.label}</span>
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Social proof + CTA */}
-                    <div className="flex flex-col items-center gap-4">
-                        <div className="flex items-center gap-3">
-                            <div className="flex -space-x-2">
-                                {['SK','PR','AM','VT','NJ'].map((initials, i) => (
-                                    <div key={i} className={`w-8 h-8 rounded-full border-2 border-[#0F172A] flex items-center justify-center text-xs font-bold text-white ${['bg-blue-500','bg-emerald-500','bg-violet-500','bg-orange-500','bg-pink-500'][i]}`}>
-                                        {initials}
-                                    </div>
-                                ))}
-                            </div>
-                            <span className="text-sm text-gray-400"><strong className="text-white">200+</strong> CA firms already joined</span>
+            <section ref={statsBarRef} className="py-12 bg-[#0F172A] border-t border-white/5">
+                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 sm:grid-cols-4 gap-6">
+                    {[
+                        { value: 500, suffix: '+', label: 'CA Firms' },
+                        { value: 20, suffix: '+', label: 'Bank Formats' },
+                        { value: 98.7, suffix: '%', label: 'Accuracy Rate' },
+                        { value: 3, suffix: ' hrs', label: 'Saved Daily' },
+                    ].map((stat) => (
+                        <div key={stat.label} className="text-center">
+                            <p className="font-mono text-3xl sm:text-4xl font-bold text-white">
+                                <NumberFlow value={statsBarVisible ? stat.value : 0} />{stat.suffix}
+                            </p>
+                            <p className="text-gray-400 text-xs sm:text-sm mt-1.5">{stat.label}</p>
                         </div>
-                        <div className="flex flex-wrap gap-4 justify-center">
-                            <Link href="/products/statement2books#waitlist">
-                                <Button size="lg" className="bg-orange-500 hover:bg-orange-600 text-white rounded-full px-8 font-bold shadow-xl shadow-orange-900/30">
-                                    <Rocket className="mr-2 h-5 w-5" /> Get 3 Months Free →
-                                </Button>
-                            </Link>
-                            <Link href="/products/statement2books">
-                                <Button variant="outline" size="lg" className="border-white/20 text-white rounded-full px-8 bg-transparent hover:bg-white/10">
-                                    Learn More
-                                </Button>
-                            </Link>
-                        </div>
-                        <p className="text-xs text-gray-500 mt-1">No credit card • No commitment • Early access only</p>
-                    </div>
+                    ))}
                 </div>
             </section>
 
             {/* ═══════════════════════════════════════════════
+                SECTION — TRUST BAND (marquee)
+            ═══════════════════════════════════════════════ */}
+            <div className="bg-white py-6 overflow-hidden border-b border-gray-100 group">
+                <div className="flex animate-scroll-left group-hover:[animation-play-state:paused]" style={{ width: 'max-content' }}>
+                    {[...['SBI', 'HDFC Bank', 'ICICI Bank', 'Axis Bank', 'Kotak', 'PNB', 'Tally Prime', 'BOB', 'Canara', 'Yes Bank'],
+                      ...['SBI', 'HDFC Bank', 'ICICI Bank', 'Axis Bank', 'Kotak', 'PNB', 'Tally Prime', 'BOB', 'Canara', 'Yes Bank']].map((name, i) => (
+                        <span key={i} className="flex items-center gap-2 mx-8 text-sm font-semibold text-[#0F172A]/40 whitespace-nowrap uppercase tracking-wider">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB]/40 flex-shrink-0" />
+                            {name}
+                        </span>
+                    ))}
+                </div>
+            </div>
+
+            {/* ═══════════════════════════════════════════════
                 SECTION 3 — SERVICES
             ═══════════════════════════════════════════════ */}
-            <section className="py-20 sm:py-24 bg-gray-50" ref={servicesRef}>
+            <section className="py-20 sm:py-24 bg-[#F8FAFC]" ref={servicesRef}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     {/* Title */}
                     <motion.div
@@ -467,7 +446,7 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                         transition={{ duration: dur ?? 0.6 }}
                         className="mb-4"
                     >
-                        <h2 className="relative inline-block text-3xl sm:text-4xl font-bold text-[#0F172A]">
+                        <h2 className="font-heading relative inline-block text-3xl sm:text-4xl font-bold text-[#0F172A]">
                             What We Do
                             <motion.span
                                 className="absolute -bottom-1 left-0 h-1 bg-[#2563EB] rounded-full"
@@ -543,8 +522,8 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
             {/* ═══════════════════════════════════════════════
                 MARQUEE STRIP — TECH & SERVICES
             ═══════════════════════════════════════════════ */}
-            <div className="bg-[#0F172A] py-4 overflow-hidden border-y border-white/5">
-                <div className="flex animate-scroll-left" style={{ width: 'max-content' }}>
+            <div className="bg-[#0F172A] py-4 overflow-hidden border-y border-white/5 group">
+                <div className="flex animate-scroll-left group-hover:[animation-play-state:paused]" style={{ width: 'max-content' }}>
                     {[...['Laravel', 'React', 'AI / ML', 'Statement2Books', 'Tally Integration', 'NobelIQ Technologies', 'Mobile Apps', 'Cloud Solutions', 'Custom Software', 'REST APIs', 'UI / UX Design'], ...['Laravel', 'React', 'AI / ML', 'Statement2Books', 'Tally Integration', 'NobelIQ Technologies', 'Mobile Apps', 'Cloud Solutions', 'Custom Software', 'REST APIs', 'UI / UX Design']].map((item, i) => (
                         <span key={i} className="flex items-center gap-3 mx-6 text-sm font-medium text-white/50 whitespace-nowrap">
                             <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB] flex-shrink-0" />
@@ -555,11 +534,12 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
             </div>
 
             {/* ═══════════════════════════════════════════════
-                SECTION 3 — FEATURED PRODUCT
+                SECTION — FEATURED PRODUCT: STATEMENT2BOOKS TEASER
             ═══════════════════════════════════════════════ */}
             <section className="py-20 sm:py-24 bg-[#0F172A] text-white overflow-hidden relative">
-                {/* Background glow */}
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_50%,rgba(37,99,235,0.15)_0%,transparent_60%)] pointer-events-none" />
+                {/* Background glow blobs — matches Products/Show.tsx hero */}
+                <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-indigo-600/8 rounded-full blur-3xl pointer-events-none" />
 
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" ref={productRef}>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -570,19 +550,18 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                             animate={productInView ? { opacity: 1, x: 0 } : {}}
                             transition={{ duration: dur ?? 0.7 }}
                         >
-                            {/* Pulsing badge */}
+                            {/* Badge */}
                             <div className="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-500/40 rounded-full px-4 py-1.5 mb-6">
                                 <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
-                                <span className="text-blue-300 text-xs font-semibold uppercase tracking-wider">⭐ Flagship Product</span>
+                                <span className="text-blue-300 text-xs font-semibold uppercase tracking-wider">🤖 AI-Powered · 100% Offline · Tally Ready</span>
                             </div>
 
                             <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-4 tracking-tight leading-tight">
-                                Automate Your Tally.<br />
-                                <span className="text-blue-400">Save Hours Daily.</span>
+                                Meet <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Statement2Books</span>
                             </h2>
 
                             <p className="text-gray-400 text-lg mb-8 leading-relaxed">
-                                Built for CA firms and finance teams. Import bank statements, GST data, and TDS sheets — let AI handle the rest.
+                                Convert bank statements from SBI, HDFC, ICICI &amp; 20+ banks into Tally entries in seconds. Built for CA firms and finance teams — let AI handle the rest.
                             </p>
 
                             {/* Feature list with stagger */}
@@ -592,7 +571,7 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                                 initial="hidden"
                                 animate={productInView ? 'visible' : 'hidden'}
                             >
-                                {(featuredProduct?.features ?? []).map((f) => (
+                                {(featuredProduct?.features ?? []).slice(0, 4).map((f) => (
                                     <motion.li
                                         key={f.id}
                                         variants={fadeUp}
@@ -610,7 +589,7 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                             {/* Animated counter */}
                             <div className="flex items-center gap-2 mb-8">
                                 <Users className="h-5 w-5 text-blue-400" />
-                                <span className="text-white font-bold text-xl">
+                                <span className="font-mono text-white font-bold text-xl">
                                     <NumberFlow value={productInView ? 500 : 0} />+
                                 </span>
                                 <span className="text-gray-400">CA firms trust us</span>
@@ -618,16 +597,16 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
 
                             {/* CTAs */}
                             <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                                <Link href="/get-quote">
-                                    <Button size="lg" className="bg-[#2563EB] hover:bg-[#1D4ED8] rounded-full px-8 shadow-lg shadow-blue-900/50 font-semibold text-white">
-                                        <Download className="mr-2 h-5 w-5" />
-                                        Download Free Trial
+                                <Link href="/products/statement2books">
+                                    <Button size="lg" className="bg-orange-500 hover:bg-orange-600 rounded-full px-8 shadow-xl shadow-orange-900/40 font-semibold text-white">
+                                        Explore Statement2Books
+                                        <ArrowRight className="ml-2 h-4 w-4" />
                                     </Button>
                                 </Link>
-                                <Link href="/request-demo">
+                                <Link href="/products/statement2books#waitlist">
                                     <Button variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10 rounded-full px-8 bg-transparent font-semibold">
-                                        <Play className="mr-2 h-4 w-4" />
-                                        Watch Demo
+                                        <Rocket className="mr-2 h-4 w-4" />
+                                        Join Waitlist
                                     </Button>
                                 </Link>
                             </div>
@@ -647,84 +626,14 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                             </div>
                         </motion.div>
 
-                        {/* RIGHT — animated mockup */}
+                        {/* RIGHT — auto-cycling simulator preview (non-interactive teaser) */}
                         <motion.div
                             initial={{ opacity: 0, x: 60 }}
                             animate={productInView ? { opacity: 1, x: 0 } : {}}
                             transition={{ duration: dur ?? 0.7, delay: 0.2 }}
-                            className="hidden lg:block"
+                            className="hidden lg:flex items-center justify-center"
                         >
-                            <motion.div
-                                animate={{ y: [0, -10, 0] }}
-                                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                                className="relative"
-                            >
-                                <div className="rounded-2xl border border-blue-500/40 shadow-2xl shadow-blue-500/10 overflow-hidden bg-[#0D1117]">
-                                    {/* Title bar */}
-                                    <div className="flex items-center gap-2 px-4 py-3 bg-[#161B22] border-b border-white/10">
-                                        <div className="w-3 h-3 rounded-full bg-red-500" />
-                                        <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                                        <div className="w-3 h-3 rounded-full bg-green-500" />
-                                        <span className="ml-3 text-xs text-gray-400 font-mono">Statement2Books v1.3</span>
-                                        <span className="ml-auto flex items-center gap-1.5 text-xs text-[#10B981]">
-                                            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                                            Processing...
-                                        </span>
-                                    </div>
-
-                                    {/* Data rows */}
-                                    <div className="p-4 space-y-2 min-h-[200px]">
-                                        {DEMO_ROWS.map((row, i) =>
-                                            i < visibleRows ? (
-                                                <motion.div
-                                                    key={row.company}
-                                                    initial={{ opacity: 0, x: -20 }}
-                                                    animate={{ opacity: 1, x: 0 }}
-                                                    className="flex items-center justify-between py-2 px-3 rounded-lg bg-white/5 hover:bg-white/[0.08]"
-                                                >
-                                                    <div className="flex-1 min-w-0">
-                                                        <p className="text-xs font-medium text-gray-300 font-mono truncate">{row.company}</p>
-                                                        <p className="text-xs text-gray-500 font-mono">{row.entries} entries</p>
-                                                    </div>
-                                                    <span className="ml-3 text-xs bg-green-500/20 text-[#10B981] border border-green-500/30 rounded-full px-2 py-0.5 font-mono flex-shrink-0">
-                                                        ✓ {row.status}
-                                                    </span>
-                                                </motion.div>
-                                            ) : null
-                                        )}
-                                    </div>
-
-                                    {/* Progress bars */}
-                                    <div className="px-4 pb-4 border-t border-white/10 pt-3 space-y-2">
-                                        {[
-                                            { label: 'Bank Entries', pct: 92, color: 'bg-blue-500' },
-                                            { label: 'GST Entries', pct: 87, color: 'bg-indigo-500' },
-                                        ].map(bar => (
-                                            <div key={bar.label}>
-                                                <div className="flex justify-between text-xs mb-1">
-                                                    <span className="text-gray-400 font-mono">{bar.label}</span>
-                                                    <span className="text-gray-300 font-mono">{bar.pct}%</span>
-                                                </div>
-                                                <div className="h-1.5 bg-white/10 rounded-full">
-                                                    <motion.div
-                                                        className={`h-full ${bar.color} rounded-full`}
-                                                        initial={{ width: 0 }}
-                                                        animate={productInView ? { width: `${bar.pct}%` } : {}}
-                                                        transition={{ duration: dur ?? 1.5, delay: 0.8, ease: 'easeOut' }}
-                                                    />
-                                                </div>
-                                            </div>
-                                        ))}
-                                        <p className="text-xs text-gray-500 font-mono text-right pt-1">1,284 processed · 98.7% accuracy</p>
-                                    </div>
-                                </div>
-
-                                {/* Floating badge */}
-                                <div className="absolute -top-4 -right-4 bg-white text-[#1D4ED8] rounded-xl shadow-xl px-4 py-2.5">
-                                    <p className="text-xs font-semibold">Time saved</p>
-                                    <p className="text-xl font-bold leading-none mt-0.5">3 hrs<span className="text-sm font-medium">/day</span></p>
-                                </div>
-                            </motion.div>
+                            <StatementSimulatorPreview />
                         </motion.div>
 
                     </div>
@@ -778,7 +687,7 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                                 >
                                     <h3 className="text-2xl font-bold text-[#0F172A] mb-3">{item.title}</h3>
                                     <p className="text-[#0F172A]/60 text-base leading-relaxed mb-4">{item.desc}</p>
-                                    <p className="text-4xl font-extrabold text-[#2563EB]">{item.stat}</p>
+                                    <p className="font-mono text-4xl font-extrabold text-[#2563EB]">{item.stat}</p>
                                     <p className="text-sm text-gray-500 mt-1 font-medium">{item.statLabel}</p>
                                 </motion.div>
                             </div>
@@ -790,7 +699,7 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
             {/* ═══════════════════════════════════════════════
                 SECTION 5 — TESTIMONIALS
             ═══════════════════════════════════════════════ */}
-            <section className="py-20 sm:py-24 bg-gray-50 overflow-hidden" ref={testimonialsRef}>
+            <section className="py-20 sm:py-24 bg-[#F8FAFC] overflow-hidden" ref={testimonialsRef}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
                     <motion.div
                         className="text-center"
