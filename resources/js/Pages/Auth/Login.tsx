@@ -37,10 +37,8 @@ export default function Login({
 
                     <div className="relative z-10 max-w-md w-full">
                         <div className="flex items-center gap-3 mb-12">
-                            <div className="w-10 h-10 rounded-xl bg-[#2563EB] flex items-center justify-center shadow-lg shadow-blue-900/50">
-                                <span className="text-white font-bold text-base">M</span>
-                            </div>
-                            <span className="text-white font-bold text-xl">MIS<span className="text-blue-400">Analytics</span></span>
+                            <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-10 h-10 object-contain" />
+                            <span className="text-white font-bold text-xl">NobelIQ<span className="text-blue-400"> Technologies</span></span>
                         </div>
 
                         <h1 className="text-4xl xl:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4">
@@ -54,7 +52,7 @@ export default function Login({
                         <div className="space-y-3 mb-16">
                             {[
                                 { icon: '📊', label: 'Real-time Analytics', color: 'from-blue-500/20 to-blue-600/10' },
-                                { icon: '🚀', label: 'Bank2Books — Early Access', color: 'from-violet-500/20 to-violet-600/10' },
+                                { icon: '🚀', label: 'Statement2Books — Early Access', color: 'from-violet-500/20 to-violet-600/10' },
                                 { icon: '🔒', label: 'Secure & Private', color: 'from-emerald-500/20 to-emerald-600/10' },
                             ].map((item, i) => (
                                 <motion.div
@@ -89,10 +87,8 @@ export default function Login({
                         className="w-full max-w-sm"
                     >
                         <div className="flex items-center gap-2 mb-8 lg:hidden">
-                            <div className="w-8 h-8 rounded-lg bg-[#2563EB] flex items-center justify-center">
-                                <span className="text-white font-bold text-sm">M</span>
-                            </div>
-                            <span className="font-bold text-[#0F172A] text-lg">MIS<span className="text-[#2563EB]">Analytics</span></span>
+                            <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-8 h-8 object-contain" />
+                            <span className="font-bold text-[#0F172A] text-lg">NobelIQ<span className="text-[#2563EB]"> Technologies</span></span>
                         </div>
 
                         <h2 className="text-2xl font-extrabold text-[#0F172A] mb-1">Sign In</h2>

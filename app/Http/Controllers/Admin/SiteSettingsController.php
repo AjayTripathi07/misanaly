@@ -24,6 +24,9 @@ class SiteSettingsController extends Controller
             'instagram'                  => '',
             'default_meta_description'   => '',
             'og_image_url'               => '',
+            'gst_number'                 => '',
+            'cin_number'                 => '',
+            'udyam_number'               => 'UDYAM-MP-40-0050255',
         ];
 
         return Inertia::render('Admin/Settings/Index', [
@@ -45,6 +48,9 @@ class SiteSettingsController extends Controller
             'instagram'                => ['nullable', 'string', 'max:500'],
             'default_meta_description' => ['nullable', 'string', 'max:500'],
             'og_image_url'             => ['nullable', 'string', 'max:500'],
+            'gst_number'               => ['nullable', 'string', 'max:255'],
+            'cin_number'               => ['nullable', 'string', 'max:255'],
+            'udyam_number'             => ['nullable', 'string', 'max:255'],
         ]);
 
         foreach ($data as $key => $value) {

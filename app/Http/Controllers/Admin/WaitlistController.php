@@ -59,7 +59,7 @@ class WaitlistController extends Controller
                 '"' . $e->email . '"',
                 '"' . $e->phone . '"',
                 '"' . str_replace('"', '""', $e->company ?? '') . '"',
-                '"' . ($e->product->name ?? 'Bank2Books') . '"',
+                '"' . ($e->product->name ?? 'Statement2Books') . '"',
                 $e->status,
                 '"' . str_replace('"', '""', $e->remark ?? '') . '"',
                 '"' . $e->created_at->format('Y-m-d H:i') . '"',
@@ -68,7 +68,7 @@ class WaitlistController extends Controller
 
         return response($csv, 200, [
             'Content-Type'        => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="bank2books-waitlist-' . now()->format('Y-m-d') . '.csv"',
+            'Content-Disposition' => 'attachment; filename="statement2books-waitlist-' . now()->format('Y-m-d') . '.csv"',
         ]);
     }
 }

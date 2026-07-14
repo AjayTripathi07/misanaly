@@ -12,7 +12,7 @@ class TeamSeeder extends Seeder
             [
                 'name'         => 'Rajesh Sharma',
                 'role'         => 'Founder & CEO',
-                'bio'          => 'Rajesh brings over 15 years of experience in enterprise software development and IT consulting. He founded MIS Analytics with a vision to make cutting-edge technology accessible to businesses of all sizes across India.',
+                'bio'          => 'Rajesh brings over 15 years of experience in enterprise software development and IT consulting. He founded NobelIQ Technologies with a vision to make cutting-edge technology accessible to businesses of all sizes across India.',
                 'photo'        => null,
                 'linkedin_url' => null,
                 'sort_order'   => 1,

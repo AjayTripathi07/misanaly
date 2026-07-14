@@ -1,7 +1,7 @@
 @component('mail::message')
 # New Lead Received! 🎉
 
-A new enquiry has been submitted on the MIS Analytics website.
+A new enquiry has been submitted on the NobelIQ Technologies website.
 
 ---
 
@@ -40,5 +40,5 @@ View in Admin Panel
 
 ---
 
-*This is an automated notification from the MIS Analytics website.*
+*This is an automated notification from the NobelIQ Technologies website.*
 @endcomponent

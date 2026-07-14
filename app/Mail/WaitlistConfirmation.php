@@ -20,7 +20,7 @@ class WaitlistConfirmation extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: "You're on the Bank2Books Early Access List! 🎉",
+            subject: "You're on the Statement2Books Early Access List! 🎉",
         );
     }
 

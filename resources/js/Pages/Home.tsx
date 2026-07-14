@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import SeoHead from '@/Components/SeoHead';
 import {
     Globe, Smartphone, Code2, Brain, Network, Palette,
@@ -12,7 +12,7 @@ import NumberFlow from '@number-flow/react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
-import { type Service, type Product, type Testimonial, type BlogPost } from '@/types';
+import { type Service, type Product, type Testimonial, type BlogPost, type PageProps } from '@/types';
 
 /* ─── icon map ─── */
 const ICON_MAP: Record<string, React.ElementType> = {
@@ -101,6 +101,8 @@ const WHY_ITEMS = [
 
 /* ─── main component ─── */
 export default function Home({ services, featuredProduct, testimonials, latestPosts }: Props) {
+    const { props: pageProps } = usePage<PageProps<{ siteSettings?: { udyam_number: string } }>>();
+    const udyamNumber = pageProps.siteSettings?.udyam_number;
     const prefersReduced = useReducedMotion();
     const dur = prefersReduced ? 0 : undefined;
 
@@ -151,14 +153,14 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
         <PublicLayout>
             <SeoHead
                 title="IT Services & Software Products for Modern Businesses"
-                description="Custom software development, web & mobile apps, and AI-powered tools. MIS Analytics — trusted by businesses across India."
+                description="Custom software development, web & mobile apps, and AI-powered tools. NobelIQ Technologies — trusted by businesses across India."
                 keywords="IT services India, custom software development, web development, mobile app development, Tally automation, CA firm software"
             />
             <Head>
                 <script type="application/ld+json">{JSON.stringify({
                     '@context': 'https://schema.org',
                     '@type': 'Organization',
-                    name: 'MIS Analytics',
+                    name: 'NobelIQ Technologies',
                     url: 'https://misanaly.in',
                     description: 'IT Services and Software Products company based in India',
                     contactPoint: {
@@ -225,7 +227,7 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                             </motion.div>
 
                             {/* H1 — word-by-word stagger */}
-                            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6">
+                            <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6">
                                 {"Innovative IT Solutions & Software Products".split(" ").map((word, i) => (
                                     <motion.span
                                         key={i}
@@ -249,16 +251,16 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                                 We build custom web apps, mobile apps, and accounting automation tools that help CA firms and businesses work smarter — not harder.
                             </motion.p>
 
-                            {/* Bank2Books floating pill */}
+                            {/* Statement2Books floating pill */}
                             <motion.a
-                                href="/products/bank2books"
+                                href="/products/statement2books"
                                 className="inline-flex items-center gap-2 bg-orange-500/15 border border-orange-500/30 text-orange-300 text-xs font-semibold px-4 py-2 rounded-full hover:bg-orange-500/25 transition-colors mb-6"
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.1 }}
                             >
                                 <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
-                                🎉 Bank2Books — Join 200+ CA firms on the waitlist
+                                🎉 Statement2Books — Join 200+ CA firms on the waitlist
                                 <ChevronRight className="h-3 w-3" />
                             </motion.a>
 
@@ -297,6 +299,10 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                                     </div>
                                 ))}
                             </div>
+
+                            {udyamNumber && (
+                                <p className="mt-4 text-xs text-gray-500">🏛️ MSME Registered · Udyam: {udyamNumber}</p>
+                            )}
                         </div>
 
                         {/* RIGHT SIDE — Tally mockup (hidden below lg) */}
@@ -313,7 +319,7 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                                         <div className="w-3 h-3 rounded-full bg-red-500" />
                                         <div className="w-3 h-3 rounded-full bg-yellow-500" />
                                         <div className="w-3 h-3 rounded-full bg-green-500" />
-                                        <span className="ml-3 text-xs text-gray-400 font-mono">Bank2Books v1.3</span>
+                                        <span className="ml-3 text-xs text-gray-400 font-mono">Statement2Books v1.3</span>
                                         <span className="ml-auto flex items-center gap-1.5 text-xs text-[#10B981]">
                                             <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
                                             Processing...
@@ -388,7 +394,7 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
             </section>
 
             {/* ═══════════════════════════════════════════════
-                SECTION 2 — FEATURED PRODUCT: Bank2Books
+                SECTION 2 — FEATURED PRODUCT: Statement2Books
             ═══════════════════════════════════════════════ */}
             <section className="py-20 bg-gradient-to-br from-[#0F172A] via-[#1E3A5F] to-[#0F172A] text-white">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -399,8 +405,8 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                             New Product — Early Access Open
                         </span>
                     </div>
-                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-center mb-4">
-                        Meet <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Bank2Books</span>
+                    <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-center mb-4">
+                        Meet <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Statement2Books</span>
                     </h2>
                     <p className="text-center text-gray-400 max-w-2xl mx-auto mb-12 text-lg">
                         Convert bank statements from SBI, HDFC, ICICI &amp; 20+ banks into Tally entries in seconds. AI-powered, fully offline.
@@ -433,12 +439,12 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                             <span className="text-sm text-gray-400"><strong className="text-white">200+</strong> CA firms already joined</span>
                         </div>
                         <div className="flex flex-wrap gap-4 justify-center">
-                            <Link href="/products/bank2books#waitlist">
+                            <Link href="/products/statement2books#waitlist">
                                 <Button size="lg" className="bg-orange-500 hover:bg-orange-600 text-white rounded-full px-8 font-bold shadow-xl shadow-orange-900/30">
                                     <Rocket className="mr-2 h-5 w-5" /> Get 3 Months Free →
                                 </Button>
                             </Link>
-                            <Link href="/products/bank2books">
+                            <Link href="/products/statement2books">
                                 <Button variant="outline" size="lg" className="border-white/20 text-white rounded-full px-8 bg-transparent hover:bg-white/10">
                                     Learn More
                                 </Button>
@@ -539,7 +545,7 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
             ═══════════════════════════════════════════════ */}
             <div className="bg-[#0F172A] py-4 overflow-hidden border-y border-white/5">
                 <div className="flex animate-scroll-left" style={{ width: 'max-content' }}>
-                    {[...['Laravel', 'React', 'AI / ML', 'Bank2Books', 'Tally Integration', 'MIS Analytics', 'Mobile Apps', 'Cloud Solutions', 'Custom Software', 'REST APIs', 'UI / UX Design'], ...['Laravel', 'React', 'AI / ML', 'Bank2Books', 'Tally Integration', 'MIS Analytics', 'Mobile Apps', 'Cloud Solutions', 'Custom Software', 'REST APIs', 'UI / UX Design']].map((item, i) => (
+                    {[...['Laravel', 'React', 'AI / ML', 'Statement2Books', 'Tally Integration', 'NobelIQ Technologies', 'Mobile Apps', 'Cloud Solutions', 'Custom Software', 'REST APIs', 'UI / UX Design'], ...['Laravel', 'React', 'AI / ML', 'Statement2Books', 'Tally Integration', 'NobelIQ Technologies', 'Mobile Apps', 'Cloud Solutions', 'Custom Software', 'REST APIs', 'UI / UX Design']].map((item, i) => (
                         <span key={i} className="flex items-center gap-3 mx-6 text-sm font-medium text-white/50 whitespace-nowrap">
                             <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB] flex-shrink-0" />
                             {item}
@@ -570,7 +576,7 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                                 <span className="text-blue-300 text-xs font-semibold uppercase tracking-wider">⭐ Flagship Product</span>
                             </div>
 
-                            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-4 tracking-tight leading-tight">
+                            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-4 tracking-tight leading-tight">
                                 Automate Your Tally.<br />
                                 <span className="text-blue-400">Save Hours Daily.</span>
                             </h2>
@@ -659,7 +665,7 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                                         <div className="w-3 h-3 rounded-full bg-red-500" />
                                         <div className="w-3 h-3 rounded-full bg-yellow-500" />
                                         <div className="w-3 h-3 rounded-full bg-green-500" />
-                                        <span className="ml-3 text-xs text-gray-400 font-mono">Bank2Books v1.3</span>
+                                        <span className="ml-3 text-xs text-gray-400 font-mono">Statement2Books v1.3</span>
                                         <span className="ml-auto flex items-center gap-1.5 text-xs text-[#10B981]">
                                             <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
                                             Processing...
@@ -737,8 +743,8 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                         animate={whyInView ? { opacity: 1, y: 0 } : {}}
                         transition={{ duration: dur ?? 0.6 }}
                     >
-                        <h2 className="text-3xl sm:text-4xl font-bold text-[#0F172A] mb-4">
-                            Why Choose MIS Analytics?
+                        <h2 className="font-heading text-3xl sm:text-4xl font-bold text-[#0F172A] mb-4">
+                            Why Choose NobelIQ Technologies?
                         </h2>
                         <p className="text-[#0F172A]/60 text-lg max-w-2xl mx-auto">
                             We combine technical excellence with deep business understanding to deliver results that matter.
@@ -792,11 +798,11 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                         animate={testimonialsInView ? { opacity: 1, y: 0 } : {}}
                         transition={{ duration: dur ?? 0.6 }}
                     >
-                        <h2 className="text-3xl sm:text-4xl font-bold text-[#0F172A] mb-4">
+                        <h2 className="font-heading text-3xl sm:text-4xl font-bold text-[#0F172A] mb-4">
                             Trusted by Businesses Across India
                         </h2>
                         <p className="text-[#0F172A]/60 text-lg max-w-2xl mx-auto">
-                            Hear from the teams that rely on MIS Analytics every day.
+                            Hear from the teams that rely on NobelIQ Technologies every day.
                         </p>
                     </motion.div>
                 </div>
@@ -827,7 +833,7 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             {[
-                                { name: 'Ramesh Gupta', role: 'CA', company: 'Gupta & Co', quote: 'MIS Analytics transformed the way we handle Tally entries. What used to take half a day now takes minutes.', rating: 5 },
+                                { name: 'Ramesh Gupta', role: 'CA', company: 'Gupta & Co', quote: 'NobelIQ Technologies transformed the way we handle Tally entries. What used to take half a day now takes minutes.', rating: 5 },
                                 { name: 'Priya Sharma', role: 'Finance Manager', company: 'Sharma Exports', quote: 'Excellent web application built on time. The team understood our requirements perfectly.', rating: 5 },
                                 { name: 'Anil Patel', role: 'Director', company: 'Patel Industries', quote: 'Outstanding support and a product that genuinely works. Highly recommend for any CA firm.', rating: 5 },
                             ].map((t, i) => (
@@ -870,11 +876,11 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                             transition={{ duration: dur ?? 0.6 }}
                         >
                             <div>
-                                <h2 className="text-3xl sm:text-4xl font-bold text-[#0F172A] mb-2">
+                                <h2 className="font-heading text-3xl sm:text-4xl font-bold text-[#0F172A] mb-2">
                                     Latest Insights
                                 </h2>
                                 <p className="text-[#0F172A]/60 text-lg">
-                                    Tips, guides, and updates from the MIS Analytics team.
+                                    Tips, guides, and updates from the NobelIQ Technologies team.
                                 </p>
                             </div>
                             <Link href="/blog">
@@ -959,13 +965,13 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                         Start Today
                     </Badge>
 
-                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-6 tracking-tight leading-tight">
+                    <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-6 tracking-tight leading-tight">
                         Ready to Transform{' '}
                         <span className="text-white/90">Your Business?</span>
                     </h2>
 
                     <p className="text-white/75 text-lg mb-10 leading-relaxed max-w-xl mx-auto">
-                        Join 500+ businesses and CA firms across India who trust MIS Analytics for their technology needs. Let's build something great together.
+                        Join 500+ businesses and CA firms across India who trust NobelIQ Technologies for their technology needs. Let's build something great together.
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">

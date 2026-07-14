@@ -19,6 +19,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/services', [ServicesController::class, 'index'])->name('services.index');
 Route::get('/services/{slug}', [ServicesController::class, 'show'])->name('services.show');
 Route::get('/products', [ProductsController::class, 'index'])->name('products.index');
+Route::redirect('/products/bank2books', '/products/statement2books', 301);
 Route::get('/products/{slug}', [ProductsController::class, 'show'])->name('products.show');
 Route::get('/about', [AboutController::class, 'index'])->name('about');
 Route::get('/contact', [ContactController::class, 'show'])->name('contact');

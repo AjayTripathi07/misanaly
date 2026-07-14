@@ -44,7 +44,7 @@ export default function RequestDemo({ products }: Props) {
         <PublicLayout>
             <SeoHead
                 title="Request a Demo"
-                description="See our software products in action — request a free demo of Bank2Books and our other tools today."
+                description="See our software products in action — request a free demo of Statement2Books and our other tools today."
             />
 
             {/* Hero */}

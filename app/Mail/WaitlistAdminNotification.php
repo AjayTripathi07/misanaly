@@ -20,7 +20,7 @@ class WaitlistAdminNotification extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: "New Waitlist Signup: {$this->entry->name} — Bank2Books",
+            subject: "New Waitlist Signup: {$this->entry->name} — Statement2Books",
         );
     }
 

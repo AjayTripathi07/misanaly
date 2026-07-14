@@ -33,8 +33,8 @@ export default function ProductsIndex({ products }: Props) {
         <PublicLayout>
             <SeoHead
                 title="Our Software Products"
-                description="Discover MIS Analytics software products including Bank2Books — built for CA firms and finance teams across India."
-                keywords="Bank2Books, bank statement to Tally, CA firm software, accounting automation, MIS Analytics products"
+                description="Discover NobelIQ Technologies software products including Statement2Books — built for CA firms and finance teams across India."
+                keywords="Statement2Books, bank statement to Tally, CA firm software, accounting automation, NobelIQ Technologies products"
             />
 
             {/* Hero */}

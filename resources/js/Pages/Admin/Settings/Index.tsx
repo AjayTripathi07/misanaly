@@ -28,6 +28,9 @@ interface FormFields {
     instagram: string;
     default_meta_description: string;
     og_image_url: string;
+    gst_number: string;
+    cin_number: string;
+    udyam_number: string;
 }
 
 export default function SettingsIndex({ settings }: Props) {
@@ -46,6 +49,9 @@ export default function SettingsIndex({ settings }: Props) {
         instagram: settings.instagram ?? '',
         default_meta_description: settings.default_meta_description ?? '',
         og_image_url: settings.og_image_url ?? '',
+        gst_number: settings.gst_number ?? '',
+        cin_number: settings.cin_number ?? '',
+        udyam_number: settings.udyam_number ?? '',
     });
 
     function handleSubmit(e: React.FormEvent) {
@@ -81,7 +87,7 @@ export default function SettingsIndex({ settings }: Props) {
                                     id="site_name"
                                     value={data.site_name}
                                     onChange={(e) => setData('site_name', e.target.value)}
-                                    placeholder="MIS Analytics"
+                                    placeholder="NobelIQ Technologies"
                                 />
                                 {errors.site_name && <p className="text-xs text-red-500">{errors.site_name}</p>}
                             </div>
@@ -190,7 +196,7 @@ export default function SettingsIndex({ settings }: Props) {
                                 id="default_meta_description"
                                 value={data.default_meta_description}
                                 onChange={(e) => setData('default_meta_description', e.target.value)}
-                                placeholder="MIS Analytics — data-driven insights to grow your business."
+                                placeholder="NobelIQ Technologies — data-driven insights to grow your business."
                                 rows={3}
                             />
                             {errors.default_meta_description && <p className="text-xs text-red-500">{errors.default_meta_description}</p>}
@@ -204,6 +210,43 @@ export default function SettingsIndex({ settings }: Props) {
                                 placeholder="https://misanalytics.com/og-image.png"
                             />
                             {errors.og_image_url && <p className="text-xs text-red-500">{errors.og_image_url}</p>}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Business Registration */}
+                <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-6">
+                    <h3 className="text-sm font-semibold text-[#0F172A] mb-5 pb-3 border-b border-gray-100">Business Registration</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div className="space-y-1.5">
+                            <Label htmlFor="gst_number">GST Number</Label>
+                            <Input
+                                id="gst_number"
+                                value={data.gst_number}
+                                onChange={(e) => setData('gst_number', e.target.value)}
+                                placeholder="23AAAAA0000A1Z5"
+                            />
+                            {errors.gst_number && <p className="text-xs text-red-500">{errors.gst_number}</p>}
+                        </div>
+                        <div className="space-y-1.5">
+                            <Label htmlFor="cin_number">CIN Number</Label>
+                            <Input
+                                id="cin_number"
+                                value={data.cin_number}
+                                onChange={(e) => setData('cin_number', e.target.value)}
+                                placeholder="U72900MP2024PTC000000"
+                            />
+                            {errors.cin_number && <p className="text-xs text-red-500">{errors.cin_number}</p>}
+                        </div>
+                        <div className="space-y-1.5">
+                            <Label htmlFor="udyam_number">Udyam Number</Label>
+                            <Input
+                                id="udyam_number"
+                                value={data.udyam_number}
+                                onChange={(e) => setData('udyam_number', e.target.value)}
+                                placeholder="UDYAM-MP-40-0050255"
+                            />
+                            {errors.udyam_number && <p className="text-xs text-red-500">{errors.udyam_number}</p>}
                         </div>
                     </div>
                 </div>

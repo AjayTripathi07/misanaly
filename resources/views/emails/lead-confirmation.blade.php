@@ -24,11 +24,11 @@ In the meantime, you can explore our services and products at [misanaly.in]({{ c
 If you have any urgent questions, feel free to reply to this email or reach us at **info@misanaly.in**.
 
 @component('mail::button', ['url' => config('app.url'), 'color' => 'blue'])
-Visit MIS Analytics
+Visit NobelIQ Technologies
 @endcomponent
 
 Warm regards,
-**MIS Analytics Team**
+**NobelIQ Technologies Team**
 
 ---
 

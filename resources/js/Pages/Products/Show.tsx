@@ -2,7 +2,10 @@ import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import { useState, useEffect, useRef, FormEvent } from 'react';
 import SeoHead from '@/Components/SeoHead';
 import { motion, useInView, AnimatePresence, useReducedMotion } from 'framer-motion';
+import NumberFlow from '@number-flow/react';
 import PublicLayout from '@/Layouts/PublicLayout';
+import StatementSimulator from '@/Components/Products/StatementSimulator';
+import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
 import { Card, CardContent } from '@/Components/ui/card';
@@ -11,6 +14,8 @@ import {
     Download, Play, ChevronDown, Shield, Monitor, Star,
     ChevronUp, ChevronRight, Zap, Database, FileText,
     Rocket, Mail, Phone, Building2, CheckCheck, UserCircle, X,
+    Clock, AlertTriangle, Landmark, Briefcase, ScanLine, ListTree,
+    Layers, Send, Sheet as SheetIcon, FileCheck2, Target, Brain, ClipboardCheck,
 } from 'lucide-react';
 
 // ─── Interfaces ───────────────────────────────────────────────────────────────
@@ -63,13 +68,10 @@ interface Props {
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const DEMO_ROWS = [
-    { company: 'Sharma & Associates', entries: '1,284', status: 'Processed' },
-    { company: 'Patel Traders Pvt Ltd', entries: '892', status: 'Processed' },
-    { company: 'Rajesh Kumar & Co', entries: '2,156', status: 'Processed' },
-    { company: 'Mumbai Exports Ltd', entries: '445', status: 'Processed' },
-    { company: 'Delhi Tech Solutions', entries: '1,780', status: 'Processed' },
-];
+const FEATURE_ICON_MAP: Record<string, typeof CheckCircle2> = {
+    Brain, FileText, ScanLine, ListTree, ClipboardCheck, Building2,
+    Layers, Send, Sheet: SheetIcon, FileCheck2, Shield, Target,
+};
 
 const HOW_IT_WORKS = [
     {
@@ -83,7 +85,7 @@ const HOW_IT_WORKS = [
         step: 2,
         title: 'AI Reads & Categorises Instantly',
         description:
-            'Bank2Books AI engine scans every transaction and maps it to the correct Tally ledger using 160+ auto-tagging rules — salary, GST, TDS, vendor payments, and more.',
+            'Statement2Books AI engine scans every transaction and maps it to the correct Tally ledger using 160+ auto-tagging rules — salary, GST, TDS, vendor payments, and more.',
         icon: FileText,
     },
     {
@@ -140,55 +142,6 @@ export default function ProductShow({ product, faqs }: Props) {
         });
     }
 
-    // ── Typewriter ────────────────────────────────────────────────────────────
-    const [displayText, setDisplayText] = useState('');
-    const [cursorVisible, setCursorVisible] = useState(true);
-
-    useEffect(() => {
-        let i = 0;
-        const interval = setInterval(() => {
-            if (i <= product.tagline.length) {
-                setDisplayText(product.tagline.slice(0, i));
-                i++;
-            } else {
-                clearInterval(interval);
-            }
-        }, 40);
-        return () => clearInterval(interval);
-    }, [product.tagline]);
-
-    useEffect(() => {
-        const blink = setInterval(() => setCursorVisible((v) => !v), 500);
-        return () => clearInterval(blink);
-    }, []);
-
-    // ── Hero demo rows ────────────────────────────────────────────────────────
-    const [heroRows, setHeroRows] = useState(0);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setHeroRows((prev) => {
-                if (prev < DEMO_ROWS.length) return prev + 1;
-                clearInterval(interval);
-                return prev;
-            });
-        }, 900);
-        return () => clearInterval(interval);
-    }, []);
-
-    // ── Demo section rows ─────────────────────────────────────────────────────
-    const [demoRows, setDemoRows] = useState(0);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setDemoRows((prev) => {
-                if (prev < DEMO_ROWS.length) return prev + 1;
-                return 0;
-            });
-        }, 1200);
-        return () => clearInterval(interval);
-    }, []);
-
     // ── FAQ accordion ─────────────────────────────────────────────────────────
     const [openFaq, setOpenFaq] = useState<number | null>(null);
 
@@ -199,6 +152,13 @@ export default function ProductShow({ product, faqs }: Props) {
         window.addEventListener('scroll', onScroll, { passive: true });
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
+
+    // ── Stats bar (count-up on scroll) ────────────────────────────────────────
+    const { ref: statsBarRef, isVisible: statsBarVisible } = useScrollAnimation({ once: true });
+
+    // ── Problem section ────────────────────────────────────────────────────────
+    const problemRef = useRef<HTMLElement>(null);
+    const problemInView = useInView(problemRef, { once: true, margin: '-80px' });
 
     // ── InView refs ───────────────────────────────────────────────────────────
     const featuresRef = useRef<HTMLElement>(null);
@@ -245,7 +205,7 @@ export default function ProductShow({ product, faqs }: Props) {
             </Head>
 
             {/* ═══════════════════════════════════════════════════════════════
-                SECTION 1 — HERO
+                SECTION 1 — HERO / INTERACTIVE SIMULATOR
             ═══════════════════════════════════════════════════════════════ */}
             <section className="min-h-screen bg-[#0F172A] text-white relative overflow-hidden flex items-center">
                 {/* Background glow blobs */}
@@ -272,50 +232,37 @@ export default function ProductShow({ product, faqs }: Props) {
                                 </Link>
                             </motion.div>
 
-                            {/* Coming Soon badge */}
+                            {/* Badge */}
                             <motion.div
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: dur(0.4), delay: 0.05 }}
-                                className="mb-3"
+                                className="mb-4"
                             >
-                                <span className="inline-flex items-center gap-2 bg-orange-500/20 border border-orange-500/40 text-orange-300 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
-                                    Coming Soon — Early Access Open
+                                <span className="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-500/40 text-blue-300 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full">
+                                    🤖 AI-Powered · 100% Offline · Tally Ready
                                 </span>
                             </motion.div>
 
-                            {/* Pricing model badge */}
-                            <motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: dur(0.4), delay: 0.1 }}
-                                className="mb-4"
-                            >
-                                <Badge className="bg-blue-500/20 text-blue-300 border border-blue-500/30 text-xs font-semibold uppercase tracking-wider px-4 py-1.5">
-                                    {product.pricing_model}
-                                </Badge>
-                            </motion.div>
-
-                            {/* Product name */}
+                            {/* Headline */}
                             <motion.h1
-                                className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tighter leading-none"
+                                className="font-heading text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tighter leading-none"
                                 initial={{ opacity: 0, y: 60 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: dur(0.7), delay: 0.2 }}
                             >
-                                {product.name}
+                                Your Bank Statements.<br />
+                                <span className="text-blue-400">Booked in Minutes.</span>
                             </motion.h1>
 
-                            {/* Typewriter tagline */}
+                            {/* Subheadline */}
                             <motion.p
-                                className="text-blue-200 text-xl mt-4"
+                                className="text-blue-200 text-xl mt-4 leading-relaxed max-w-lg"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
-                                transition={{ duration: dur(0.4), delay: 0.5 }}
+                                transition={{ duration: dur(0.4), delay: 0.4 }}
                             >
-                                {displayText}
-                                <span className={`transition-opacity ${cursorVisible ? 'opacity-100' : 'opacity-0'}`}>|</span>
+                                {product.tagline}
                             </motion.p>
 
                             {/* CTA buttons */}
@@ -323,15 +270,15 @@ export default function ProductShow({ product, faqs }: Props) {
                                 className="mt-8 flex flex-wrap gap-4"
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.8, duration: dur(0.5) }}
+                                transition={{ delay: 0.6, duration: dur(0.5) }}
                             >
                                 <Button
                                     size="lg"
                                     onClick={scrollToWaitlist}
                                     className="bg-orange-500 hover:bg-orange-600 rounded-full px-8 shadow-xl shadow-orange-900/40 font-semibold text-white"
                                 >
-                                    <Rocket className="mr-2 h-5 w-5" />
-                                    Get Early Access — Free
+                                    <Download className="mr-2 h-5 w-5" />
+                                    Download Free Trial
                                 </Button>
                                 <Link href="/request-demo">
                                     <Button
@@ -345,12 +292,12 @@ export default function ProductShow({ product, faqs }: Props) {
                                 </Link>
                             </motion.div>
 
-                            {/* Incentive pill */}
+                            {/* Trust text row */}
                             <motion.div
                                 className="mt-5"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
-                                transition={{ delay: 1.0, duration: dur(0.4) }}
+                                transition={{ delay: 0.8, duration: dur(0.4) }}
                             >
                                 <span className="inline-flex items-center gap-2 text-orange-200/80 text-sm">
                                     <Check className="h-4 w-4 text-orange-400 flex-shrink-0" />
@@ -358,99 +305,32 @@ export default function ProductShow({ product, faqs }: Props) {
                                 </span>
                             </motion.div>
 
-                            {/* Floating stat pills */}
+                            {/* Avatar-stack social proof */}
                             <motion.div
-                                className="mt-5 flex flex-wrap gap-3"
+                                className="flex items-center gap-3 mt-6"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
-                                transition={{ delay: 1.1, duration: dur(0.4) }}
+                                transition={{ delay: 1.0, duration: dur(0.4) }}
                             >
-                                {['v1.3.0', '160+ Rules', '47/47 Tests'].map((stat, i) => (
-                                    <motion.span
-                                        key={stat}
-                                        className="bg-white/10 border border-white/20 text-white text-sm rounded-full px-4 py-1.5 font-mono"
-                                        initial={{ opacity: 0, scale: 0.8 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        transition={{
-                                            delay: 1.1 + i * 0.1,
-                                            type: 'spring',
-                                            stiffness: 200,
-                                            duration: dur(0.4),
-                                        }}
-                                    >
-                                        {stat}
-                                    </motion.span>
-                                ))}
+                                <div className="flex -space-x-2">
+                                    {['SK', 'PR', 'AM', 'VT', 'NJ', 'RS'].map((initials, i) => (
+                                        <div
+                                            key={i}
+                                            className={`w-7 h-7 rounded-full border-2 border-[#0F172A] flex items-center justify-center text-[10px] font-bold text-white ${['bg-blue-500', 'bg-emerald-500', 'bg-violet-500', 'bg-orange-500', 'bg-pink-500', 'bg-teal-500'][i]}`}
+                                        >
+                                            {initials}
+                                        </div>
+                                    ))}
+                                </div>
+                                <span className="text-gray-400 text-sm">
+                                    <strong className="text-white">500+</strong> CA firms process statements daily
+                                </span>
                             </motion.div>
                         </div>
 
-                        {/* RIGHT — Floating mockup ──────────────────────────── */}
+                        {/* RIGHT — Interactive simulator ─────────────────────── */}
                         <div className="hidden lg:flex items-center justify-center">
-                            <motion.div
-                                animate={{ y: prefersReduced ? 0 : [0, -10, 0] }}
-                                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                                className="w-full max-w-md"
-                            >
-                                {/* Terminal window */}
-                                <div className="rounded-2xl border border-blue-500/30 overflow-hidden shadow-2xl shadow-blue-900/40 bg-[#0D1117]">
-                                    {/* Title bar */}
-                                    <div className="flex items-center gap-2 px-4 py-3 bg-[#161B22] border-b border-white/10">
-                                        <div className="w-3 h-3 rounded-full bg-red-500" />
-                                        <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                                        <div className="w-3 h-3 rounded-full bg-green-500" />
-                                        <span className="ml-3 text-xs text-gray-400 font-mono">{product.name} — Processing</span>
-                                        <span className="ml-auto flex items-center gap-1.5 text-xs text-green-400">
-                                            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                                            LIVE
-                                        </span>
-                                    </div>
-
-                                    {/* Column headers */}
-                                    <div className="px-4 pt-4 pb-2 grid grid-cols-3 text-xs text-gray-500 font-mono uppercase tracking-wider border-b border-white/5">
-                                        <span>Company</span>
-                                        <span className="text-center">Entries</span>
-                                        <span className="text-right">Status</span>
-                                    </div>
-
-                                    {/* Data rows */}
-                                    <div className="p-4 space-y-2 min-h-[220px]">
-                                        {DEMO_ROWS.map((row, i) =>
-                                            i < heroRows ? (
-                                                <motion.div
-                                                    key={i}
-                                                    initial={{ opacity: 0, x: -16 }}
-                                                    animate={{ opacity: 1, x: 0 }}
-                                                    transition={{ duration: dur(0.35) }}
-                                                    className="grid grid-cols-3 text-sm py-1.5 px-2 rounded-lg bg-white/5 hover:bg-white/8 transition-colors"
-                                                >
-                                                    <span className="text-gray-300 truncate text-xs">{row.company}</span>
-                                                    <span className="text-center text-blue-300 font-mono text-xs">{row.entries}</span>
-                                                    <span className="text-right">
-                                                        <span className="text-xs bg-green-500/20 text-green-400 rounded-full px-2 py-0.5">
-                                                            {row.status}
-                                                        </span>
-                                                    </span>
-                                                </motion.div>
-                                            ) : null,
-                                        )}
-                                    </div>
-
-                                    {/* Progress bar footer */}
-                                    <div className="px-4 pb-4 space-y-1.5">
-                                        <div className="flex justify-between text-xs text-gray-500 font-mono mb-1">
-                                            <span>Processing…</span>
-                                            <span>{Math.round((heroRows / DEMO_ROWS.length) * 100)}%</span>
-                                        </div>
-                                        <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
-                                            <motion.div
-                                                className="h-full bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full"
-                                                animate={{ width: `${(heroRows / DEMO_ROWS.length) * 100}%` }}
-                                                transition={{ duration: dur(0.5), ease: 'easeOut' }}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </motion.div>
+                            <StatementSimulator />
                         </div>
                     </div>
                 </div>
@@ -463,6 +343,92 @@ export default function ProductShow({ product, faqs }: Props) {
                 >
                     <ChevronDown className="h-7 w-7" />
                 </motion.div>
+            </section>
+
+            {/* ═══════════════════════════════════════════════════════════════
+                SECTION — STATS BAR
+            ═══════════════════════════════════════════════════════════════ */}
+            <section ref={statsBarRef} className="py-12 bg-[#0F172A] border-t border-white/5">
+                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 sm:grid-cols-4 gap-6">
+                    {[
+                        { value: 500, suffix: '+', label: 'CA Firms' },
+                        { value: 20, suffix: '+', label: 'Bank Formats' },
+                        { value: 98.7, suffix: '%', label: 'Accuracy Rate' },
+                        { value: 3, suffix: ' hrs', label: 'Saved Daily' },
+                    ].map((stat) => (
+                        <div key={stat.label} className="text-center">
+                            <p className="font-mono text-3xl sm:text-4xl font-bold text-white">
+                                <NumberFlow value={statsBarVisible ? stat.value : 0} />{stat.suffix}
+                            </p>
+                            <p className="text-gray-400 text-xs sm:text-sm mt-1.5">{stat.label}</p>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* ═══════════════════════════════════════════════════════════════
+                SECTION — TRUST BAND (marquee)
+            ═══════════════════════════════════════════════════════════════ */}
+            <div className="bg-white py-6 overflow-hidden border-b border-gray-100 group">
+                <div className="flex animate-scroll-left group-hover:[animation-play-state:paused]" style={{ width: 'max-content' }}>
+                    {[...['SBI', 'HDFC Bank', 'ICICI Bank', 'Axis Bank', 'Kotak', 'PNB', 'Tally Prime', 'BOB', 'Canara', 'Yes Bank'],
+                      ...['SBI', 'HDFC Bank', 'ICICI Bank', 'Axis Bank', 'Kotak', 'PNB', 'Tally Prime', 'BOB', 'Canara', 'Yes Bank']].map((name, i) => (
+                        <span key={i} className="flex items-center gap-2 mx-8 text-sm font-semibold text-[#0F172A]/40 whitespace-nowrap uppercase tracking-wider">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB]/40 flex-shrink-0" />
+                            {name}
+                        </span>
+                    ))}
+                </div>
+            </div>
+
+            {/* ═══════════════════════════════════════════════════════════════
+                SECTION — THE PROBLEM
+            ═══════════════════════════════════════════════════════════════ */}
+            <section className="py-20 bg-[#F8FAFC]" ref={problemRef}>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <motion.div
+                        className="text-center mb-14"
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={problemInView ? { opacity: 1, y: 0 } : {}}
+                        transition={{ duration: dur(0.5) }}
+                    >
+                        <Badge
+                            variant="secondary"
+                            className="mb-3 bg-orange-50 text-orange-600 border-0 text-xs font-semibold uppercase tracking-wider px-4 py-1.5"
+                        >
+                            The Problem
+                        </Badge>
+                        <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-[#0F172A] tracking-tight mt-3">
+                            Manual Bank Data Entry Is Killing Your Margins
+                        </h2>
+                    </motion.div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {[
+                            { icon: Clock, title: 'Hours Lost to Manual Entry', desc: 'CAs spend 3-6 hours per client, per month, just typing bank transactions into Tally.' },
+                            { icon: AlertTriangle, title: 'One Wrong Entry, One Wrong Balance', desc: 'A single transposed digit cascades into hours of reconciliation and client trust issues.' },
+                            { icon: Landmark, title: 'Every Bank Does It Differently', desc: 'SBI, HDFC, ICICI, Axis — each statement format is different, making manual mapping painful.' },
+                            { icon: Briefcase, title: "You're Billing Data Entry, Not Advisory", desc: 'Time spent on repetitive entry is time not spent on the high-value advisory work clients pay for.' },
+                        ].map((item, i) => (
+                            <motion.div
+                                key={item.title}
+                                className="bg-white rounded-2xl border border-gray-100 p-6"
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={problemInView ? { opacity: 1, y: 0 } : {}}
+                                transition={{ duration: dur(0.5), delay: i * 0.1 }}
+                            >
+                                <div className="inline-flex items-center gap-1.5 bg-orange-50 text-orange-500 text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full mb-4">
+                                    Problem
+                                </div>
+                                <div className="w-11 h-11 rounded-xl bg-orange-50 flex items-center justify-center mb-4">
+                                    <item.icon className="h-5 w-5 text-orange-500" />
+                                </div>
+                                <h3 className="font-bold text-[#0F172A] text-sm mb-2">{item.title}</h3>
+                                <p className="text-[#0F172A]/60 text-xs leading-relaxed">{item.desc}</p>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
             </section>
 
             {/* ═══════════════════════════════════════════════════════════════
@@ -483,7 +449,7 @@ export default function ProductShow({ product, faqs }: Props) {
                         >
                             Features
                         </Badge>
-                        <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F172A] tracking-tight mt-3">
+                        <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-[#0F172A] tracking-tight mt-3">
                             Everything You Get
                         </h2>
                         <p className="text-[#0F172A]/60 mt-3 max-w-2xl mx-auto">
@@ -491,37 +457,29 @@ export default function ProductShow({ product, faqs }: Props) {
                         </p>
                     </motion.div>
 
-                    {/* Alternating feature rows */}
-                    <div className="max-w-5xl mx-auto space-y-16">
-                        {product.features.map((feature, i) => (
-                            <motion.div
-                                key={feature.id}
-                                className={`flex flex-col md:flex-row gap-10 items-center ${
-                                    i % 2 === 1 ? 'md:flex-row-reverse' : ''
-                                }`}
-                                initial={{ opacity: 0, x: i % 2 === 0 ? -50 : 50 }}
-                                animate={featuresInView ? { opacity: 1, x: 0 } : {}}
-                                transition={{ duration: dur(0.6), delay: i * 0.1 }}
-                            >
-                                {/* Icon side */}
+                    {/* Feature grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {product.features.map((feature, i) => {
+                            const Icon = (feature.icon && FEATURE_ICON_MAP[feature.icon]) || CheckCircle2;
+                            return (
                                 <motion.div
-                                    className="w-32 h-32 rounded-3xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center flex-shrink-0"
-                                    whileHover={{ scale: 1.1 }}
-                                    transition={{ duration: dur(0.2) }}
+                                    key={feature.id}
+                                    className="bg-[#F8FAFC] rounded-2xl border border-gray-100 p-6"
+                                    initial={{ opacity: 0, y: 30 }}
+                                    animate={featuresInView ? { opacity: 1, y: 0 } : {}}
+                                    transition={{ duration: dur(0.5), delay: (i % 6) * 0.08 }}
                                 >
-                                    <CheckCircle2 className="h-14 w-14 text-[#2563EB]" />
+                                    <div className="w-11 h-11 rounded-xl bg-blue-500/10 flex items-center justify-center mb-4">
+                                        <Icon className="h-5 w-5 text-[#2563EB]" />
+                                    </div>
+                                    <h3 className="font-bold text-[#0F172A] text-sm mb-2">{feature.title}</h3>
+                                    <p className="text-[#0F172A]/60 text-xs leading-relaxed">{feature.description}</p>
                                 </motion.div>
-
-                                {/* Text side */}
-                                <div>
-                                    <h3 className="text-2xl font-bold text-[#0F172A] mb-3">{feature.title}</h3>
-                                    <p className="text-[#0F172A]/65 text-lg leading-relaxed">{feature.description}</p>
-                                </div>
-                            </motion.div>
-                        ))}
+                            );
+                        })}
 
                         {product.features.length === 0 && (
-                            <p className="text-center text-[#0F172A]/40">Feature details coming soon.</p>
+                            <p className="col-span-full text-center text-[#0F172A]/40">Feature details coming soon.</p>
                         )}
                     </div>
                 </div>
@@ -545,7 +503,7 @@ export default function ProductShow({ product, faqs }: Props) {
                         >
                             How It Works
                         </Badge>
-                        <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F172A] tracking-tight mt-3">
+                        <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-[#0F172A] tracking-tight mt-3">
                             Bank Statement to Tally in 3 Steps
                         </h2>
                         <p className="text-[#0F172A]/60 mt-3 max-w-xl mx-auto">
@@ -562,7 +520,7 @@ export default function ProductShow({ product, faqs }: Props) {
                     >
                         <img
                             src="/images/products/bank2books/how-it-works.png"
-                            alt="Bank2Books workflow: Bank Statements → AI → Tally entries"
+                            alt="Statement2Books workflow: Bank Statements → AI → Tally entries"
                             className="w-full h-auto rounded-2xl shadow-lg object-contain"
                         />
                     </motion.div>
@@ -606,7 +564,7 @@ export default function ProductShow({ product, faqs }: Props) {
             </section>
 
             {/* ═══════════════════════════════════════════════════════════════
-                SECTION — MANUAL vs BANK2BOOKS
+                SECTION — MANUAL vs STATEMENT2BOOKS
             ═══════════════════════════════════════════════════════════════ */}
             <section className="py-20 bg-white">
                 <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -614,8 +572,8 @@ export default function ProductShow({ product, faqs }: Props) {
                         <Badge variant="secondary" className="mb-3 bg-blue-50 text-[#2563EB] border-0 text-xs font-semibold uppercase tracking-wider px-4 py-1.5">
                             The Difference
                         </Badge>
-                        <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F172A] tracking-tight mt-3">
-                            Manual Entry vs Bank2Books
+                        <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-[#0F172A] tracking-tight mt-3">
+                            Manual Entry vs Statement2Books
                         </h2>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -646,13 +604,13 @@ export default function ProductShow({ product, faqs }: Props) {
                                 </motion.div>
                             ))}
                         </div>
-                        {/* Bank2Books side */}
+                        {/* Statement2Books side */}
                         <div className="rounded-2xl border-2 border-emerald-200 bg-emerald-50/40 p-8">
                             <div className="flex items-center gap-2 mb-6">
                                 <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
                                     <CheckCircle2 className="h-4 w-4 text-emerald-500" />
                                 </div>
-                                <h3 className="font-bold text-[#0F172A] text-lg">With Bank2Books</h3>
+                                <h3 className="font-bold text-[#0F172A] text-lg">With Statement2Books</h3>
                             </div>
                             {[
                                 'Upload statement (PDF/Excel/CSV)',
@@ -696,8 +654,8 @@ export default function ProductShow({ product, faqs }: Props) {
                         <Badge className="mb-3 bg-blue-500/20 text-blue-300 border border-blue-500/30 text-xs font-semibold uppercase tracking-wider px-4 py-1.5">
                             Product Preview
                         </Badge>
-                        <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mt-3">
-                            See Bank2Books in Action
+                        <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-white tracking-tight mt-3">
+                            See Statement2Books in Action
                         </h2>
                         <p className="text-gray-400 mt-3 max-w-xl mx-auto">
                             A clean, powerful interface built for speed and accuracy.
@@ -713,7 +671,7 @@ export default function ProductShow({ product, faqs }: Props) {
                     >
                         <img
                             src="/images/products/bank2books/hero-banner.png"
-                            alt="Bank2Books app on laptop and mobile showing financial dashboard"
+                            alt="Statement2Books app on laptop and mobile showing financial dashboard"
                             className="w-full h-auto rounded-2xl shadow-2xl shadow-blue-900/40 object-cover"
                         />
                     </motion.div>
@@ -727,7 +685,7 @@ export default function ProductShow({ product, faqs }: Props) {
                         >
                             <img
                                 src="/images/products/bank2books/dashboard-mockup.png"
-                                alt="Bank2Books financial dashboard showing transaction table"
+                                alt="Statement2Books financial dashboard showing transaction table"
                                 className="w-full h-auto rounded-xl shadow-lg border border-white/10 object-cover"
                             />
                             <p className="text-gray-500 text-xs text-center mt-2">Transaction processing dashboard</p>
@@ -741,7 +699,7 @@ export default function ProductShow({ product, faqs }: Props) {
                         >
                             <img
                                 src="/images/products/bank2books/before-after.png"
-                                alt="Before and after Bank2Books: from paper chaos to organised digital"
+                                alt="Before and after Statement2Books: from paper chaos to organised digital"
                                 className="w-full h-auto rounded-xl shadow-lg border border-white/10 object-cover"
                             />
                             <p className="text-gray-500 text-xs text-center mt-2">From manual chaos to automated clarity</p>
@@ -782,7 +740,7 @@ export default function ProductShow({ product, faqs }: Props) {
                         >
                             Pricing
                         </Badge>
-                        <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F172A] tracking-tight mt-3">
+                        <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-[#0F172A] tracking-tight mt-3">
                             Simple, Transparent Pricing
                         </h2>
                         <p className="text-[#0F172A]/60 mt-3 max-w-2xl mx-auto">
@@ -837,7 +795,7 @@ export default function ProductShow({ product, faqs }: Props) {
 
                                     <div className="my-4">
                                         {tier.price ? (
-                                            <p className="text-4xl font-extrabold">
+                                            <p className="font-mono text-4xl font-extrabold">
                                                 ₹{Number(tier.price).toLocaleString('en-IN')}
                                                 <span className="text-base font-normal opacity-70"> one-time</span>
                                             </p>
@@ -917,11 +875,11 @@ export default function ProductShow({ product, faqs }: Props) {
                             <Rocket className="h-3.5 w-3.5" />
                             Early Access — Limited Spots
                         </div>
-                        <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+                        <h2 className="font-heading text-3xl sm:text-4xl font-extrabold tracking-tight">
                             Reserve Your Free 3 Months
                         </h2>
                         <p className="text-blue-100/80 mt-3 text-lg">
-                            Bank2Books launches soon. Be first in line — early access users get 3 months completely free.
+                            Statement2Books launches soon. Be first in line — early access users get 3 months completely free.
                         </p>
                     </motion.div>
 
@@ -1036,7 +994,7 @@ export default function ProductShow({ product, faqs }: Props) {
                                         {/* Remark */}
                                         <div>
                                             <label className="block text-xs font-semibold text-blue-100/70 uppercase tracking-wider mb-1.5">
-                                                How will you use Bank2Books? <span className="font-normal normal-case">(optional)</span>
+                                                How will you use Statement2Books? <span className="font-normal normal-case">(optional)</span>
                                             </label>
                                             <textarea
                                                 value={wlData.remark}
@@ -1051,7 +1009,7 @@ export default function ProductShow({ product, faqs }: Props) {
                                         <div className="flex items-start gap-3 bg-white/8 rounded-xl px-4 py-3">
                                             <Rocket className="h-4 w-4 text-orange-300 mt-0.5 flex-shrink-0" />
                                             <p className="text-xs text-blue-100/70 leading-relaxed">
-                                                Early access users get <strong className="text-white">3 months completely free</strong> when Bank2Books launches — no credit card needed to reserve your spot.
+                                                Early access users get <strong className="text-white">3 months completely free</strong> when Statement2Books launches — no credit card needed to reserve your spot.
                                             </p>
                                         </div>
 
@@ -1116,7 +1074,7 @@ export default function ProductShow({ product, faqs }: Props) {
                             >
                                 FAQ
                             </Badge>
-                            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F172A] tracking-tight mt-3">
+                            <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-[#0F172A] tracking-tight mt-3">
                                 Frequently Asked Questions
                             </h2>
                         </motion.div>
@@ -1175,8 +1133,8 @@ export default function ProductShow({ product, faqs }: Props) {
                             animate={ctaInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: dur(0.6) }}
                         >
-                            <h2 className="text-3xl sm:text-4xl font-extrabold mb-4">
-                                Be First When Bank2Books Launches
+                            <h2 className="font-heading text-3xl sm:text-4xl font-extrabold mb-4">
+                                Be First When Statement2Books Launches
                             </h2>
                             <p className="text-gray-400 mb-8">
                                 Reserve your spot today — first 100 signups get 3 months completely free.
@@ -1215,7 +1173,7 @@ export default function ProductShow({ product, faqs }: Props) {
                         transition={{ duration: 0.25 }}
                         className="fixed top-0 left-0 right-0 z-40 bg-[#0F172A]/95 backdrop-blur-md border-b border-white/10 px-4 py-2.5 flex items-center justify-between"
                     >
-                        <span className="text-white text-sm font-medium hidden sm:block">Bank2Books — Early Access</span>
+                        <span className="text-white text-sm font-medium hidden sm:block">Statement2Books — Early Access</span>
                         <div className="flex items-center gap-3 mx-auto sm:mx-0">
                             <span className="text-gray-400 text-xs hidden md:block">🎉 First 100 signups get 3 months free</span>
                             <button onClick={scrollToWaitlist} className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold px-4 py-1.5 rounded-full transition-colors">

@@ -7,11 +7,22 @@ import { Sheet, SheetContent, SheetClose } from '@/Components/ui/sheet';
 import { Separator } from '@/Components/ui/separator';
 import { cn } from '@/lib/utils';
 import BackToTop from '@/Components/BackToTop';
+import { type PageProps } from '@/types';
 
 interface PublicLayoutProps {
     children: ReactNode;
     title?: string;
 }
+
+interface SiteSettings {
+    gst_number: string;
+    cin_number: string;
+    udyam_number: string;
+}
+
+type PublicPageProps = PageProps<{
+    siteSettings?: SiteSettings;
+}>;
 
 const navLinks = [
     { label: 'Home', href: '/' },
@@ -31,7 +42,8 @@ const serviceLinks = [
 ];
 
 export default function PublicLayout({ children }: PublicLayoutProps) {
-    const { url } = usePage();
+    const { url, props } = usePage<PublicPageProps>();
+    const siteSettings = props.siteSettings;
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const [scrollProgress, setScrollProgress] = useState(0);
@@ -59,16 +71,16 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
-    const onBank2BooksPage = url.startsWith('/products/bank2books');
+    const onStatement2BooksPage = url.startsWith('/products/statement2books');
 
     return (
         <div className="min-h-screen flex flex-col bg-white">
             {/* ── ANNOUNCEMENT BAR ── */}
-            {!barDismissed && !onBank2BooksPage && (
+            {!barDismissed && !onStatement2BooksPage && (
                 <div className="relative bg-gradient-to-r from-[#2563EB] via-[#6D28D9] to-[#8B5CF6] text-white text-sm py-2 px-4 flex items-center justify-center gap-3 z-50">
                     <span className="hidden sm:inline">🚀</span>
-                    <Link href="/products/bank2books" className="hover:underline underline-offset-2 font-medium text-center">
-                        <strong>Bank2Books is here!</strong> Automate your Tally entries — Join waitlist for <strong>3 months free</strong> →
+                    <Link href="/products/statement2books" className="hover:underline underline-offset-2 font-medium text-center">
+                        <strong>Statement2Books is here!</strong> Automate your Tally entries — Join waitlist for <strong>3 months free</strong> →
                     </Link>
                     <button onClick={dismissBar} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors p-1" aria-label="Dismiss">
                         <X className="h-3.5 w-3.5" />
@@ -93,11 +105,9 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                     <div className="flex items-center justify-between h-16">
                         {/* Logo */}
                         <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-                            <div className="w-8 h-8 rounded-lg bg-[#2563EB] flex items-center justify-center">
-                                <span className="text-white font-bold text-sm">M</span>
-                            </div>
+                            <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-8 h-8 object-contain" />
                             <span className="text-[#0F172A] font-bold text-lg leading-none">
-                                MIS<span className="text-[#2563EB]">Analytics</span>
+                                NobelIQ<span className="text-[#2563EB]"> Technologies</span>
                             </span>
                         </Link>
 
@@ -159,11 +169,9 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                                 onClick={() => setMobileOpen(false)}
                                 className="flex items-center gap-2"
                             >
-                                <div className="w-7 h-7 rounded-lg bg-[#2563EB] flex items-center justify-center">
-                                    <span className="text-white font-bold text-xs">M</span>
-                                </div>
+                                <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-7 h-7 object-contain" />
                                 <span className="text-[#0F172A] font-bold text-base">
-                                    MIS<span className="text-[#2563EB]">Analytics</span>
+                                    NobelIQ<span className="text-[#2563EB]"> Technologies</span>
                                 </span>
                             </Link>
                             <SheetClose className="rounded-sm opacity-70 hover:opacity-100 transition-opacity">
@@ -212,11 +220,9 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                         {/* Company */}
                         <div className="lg:col-span-1">
                             <Link href="/" className="flex items-center gap-2 mb-4">
-                                <div className="w-8 h-8 rounded-lg bg-[#2563EB] flex items-center justify-center">
-                                    <span className="text-white font-bold text-sm">M</span>
-                                </div>
+                                <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-8 h-8 object-contain" />
                                 <span className="text-white font-bold text-lg">
-                                    MIS<span className="text-[#60A5FA]">Analytics</span>
+                                    NobelIQ<span className="text-[#60A5FA]"> Technologies</span>
                                 </span>
                             </Link>
                             <p className="text-gray-400 text-sm leading-relaxed mb-5">
@@ -306,10 +312,32 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                         </div>
                     </div>
 
+                    {siteSettings?.udyam_number && (
+                        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-gray-400 border-t border-white/10 pt-5 mb-5">
+                            <span>🏛️ MSME Registered · Udyam: {siteSettings.udyam_number}</span>
+                            <a
+                                href="/documents/udyam-registration-certificate.pdf"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="hover:text-gray-200 transition-colors"
+                            >
+                                View Registration Certificate ↓
+                            </a>
+                        </div>
+                    )}
+
+                    {(siteSettings?.gst_number || siteSettings?.cin_number) && (
+                        <p className="text-xs text-gray-500 mb-5">
+                            {siteSettings.gst_number && <>GSTIN: {siteSettings.gst_number}</>}
+                            {siteSettings.gst_number && siteSettings.cin_number && <> · </>}
+                            {siteSettings.cin_number && <>CIN: {siteSettings.cin_number}</>}
+                        </p>
+                    )}
+
                     <Separator className="bg-white/10 mb-6" />
 
                     <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-gray-500">
-                        <p>© {new Date().getFullYear()} MIS Analytics. All rights reserved.</p>
+                        <p>© {new Date().getFullYear()} NobelIQ Technologies. All rights reserved.</p>
                         <div className="flex gap-4">
                             <Link href="/privacy" className="hover:text-gray-300 transition-colors">Privacy Policy</Link>
                             <Link href="/terms" className="hover:text-gray-300 transition-colors">Terms of Service</Link>
@@ -321,7 +349,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
 
             {/* ── STICKY BOTTOM CTA ── */}
             <AnimatePresence>
-                {showStickyCta && !onBank2BooksPage && (
+                {showStickyCta && !onStatement2BooksPage && (
                     <motion.div
                         initial={{ y: 80, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
@@ -330,8 +358,8 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                         className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-[#0F172A] border border-white/10 text-white px-5 py-3 rounded-2xl shadow-2xl shadow-black/40 backdrop-blur-sm"
                     >
                         <span className="text-orange-400">🚀</span>
-                        <span className="text-sm font-medium">Bank2Books Early Access — 3 months free</span>
-                        <Link href="/products/bank2books#waitlist">
+                        <span className="text-sm font-medium">Statement2Books Early Access — 3 months free</span>
+                        <Link href="/products/statement2books#waitlist">
                             <Button size="sm" className="bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-4 text-xs font-bold ml-1">
                                 Join Waitlist →
                             </Button>

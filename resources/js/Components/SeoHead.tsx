@@ -8,7 +8,7 @@ interface SeoHeadProps {
     canonicalUrl?: string;
 }
 
-const SITE_NAME = 'MIS Analytics';
+const SITE_NAME = 'NobelIQ Technologies';
 const DEFAULT_OG_IMAGE = '/images/og-default.jpg';
 // Place a 1200×630 px image at public/images/og-default.jpg to activate the default OG image.
 

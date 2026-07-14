@@ -1,7 +1,7 @@
 @component('mail::message')
-# New Bank2Books Waitlist Signup
+# New Statement2Books Waitlist Signup
 
-A new user has registered for Bank2Books Early Access.
+A new user has registered for Statement2Books Early Access.
 
 @component('mail::table')
 | Field | Details |

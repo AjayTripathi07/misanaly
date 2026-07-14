@@ -145,11 +145,9 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
         <div className="flex flex-col h-full">
             {/* Logo */}
             <div className="flex items-center gap-2.5 px-4 py-5 border-b border-white/8">
-                <div className="w-8 h-8 rounded-lg bg-[#2563EB] flex items-center justify-center flex-shrink-0">
-                    <span className="text-white font-bold text-sm">M</span>
-                </div>
+                <img src="/images/branding/Icon.png" alt="NobelIQ" className="w-8 h-8 object-contain flex-shrink-0" />
                 <div>
-                    <p className="text-white font-bold text-sm leading-none">MISAnalytics</p>
+                    <p className="text-white font-bold text-sm leading-none">NobelIQ</p>
                     <p className="text-slate-500 text-xs mt-0.5">Admin Panel</p>
                 </div>
             </div>

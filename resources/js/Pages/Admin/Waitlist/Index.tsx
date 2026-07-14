@@ -60,13 +60,13 @@ export default function WaitlistIndex({ entries, stats, filters }: Props) {
     }
 
     return (
-        <AdminLayout title="Bank2Books Waitlist">
+        <AdminLayout title="Statement2Books Waitlist">
             <Head title="Waitlist — Admin" />
 
             {/* ── Header ── */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                 <div>
-                    <h1 className="text-xl font-bold text-[#0F172A]">Bank2Books Waitlist</h1>
+                    <h1 className="text-xl font-bold text-[#0F172A]">Statement2Books Waitlist</h1>
                     <p className="text-sm text-[#0F172A]/50 mt-0.5">
                         {entries.total} signup{entries.total !== 1 ? 's' : ''} total
                     </p>

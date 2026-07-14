@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\ProductWaitlist;
+use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -19,6 +20,9 @@ class HandleInertiaRequests extends Middleware
     {
         $user = $request->user();
 
+        $settings = SiteSetting::whereIn('key', ['gst_number', 'cin_number', 'udyam_number'])
+            ->pluck('value', 'key');
+
         return [
             ...parent::share($request),
             'auth' => [
@@ -30,6 +34,11 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'success'          => $request->session()->get('success'),
                 'waitlist_success' => $request->session()->get('waitlist_success'),
+            ],
+            'siteSettings' => [
+                'gst_number'   => $settings->get('gst_number', ''),
+                'cin_number'   => $settings->get('cin_number', ''),
+                'udyam_number' => $settings->get('udyam_number', ''),
             ],
         ];
     }
