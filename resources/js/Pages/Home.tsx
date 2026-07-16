@@ -67,28 +67,28 @@ const WHY_ITEMS = [
     {
         Icon: Users,
         title: 'Expert Team',
-        desc: 'Our engineers bring deep domain expertise across web, mobile, cloud, and enterprise automation — delivering solutions that are robust, scalable, and future-proof.',
+        desc: 'Deep expertise across web, mobile, cloud & automation.',
         stat: '15+',
         statLabel: 'engineers',
     },
     {
         Icon: Lightbulb,
         title: 'Custom Solutions',
-        desc: 'No templates, no shortcuts. Every solution is architected from the ground up to match your exact workflow, compliance requirements, and business goals.',
+        desc: 'No templates — built from the ground up for you.',
         stat: '100%',
         statLabel: 'custom built',
     },
     {
         Icon: Clock,
         title: 'Timely Delivery',
-        desc: 'We respect your time. Clear milestones, transparent communication, and a proven delivery process ensure your project ships on schedule — every time.',
+        desc: 'Clear milestones, shipped on schedule — every time.',
         stat: '95%',
         statLabel: 'on-time rate',
     },
     {
         Icon: LifeBuoy,
         title: '24/7 Support',
-        desc: 'Your business never sleeps, and neither does our support. Reach our team any time via chat, email, or phone — we are always here when you need us.',
+        desc: 'Always reachable — chat, email, or phone.',
         stat: '24/7',
         statLabel: 'availability',
     },
@@ -129,8 +129,7 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
     const servicesRef = useRef(null);
     const servicesInView = useInView(servicesRef, { once: true, margin: '-100px' });
 
-    const whyRef = useRef(null);
-    const whyInView = useInView(whyRef, { once: true, margin: '-100px' });
+    const { ref: whyRef, isVisible: whyInView } = useScrollAnimation({ once: true, threshold: 0.15 });
 
     const testimonialsRef = useRef(null);
     const testimonialsInView = useInView(testimonialsRef, { once: true, margin: '-100px' });
@@ -567,11 +566,11 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
             {/* ═══════════════════════════════════════════════
                 SECTION 4 — WHY CHOOSE US
             ═══════════════════════════════════════════════ */}
-            <section className="py-20 sm:py-24 bg-white" ref={whyRef}>
-                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <section className="py-20 sm:py-24 bg-white overflow-hidden">
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8" ref={whyRef}>
                     {/* Title */}
                     <motion.div
-                        className="text-center mb-16"
+                        className="text-center mb-16 sm:mb-20"
                         initial={{ opacity: 0, y: 30 }}
                         animate={whyInView ? { opacity: 1, y: 0 } : {}}
                         transition={{ duration: dur ?? 0.6 }}
@@ -584,38 +583,97 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                         </p>
                     </motion.div>
 
-                    {/* Alternating rows */}
-                    <div className="space-y-16">
-                        {WHY_ITEMS.map((item, i) => (
-                            <div
-                                key={item.title}
-                                className={`flex flex-col md:flex-row gap-10 items-center ${i % 2 === 1 ? 'md:flex-row-reverse' : ''}`}
-                            >
-                                {/* Icon side */}
-                                <motion.div
-                                    className="flex-shrink-0"
-                                    initial={{ opacity: 0, x: i % 2 === 0 ? -50 : 50 }}
-                                    animate={whyInView ? { opacity: 1, x: 0 } : {}}
-                                    transition={{ duration: dur ?? 0.6, delay: i * 0.1 }}
-                                >
-                                    <div className="w-28 h-28 rounded-3xl bg-blue-500/10 border border-blue-100 flex items-center justify-center shadow-sm">
-                                        <item.Icon className="h-14 w-14 text-[#2563EB]" />
-                                    </div>
-                                </motion.div>
+                    {/* ── Desktop: horizontal trust path ── */}
+                    <div className="hidden md:flex items-start justify-between">
+                        {WHY_ITEMS.map((item, i) => {
+                            const color = SERVICE_COLORS[i % SERVICE_COLORS.length];
+                            const isLast = i === WHY_ITEMS.length - 1;
+                            return (
+                                <div key={item.title} className={isLast ? 'flex items-start flex-shrink-0' : 'flex items-start flex-1'}>
+                                    {/* Node */}
+                                    <motion.div
+                                        className="flex flex-col items-center text-center w-36 lg:w-44 group/node"
+                                        initial={{ opacity: 0, y: 24 }}
+                                        animate={whyInView ? { opacity: 1, y: 0 } : {}}
+                                        transition={{ duration: dur ?? 0.5, delay: i * 0.18 }}
+                                    >
+                                        <div className="relative">
+                                            <motion.div
+                                                className={`w-20 h-20 rounded-full ${color.bg} border-2 ${color.border} flex items-center justify-center shadow-sm transition-transform duration-200 group-hover/node:scale-110`}
+                                                whileHover={{ scale: 1.1 }}
+                                            >
+                                                <item.Icon className={`h-8 w-8 ${color.icon}`} />
+                                            </motion.div>
+                                            {/* Step badge */}
+                                            <motion.span
+                                                className={`absolute -top-1 -right-1 w-6 h-6 rounded-full bg-white border-2 ${color.border} ${color.icon} text-[11px] font-bold flex items-center justify-center`}
+                                                initial={{ scale: 0 }}
+                                                animate={whyInView ? { scale: 1 } : {}}
+                                                transition={{ type: 'spring', stiffness: 300, damping: 15, delay: i * 0.18 + 0.25 }}
+                                            >
+                                                {i + 1}
+                                            </motion.span>
+                                        </div>
+                                        <h3 className="text-sm lg:text-base font-bold text-[#0F172A] mt-4">{item.title}</h3>
+                                        <p className="text-[#0F172A]/55 text-xs mt-1.5 leading-relaxed">{item.desc}</p>
+                                        <span className={`inline-flex items-center gap-1 mt-3 text-[10px] font-mono font-bold ${color.icon} ${color.bg} px-2 py-0.5 rounded-full`}>
+                                            {item.stat} {item.statLabel}
+                                        </span>
+                                    </motion.div>
 
-                                {/* Text side */}
-                                <motion.div
-                                    initial={{ opacity: 0, x: i % 2 === 0 ? 50 : -50 }}
-                                    animate={whyInView ? { opacity: 1, x: 0 } : {}}
-                                    transition={{ duration: dur ?? 0.6, delay: i * 0.1 + 0.1 }}
-                                >
-                                    <h3 className="text-2xl font-bold text-[#0F172A] mb-3">{item.title}</h3>
-                                    <p className="text-[#0F172A]/60 text-base leading-relaxed mb-4">{item.desc}</p>
-                                    <p className="font-mono text-4xl font-extrabold text-[#2563EB]">{item.stat}</p>
-                                    <p className="text-sm text-gray-500 mt-1 font-medium">{item.statLabel}</p>
-                                </motion.div>
-                            </div>
-                        ))}
+                                    {/* Connector to next node */}
+                                    {!isLast && (
+                                        <motion.div
+                                            className="h-0.5 flex-1 mt-10 bg-gradient-to-r from-[#2563EB] to-violet-500 origin-left"
+                                            initial={{ scaleX: 0 }}
+                                            animate={whyInView ? { scaleX: 1 } : {}}
+                                            transition={{ duration: dur ?? 0.5, delay: i * 0.18 + 0.35 }}
+                                        />
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                    {/* ── Mobile/tablet: vertical trust path ── */}
+                    <div className="md:hidden relative">
+                        {/* Connecting line */}
+                        <motion.div
+                            className="absolute left-5 top-2 bottom-2 w-0.5 bg-gradient-to-b from-[#2563EB] to-violet-500 origin-top"
+                            initial={{ scaleY: 0 }}
+                            animate={whyInView ? { scaleY: 1 } : {}}
+                            transition={{ duration: dur ?? 0.8 }}
+                        />
+                        <div className="space-y-10">
+                            {WHY_ITEMS.map((item, i) => {
+                                const color = SERVICE_COLORS[i % SERVICE_COLORS.length];
+                                return (
+                                    <motion.div
+                                        key={item.title}
+                                        className="relative flex gap-4"
+                                        initial={{ opacity: 0, x: -20 }}
+                                        animate={whyInView ? { opacity: 1, x: 0 } : {}}
+                                        transition={{ duration: dur ?? 0.5, delay: i * 0.15 }}
+                                    >
+                                        <div className="relative flex-shrink-0 z-10">
+                                            <div className={`w-10 h-10 rounded-full ${color.bg} border-2 ${color.border} flex items-center justify-center shadow-sm`}>
+                                                <item.Icon className={`h-5 w-5 ${color.icon}`} />
+                                            </div>
+                                            <span className={`absolute -top-1 -right-1 w-[18px] h-[18px] rounded-full bg-white border ${color.border} ${color.icon} text-[9px] font-bold flex items-center justify-center`}>
+                                                {i + 1}
+                                            </span>
+                                        </div>
+                                        <div className="pt-1">
+                                            <h3 className="text-base font-bold text-[#0F172A]">{item.title}</h3>
+                                            <p className="text-[#0F172A]/55 text-sm mt-1 leading-relaxed">{item.desc}</p>
+                                            <span className={`inline-flex items-center gap-1 mt-2 text-[10px] font-mono font-bold ${color.icon} ${color.bg} px-2 py-0.5 rounded-full`}>
+                                                {item.stat} {item.statLabel}
+                                            </span>
+                                        </div>
+                                    </motion.div>
+                                );
+                            })}
+                        </div>
                     </div>
                 </div>
             </section>
