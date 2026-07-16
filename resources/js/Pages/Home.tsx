@@ -321,28 +321,40 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
             {/* ═══════════════════════════════════════════════
                 SECTION 2 — STATS BAR
             ═══════════════════════════════════════════════ */}
-            <section ref={statsBarRef} className="py-12 bg-[#0F172A] border-t border-white/5">
-                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 sm:grid-cols-4 gap-6">
-                    {[
-                        { value: 99, suffix: '+', label: 'CA Firms' },
-                        { value: 100, suffix: '+', label: 'Bank Formats' },
-                        { value: 98.7, suffix: '%', label: 'Accuracy Rate' },
-                        { value: 3, suffix: ' hrs', label: 'Saved Daily' },
-                    ].map((stat) => (
-                        <div key={stat.label} className="text-center">
-                            <p className="font-mono text-3xl sm:text-4xl font-bold text-white">
-                                <NumberFlow value={statsBarVisible ? stat.value : 0} />{stat.suffix}
-                            </p>
-                            <p className="text-gray-400 text-xs sm:text-sm mt-1.5">{stat.label}</p>
-                        </div>
-                    ))}
+            <section ref={statsBarRef} className="py-12 bg-[#0F172A] border-t-[3px] border-blue-400/30">
+                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-6">
+                        <span className="inline-flex items-center gap-1.5 bg-blue-500/15 border border-blue-500/25 text-blue-300 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">
+                            Our Impact
+                        </span>
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+                        {[
+                            { value: 99, suffix: '+', label: 'CA Firms' },
+                            { value: 100, suffix: '+', label: 'Bank Formats' },
+                            { value: 98.7, suffix: '%', label: 'Accuracy Rate' },
+                            { value: 3, suffix: ' hrs', label: 'Saved Daily' },
+                        ].map((stat) => (
+                            <div key={stat.label} className="text-center">
+                                <p className="font-mono text-3xl sm:text-4xl font-bold text-white">
+                                    <NumberFlow value={statsBarVisible ? stat.value : 0} />{stat.suffix}
+                                </p>
+                                <p className="text-gray-400 text-xs sm:text-sm mt-1.5">{stat.label}</p>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </section>
 
             {/* ═══════════════════════════════════════════════
                 SECTION — TRUST BAND (marquee)
             ═══════════════════════════════════════════════ */}
-            <div className="bg-white py-6 overflow-hidden border-b border-gray-100 group">
+            <div className="bg-white pt-5 pb-6 overflow-hidden border-t-[3px] border-gray-300/40 border-b border-gray-100 group">
+                <div className="text-center mb-4">
+                    <span className="inline-flex items-center text-[10px] font-bold uppercase tracking-widest text-gray-400 bg-gray-100 px-3 py-1 rounded-full">
+                        Trusted By
+                    </span>
+                </div>
                 <div className="flex animate-scroll-left group-hover:[animation-play-state:paused]" style={{ width: 'max-content' }}>
                     {[...['SBI', 'HDFC Bank', 'ICICI Bank', 'Axis Bank', 'Kotak', 'PNB', 'Tally Prime', 'BOB', 'Canara', 'Yes Bank'],
                       ...['SBI', 'HDFC Bank', 'ICICI Bank', 'Axis Bank', 'Kotak', 'PNB', 'Tally Prime', 'BOB', 'Canara', 'Yes Bank']].map((name, i) => (
@@ -357,7 +369,7 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
             {/* ═══════════════════════════════════════════════
                 SECTION — COMPANY INTRO: NOBELIQ TECHNOLOGIES
             ═══════════════════════════════════════════════ */}
-            <section className="relative py-20 sm:py-24 bg-gradient-to-br from-[#0F172A] via-[#1E3A8A] to-[#0F172A] text-white overflow-hidden">
+            <section className="relative py-20 sm:py-24 bg-gradient-to-br from-[#0F172A] via-[#1E3A8A] to-[#0F172A] text-white overflow-hidden border-t-[3px] border-blue-400/30">
                 <div className="absolute top-10 left-10 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
                 <div className="absolute bottom-10 right-10 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
 
@@ -471,7 +483,7 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
             {/* ═══════════════════════════════════════════════
                 SECTION 3 — SERVICES
             ═══════════════════════════════════════════════ */}
-            <section className="py-14 sm:py-16 bg-[#F8FAFC]" ref={servicesRef}>
+            <section className="py-14 sm:py-16 bg-[#F8FAFC] border-t-[3px] border-emerald-400/30" ref={servicesRef}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     {/* Title */}
                     <motion.div
@@ -480,6 +492,9 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                         transition={{ duration: dur ?? 0.6 }}
                         className="mb-1.5"
                     >
+                        <span className="flex w-fit items-center gap-1.5 bg-emerald-50 text-emerald-600 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-3">
+                            Our Services
+                        </span>
                         <h2 className="font-heading relative inline-block text-2xl sm:text-3xl font-bold text-[#0F172A]">
                             What We Do
                             <motion.span
@@ -566,7 +581,7 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
             {/* ═══════════════════════════════════════════════
                 SECTION 4 — WHY CHOOSE US
             ═══════════════════════════════════════════════ */}
-            <section className="py-20 sm:py-24 bg-white overflow-hidden">
+            <section className="py-20 sm:py-24 bg-white overflow-hidden border-t-[3px] border-violet-400/30">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8" ref={whyRef}>
                     {/* Title */}
                     <motion.div
@@ -575,6 +590,9 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                         animate={whyInView ? { opacity: 1, y: 0 } : {}}
                         transition={{ duration: dur ?? 0.6 }}
                     >
+                        <span className="inline-flex items-center gap-1.5 bg-violet-50 text-violet-600 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-3">
+                            Why Us
+                        </span>
                         <h2 className="font-heading text-3xl sm:text-4xl font-bold text-[#0F172A] mb-4">
                             Why Choose NobelIQ Technologies?
                         </h2>
@@ -681,7 +699,7 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
             {/* ═══════════════════════════════════════════════
                 SECTION 5 — TESTIMONIALS
             ═══════════════════════════════════════════════ */}
-            <section className="py-20 sm:py-24 bg-[#F8FAFC] overflow-hidden" ref={testimonialsRef}>
+            <section className="py-20 sm:py-24 bg-[#F8FAFC] overflow-hidden border-t-[3px] border-amber-400/30" ref={testimonialsRef}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
                     <motion.div
                         className="text-center"
@@ -689,6 +707,9 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                         animate={testimonialsInView ? { opacity: 1, y: 0 } : {}}
                         transition={{ duration: dur ?? 0.6 }}
                     >
+                        <span className="inline-flex items-center gap-1.5 bg-amber-50 text-amber-600 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-3">
+                            Testimonials
+                        </span>
                         <h2 className="font-heading text-3xl sm:text-4xl font-bold text-[#0F172A] mb-4">
                             Trusted by Businesses Across India
                         </h2>
@@ -757,7 +778,7 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                 SECTION 6 — BLOG PREVIEW
             ═══════════════════════════════════════════════ */}
             {latestPosts.length > 0 && (
-                <section className="py-20 sm:py-24 bg-white" ref={blogRef}>
+                <section className="py-20 sm:py-24 bg-white border-t-[3px] border-blue-400/30" ref={blogRef}>
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         {/* Title */}
                         <motion.div
@@ -767,6 +788,9 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                             transition={{ duration: dur ?? 0.6 }}
                         >
                             <div>
+                                <span className="inline-flex items-center gap-1.5 bg-blue-50 text-[#2563EB] text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-3">
+                                    Insights
+                                </span>
                                 <h2 className="font-heading text-3xl sm:text-4xl font-bold text-[#0F172A] mb-2">
                                     Latest Insights
                                 </h2>
