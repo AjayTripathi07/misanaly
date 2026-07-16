@@ -926,13 +926,17 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                     animate={ctaInView ? { opacity: 1, scale: 1 } : {}}
                     transition={{ duration: dur ?? 0.6 }}
                 >
-                    <Badge className="mb-6 bg-white/20 border border-white/30 text-white hover:bg-white/30 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-wider">
+                    <span className="inline-flex items-center gap-2 mb-6 bg-white/20 border border-white/30 text-white rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-wider">
+                        <span className="relative flex h-1.5 w-1.5">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+                            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white" />
+                        </span>
                         Start Today
-                    </Badge>
+                    </span>
 
                     <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-6 tracking-tight leading-tight">
                         Ready to Transform{' '}
-                        <span className="text-white/90">Your Business?</span>
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 to-white">Your Business?</span>
                     </h2>
 
                     <p className="text-white/75 text-lg mb-10 leading-relaxed max-w-xl mx-auto">
@@ -946,21 +950,27 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                                 whileTap={{ scale: 0.97 }}
                                 transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                             >
-                                <Button size="lg" className="bg-white text-[#2563EB] hover:bg-gray-50 rounded-full px-10 shadow-xl font-bold text-base">
+                                <Button size="lg" className="bg-white text-[#2563EB] hover:bg-gray-50 rounded-full px-10 shadow-xl shadow-blue-950/30 font-bold text-base">
                                     Get a Free Quote <ArrowRight className="ml-2 h-5 w-5" />
                                 </Button>
                             </motion.div>
                         </Link>
                         <Link href="/services">
-                            <Button variant="outline" size="lg" className="border-white/40 text-white hover:bg-white/10 rounded-full px-10 bg-transparent font-semibold">
-                                Browse Services
-                            </Button>
+                            <motion.div
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.97 }}
+                                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                            >
+                                <Button variant="outline" size="lg" className="border-white/40 text-white hover:bg-white/10 rounded-full px-10 bg-transparent font-semibold">
+                                    Browse Services
+                                </Button>
+                            </motion.div>
                         </Link>
                     </div>
 
                     {/* Trust row */}
                     <motion.div
-                        className="mt-12 flex flex-wrap justify-center gap-6 text-white/60 text-sm"
+                        className="mt-12 flex flex-wrap justify-center gap-3 text-white/70 text-sm"
                         initial={{ opacity: 0, y: 20 }}
                         animate={ctaInView ? { opacity: 1, y: 0 } : {}}
                         transition={{ duration: dur ?? 0.5, delay: 0.3 }}
@@ -970,7 +980,7 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                             { icon: Shield, text: 'NDA on request' },
                             { icon: Clock, text: 'Response within 24h' },
                         ].map(({ icon: Icon, text }) => (
-                            <div key={text} className="flex items-center gap-1.5">
+                            <div key={text} className="flex items-center gap-1.5 bg-white/10 border border-white/15 rounded-full px-3.5 py-1.5">
                                 <Icon className="h-4 w-4" />
                                 <span>{text}</span>
                             </div>
