@@ -43,7 +43,7 @@ export default function GetQuote({ services }: Props) {
     return (
         <PublicLayout>
             <SeoHead
-                title="Get a Quote"
+                title="Start Your Project"
                 description="Request a custom quote for your IT project — web development, mobile apps, custom software, or Tally automation."
             />
 
@@ -52,7 +52,7 @@ export default function GetQuote({ services }: Props) {
                 <div className="max-w-3xl mx-auto px-4">
                     <Badge className="mb-4">Free Consultation</Badge>
                     <h1 className="text-4xl sm:text-5xl font-extrabold text-[#0F172A] mb-4">
-                        Get a Quote
+                        Start Your Project
                     </h1>
                     <p className="text-lg text-[#0F172A]/60">
                         Tell us about your project and we'll get back with a detailed proposal.

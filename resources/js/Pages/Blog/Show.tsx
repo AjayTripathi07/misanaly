@@ -309,7 +309,7 @@ export default function BlogShow({ post, related }: Props) {
                             size="lg"
                             className="bg-white text-[#2563EB] hover:bg-blue-50 rounded-full px-8 font-semibold shadow-lg shadow-blue-900/20 transition-all duration-200"
                         >
-                            Get a Quote
+                            Start Your Project
                         </Button>
                     </Link>
                 </div>

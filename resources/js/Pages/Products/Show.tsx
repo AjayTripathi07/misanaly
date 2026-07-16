@@ -323,7 +323,7 @@ export default function ProductShow({ product, faqs }: Props) {
                                     ))}
                                 </div>
                                 <span className="text-gray-400 text-sm">
-                                    <strong className="text-white">500+</strong> CA firms process statements daily
+                                    <strong className="text-white">99+</strong> CA firms process statements daily
                                 </span>
                             </motion.div>
                         </div>
@@ -351,8 +351,8 @@ export default function ProductShow({ product, faqs }: Props) {
             <section ref={statsBarRef} className="py-12 bg-[#0F172A] border-t border-white/5">
                 <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 sm:grid-cols-4 gap-6">
                     {[
-                        { value: 500, suffix: '+', label: 'CA Firms' },
-                        { value: 20, suffix: '+', label: 'Bank Formats' },
+                        { value: 99, suffix: '+', label: 'CA Firms' },
+                        { value: 100, suffix: '+', label: 'Bank Formats' },
                         { value: 98.7, suffix: '%', label: 'Accuracy Rate' },
                         { value: 3, suffix: ' hrs', label: 'Saved Daily' },
                     ].map((stat) => (
@@ -1051,7 +1051,7 @@ export default function ProductShow({ product, faqs }: Props) {
                                 </div>
                             ))}
                         </div>
-                        <span className="text-blue-200/60 text-sm"><strong className="text-white">200+</strong> CA firms &amp; accountants already on the waitlist</span>
+                        <span className="text-blue-200/60 text-sm"><strong className="text-white">99+</strong> CA firms &amp; accountants already on the waitlist</span>
                     </motion.div>
                 </div>
             </section>

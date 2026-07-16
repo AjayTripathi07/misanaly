@@ -11,6 +11,7 @@ import { motion, useInView, useReducedMotion } from 'framer-motion';
 import NumberFlow from '@number-flow/react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import StatementSimulatorPreview from '@/Components/Products/StatementSimulatorPreview';
+import FavoriteProductPopup from '@/Components/FavoriteProductPopup';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
@@ -99,12 +100,25 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
     const prefersReduced = useReducedMotion();
     const dur = prefersReduced ? 0 : undefined;
 
+    /* full-screen favorite-product popup — shown once per session */
+    const [popupOpen, setPopupOpen] = useState(false);
+    useEffect(() => {
+        if (!featuredProduct) return;
+        if (sessionStorage.getItem('favorite_popup_shown') === '1') return;
+        const timer = setTimeout(() => {
+            sessionStorage.setItem('favorite_popup_shown', '1');
+            setPopupOpen(true);
+        }, 5000);
+        return () => clearTimeout(timer);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     /* company stats (used in Company Intro section) */
     const statsRef = useRef(null);
     const statsInView = useInView(statsRef, { once: true, margin: '-100px' });
     const [counts, setCounts] = useState({ services: 0, firms: 0, clients: 0, years: 0 });
     useEffect(() => {
-        if (statsInView) setCounts({ services: 10, firms: 500, clients: 50, years: 3 });
+        if (statsInView) setCounts({ services: 10, firms: 99, clients: 50, years: 3 });
     }, [statsInView]);
 
     /* stats bar (below hero) — count-up on scroll */
@@ -137,7 +151,7 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
         <PublicLayout>
             <SeoHead
                 title="Statement2Books - AI Bank Statement to Tally Converter"
-                description="Statement2Books converts bank statements from SBI, HDFC, ICICI & 20+ banks into Tally entries in seconds — AI-powered, 100% offline. Built by NobelIQ Technologies for CA firms and businesses across India."
+                description="Statement2Books converts bank statements from SBI, HDFC, ICICI & 100+ banks into Tally entries in seconds — AI-powered, 100% offline. Built by NobelIQ Technologies for CA firms and businesses across India."
                 keywords="Statement2Books, bank statement to Tally, AI bank statement converter, CA firm software, Tally automation, IT services India, custom software development, NobelIQ Technologies"
             />
             <Head>
@@ -159,12 +173,12 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
             {/* ═══════════════════════════════════════════════
                 SECTION 1 — HERO: STATEMENT2BOOKS
             ═══════════════════════════════════════════════ */}
-            <section className="relative min-h-screen flex items-center bg-[#0F172A] text-white overflow-hidden">
+            <section className="relative flex items-center bg-[#0F172A] text-white overflow-hidden">
                 {/* Background glow blobs — matches Products/Show.tsx hero */}
                 <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
                 <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-indigo-600/8 rounded-full blur-3xl pointer-events-none" />
 
-                <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+                <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
                         {/* LEFT */}
@@ -192,17 +206,17 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
 
                             {/* Subheadline */}
                             <motion.p
-                                className="text-gray-300 text-lg leading-relaxed mb-8 max-w-lg"
+                                className="text-gray-300 text-lg leading-relaxed mb-6 max-w-lg"
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.4, duration: dur ?? 0.5 }}
                             >
-                                Convert bank statements from SBI, HDFC, ICICI &amp; 20+ banks into Tally entries in seconds. Built for CA firms and finance teams — let AI handle the rest.
+                                Convert bank statements from SBI, HDFC, ICICI &amp; 100+ banks into Tally entries in seconds. Built for CA firms and finance teams — let AI handle the rest.
                             </motion.p>
 
                             {/* Feature list with stagger */}
                             <motion.ul
-                                className="space-y-3 mb-8"
+                                className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2.5 mb-6"
                                 variants={stagger}
                                 initial="hidden"
                                 animate="visible"
@@ -211,13 +225,10 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                                     <motion.li
                                         key={f.id}
                                         variants={fadeUp}
-                                        className="flex items-start gap-3"
+                                        className="flex items-center gap-3"
                                     >
-                                        <CheckCircle2 className="h-5 w-5 text-[#10B981] mt-0.5 flex-shrink-0" />
-                                        <div>
-                                            <span className="font-semibold text-white">{f.title}</span>
-                                            <span className="text-gray-400 text-sm"> — {f.description}</span>
-                                        </div>
+                                        <CheckCircle2 className="h-5 w-5 text-[#10B981] flex-shrink-0" />
+                                        <span className="font-semibold text-white">{f.title}</span>
                                     </motion.li>
                                 ))}
                             </motion.ul>
@@ -229,13 +240,13 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.7, type: 'spring', stiffness: 200, damping: 15 }}
                             >
-                                <Link href="/products/statement2books">
+                                <Link href={`/products/${featuredProduct?.slug ?? 'statement2books'}`}>
                                     <Button size="lg" className="bg-orange-500 hover:bg-orange-600 rounded-full px-8 shadow-xl shadow-orange-900/40 font-semibold text-white">
-                                        Explore Statement2Books
+                                        Explore {featuredProduct?.name ?? 'Statement2Books'}
                                         <ArrowRight className="ml-2 h-4 w-4" />
                                     </Button>
                                 </Link>
-                                <Link href="/products/statement2books#waitlist">
+                                <Link href={`/products/${featuredProduct?.slug ?? 'statement2books'}#waitlist`}>
                                     <Button variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10 rounded-full px-8 bg-transparent font-semibold">
                                         <Rocket className="mr-2 h-4 w-4" />
                                         Join Waitlist
@@ -261,7 +272,7 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                                     ))}
                                 </div>
                                 <span className="text-sm text-gray-400">
-                                    <strong className="font-mono text-white">500+</strong> CA firms process statements daily
+                                    <strong className="font-mono text-white">99+</strong> CA firms process statements daily
                                 </span>
                             </motion.div>
 
@@ -313,8 +324,8 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
             <section ref={statsBarRef} className="py-12 bg-[#0F172A] border-t border-white/5">
                 <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 sm:grid-cols-4 gap-6">
                     {[
-                        { value: 500, suffix: '+', label: 'CA Firms' },
-                        { value: 20, suffix: '+', label: 'Bank Formats' },
+                        { value: 99, suffix: '+', label: 'CA Firms' },
+                        { value: 100, suffix: '+', label: 'Bank Formats' },
                         { value: 98.7, suffix: '%', label: 'Accuracy Rate' },
                         { value: 3, suffix: ' hrs', label: 'Saved Daily' },
                     ].map((stat) => (
@@ -362,22 +373,43 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                         </Badge>
                     </motion.div>
 
-                    <motion.h2
-                        className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight mb-6"
+                    <motion.div
+                        className="flex items-center justify-center gap-3 mb-3"
                         initial={{ opacity: 0, y: 24 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: '-100px' }}
                         transition={{ duration: dur ?? 0.6, delay: 0.1 }}
                     >
-                        NobelIQ Technologies: IT Services &amp; Software Products
-                    </motion.h2>
+                        <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-20 h-20 sm:w-24 sm:h-24 object-contain" />
+                        <h2 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
+                            NobelIQ Technologies
+                        </h2>
+                    </motion.div>
+
+                    <motion.div
+                        className="w-16 h-1 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full mx-auto mb-4"
+                        initial={{ opacity: 0, scaleX: 0 }}
+                        whileInView={{ opacity: 1, scaleX: 1 }}
+                        viewport={{ once: true, margin: '-100px' }}
+                        transition={{ duration: dur ?? 0.6, delay: 0.2 }}
+                    />
+
+                    <motion.p
+                        className="text-blue-200/80 text-xs sm:text-sm font-semibold uppercase tracking-widest mb-6"
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true, margin: '-100px' }}
+                        transition={{ duration: dur ?? 0.5, delay: 0.25 }}
+                    >
+                        IT Services &amp; Software Products
+                    </motion.p>
 
                     <motion.p
                         className="text-gray-300 text-lg leading-relaxed mb-10 max-w-2xl mx-auto"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: '-100px' }}
-                        transition={{ duration: dur ?? 0.5, delay: 0.2 }}
+                        transition={{ duration: dur ?? 0.5, delay: 0.3 }}
                     >
                         Beyond Statement2Books, we build custom web apps, mobile apps, and enterprise software that help businesses across India work smarter — not harder.
                     </motion.p>
@@ -389,18 +421,22 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: '-100px' }}
-                        transition={{ duration: dur ?? 0.5, delay: 0.3 }}
+                        transition={{ duration: dur ?? 0.5, delay: 0.4 }}
                     >
                         {[
                             { value: counts.services, suffix: '+', label: 'Services' },
                             { value: counts.firms, suffix: '+', label: 'CA Firms' },
                             { value: counts.clients, suffix: '+', label: 'Clients' },
                             { value: counts.years, suffix: '+', label: 'Years' },
-                        ].map(({ value, suffix, label }) => (
+                        ].map(({ value, suffix, label }, i) => (
                             <div key={label} className="text-center">
-                                <p className="font-mono text-2xl sm:text-3xl font-bold text-white">
+                                <motion.p
+                                    className="font-mono text-2xl sm:text-3xl font-bold text-cyan-300"
+                                    animate={prefersReduced ? {} : { scale: [1, 1.06, 1] }}
+                                    transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut', delay: i * 0.2 }}
+                                >
                                     <NumberFlow value={value} />{suffix}
-                                </p>
+                                </motion.p>
                                 <p className="text-xs text-gray-400 mt-1 font-medium">{label}</p>
                             </div>
                         ))}
@@ -421,7 +457,7 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                         </Link>
                         <Link href="/contact">
                             <Button variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10 rounded-full px-8 bg-transparent font-semibold">
-                                Get a Quote
+                                Start Your Project
                             </Button>
                         </Link>
                     </motion.div>
@@ -813,6 +849,14 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                     </motion.div>
                 </motion.div>
             </section>
+
+            {featuredProduct && (
+                <FavoriteProductPopup
+                    product={featuredProduct}
+                    open={popupOpen}
+                    onOpenChange={setPopupOpen}
+                />
+            )}
         </PublicLayout>
     );
 }

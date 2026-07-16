@@ -144,7 +144,7 @@ export default function Index({ services }: Props) {
                     <div className="mt-8 flex items-center justify-center gap-4 flex-wrap">
                         <Link href="/get-quote">
                             <Button className="bg-[#2563EB] hover:bg-[#1D4ED8] rounded-full px-8 font-semibold">
-                                Get a Quote
+                                Start Your Project
                                 <ArrowRight className="ml-2 h-4 w-4" />
                             </Button>
                         </Link>

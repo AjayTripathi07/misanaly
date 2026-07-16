@@ -8,12 +8,13 @@ class Product extends Model
 {
     protected $fillable = [
         'slug', 'name', 'tagline', 'description',
-        'status', 'pricing_model', 'demo_url', 'sort_order',
+        'status', 'pricing_model', 'demo_url', 'sort_order', 'is_featured',
     ];
 
     protected $casts = [
         'status' => 'string',
         'sort_order' => 'integer',
+        'is_featured' => 'boolean',
     ];
 
     public function getRouteKeyName(): string

@@ -20,17 +20,39 @@ interface SiteSettings {
     udyam_number: string;
 }
 
+interface FavoriteProduct {
+    slug: string;
+    name: string;
+    tagline: string;
+}
+
 type PublicPageProps = PageProps<{
     siteSettings?: SiteSettings;
+    favoriteProduct?: FavoriteProduct | null;
 }>;
 
 const navLinks = [
     { label: 'Home', href: '/' },
-    { label: 'Services', href: '/services' },
     { label: 'Products', href: '/products' },
+    { label: 'Services', href: '/services' },
     { label: 'About', href: '/about' },
     { label: 'Blog', href: '/blog' },
 ];
+
+interface NavItem {
+    label: string;
+    href: string;
+    isFavorite?: boolean;
+}
+
+function buildNavItems(favoriteProduct?: FavoriteProduct | null): NavItem[] {
+    const items: NavItem[] = [navLinks[0]];
+    if (favoriteProduct) {
+        items.push({ label: favoriteProduct.name, href: `/products/${favoriteProduct.slug}`, isFavorite: true });
+    }
+    items.push(...navLinks.slice(1));
+    return items;
+}
 
 const serviceLinks = [
     { label: 'Website Development', href: '/services/website-development' },
@@ -44,6 +66,8 @@ const serviceLinks = [
 export default function PublicLayout({ children }: PublicLayoutProps) {
     const { url, props } = usePage<PublicPageProps>();
     const siteSettings = props.siteSettings;
+    const favoriteProduct = props.favoriteProduct;
+    const navItems = buildNavItems(favoriteProduct);
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const [scrollProgress, setScrollProgress] = useState(0);
@@ -102,10 +126,10 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                     style={{ width: `${scrollProgress * 100}%` }}
                 />
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center justify-between h-16">
+                    <div className="flex items-center justify-between h-20">
                         {/* Logo */}
                         <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-                            <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-8 h-8 object-contain" />
+                            <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-20 h-20 object-contain" />
                             <span className="text-[#0F172A] font-bold text-lg leading-none">
                                 NobelIQ<span className="text-[#2563EB]"> Technologies</span>
                             </span>
@@ -113,15 +137,20 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
 
                         {/* Desktop nav */}
                         <nav className="hidden lg:flex items-center gap-1">
-                            {navLinks.map((link) => (
+                            {navItems.map((link) => (
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className="px-3 py-2 text-sm font-medium text-[#0F172A]/70 hover:text-[#2563EB] transition-colors rounded-md hover:bg-blue-50"
+                                    className={cn(
+                                        'px-3 py-2 text-sm font-medium transition-colors rounded-md',
+                                        link.isFavorite
+                                            ? 'text-orange-600 hover:text-orange-700 hover:bg-orange-50'
+                                            : 'text-[#0F172A]/70 hover:text-[#2563EB] hover:bg-blue-50',
+                                    )}
                                 >
-                                    {link.label === 'Products' ? (
-                                        <span className="relative inline-flex items-center gap-1">
-                                            Products
+                                    {link.isFavorite ? (
+                                        <span className="relative inline-flex items-center gap-1.5 font-semibold">
+                                            🚀 {link.label}
                                             <span className="relative flex h-2 w-2">
                                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75" />
                                                 <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500" />
@@ -141,7 +170,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                                     size="sm"
                                     className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white rounded-full px-5 shadow-md shadow-blue-200"
                                 >
-                                    Get a Quote
+                                    Start Your Project
                                 </Button>
                             </Link>
 
@@ -169,7 +198,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                                 onClick={() => setMobileOpen(false)}
                                 className="flex items-center gap-2"
                             >
-                                <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-7 h-7 object-contain" />
+                                <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-20 h-20 object-contain" />
                                 <span className="text-[#0F172A] font-bold text-base">
                                     NobelIQ<span className="text-[#2563EB]"> Technologies</span>
                                 </span>
@@ -182,14 +211,21 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
 
                         {/* Nav links */}
                         <nav className="flex-1 overflow-y-auto py-4 px-4">
-                            {navLinks.map((link) => (
+                            {navItems.map((link) => (
                                 <Link
                                     key={link.href}
                                     href={link.href}
                                     onClick={() => setMobileOpen(false)}
-                                    className="flex items-center justify-between px-3 py-3 text-sm font-medium text-[#0F172A] hover:text-[#2563EB] hover:bg-blue-50 rounded-lg transition-colors"
+                                    className={cn(
+                                        'flex items-center justify-between px-3 py-3 text-sm font-medium rounded-lg transition-colors',
+                                        link.isFavorite
+                                            ? 'text-orange-600 font-semibold hover:bg-orange-50'
+                                            : 'text-[#0F172A] hover:text-[#2563EB] hover:bg-blue-50',
+                                    )}
                                 >
-                                    {link.label}
+                                    <span className="flex items-center gap-1.5">
+                                        {link.isFavorite && '🚀'} {link.label}
+                                    </span>
                                     <ChevronRight className="h-4 w-4 opacity-40" />
                                 </Link>
                             ))}
@@ -199,7 +235,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                         <div className="px-4 pb-6 pt-4 border-t">
                             <Link href="/get-quote" onClick={() => setMobileOpen(false)}>
                                 <Button className="w-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white rounded-full">
-                                    Get a Quote
+                                    Start Your Project
                                 </Button>
                             </Link>
                             <p className="mt-3 text-center text-xs text-gray-400">
@@ -211,7 +247,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
             </Sheet>
 
             {/* ── MAIN CONTENT ── */}
-            <main className="flex-1 pt-16">{children}</main>
+            <main className="flex-1 pt-20">{children}</main>
 
             {/* ── FOOTER ── */}
             <footer className="bg-[#0F172A] text-white">
@@ -220,7 +256,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                         {/* Company */}
                         <div className="lg:col-span-1">
                             <Link href="/" className="flex items-center gap-2 mb-4">
-                                <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-8 h-8 object-contain" />
+                                <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-20 h-20 object-contain" />
                                 <span className="text-white font-bold text-lg">
                                     NobelIQ<span className="text-[#60A5FA]"> Technologies</span>
                                 </span>

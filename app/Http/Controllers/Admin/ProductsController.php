@@ -159,6 +159,18 @@ class ProductsController extends Controller
         return back()->with('success', 'Product status toggled.');
     }
 
+    public function toggleFavorite(Product $product): RedirectResponse
+    {
+        DB::transaction(function () use ($product) {
+            if (!$product->is_featured) {
+                Product::where('is_featured', true)->update(['is_featured' => false]);
+            }
+            $product->update(['is_featured' => !$product->is_featured]);
+        });
+
+        return back()->with('success', 'Favorite product updated.');
+    }
+
     public function storeScreenshot(Request $request, Product $product): \Illuminate\Http\JsonResponse
     {
         $validated = $request->validate([

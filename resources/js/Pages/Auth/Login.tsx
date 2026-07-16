@@ -37,7 +37,7 @@ export default function Login({
 
                     <div className="relative z-10 max-w-md w-full">
                         <div className="flex items-center gap-3 mb-12">
-                            <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-10 h-10 object-contain" />
+                            <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-16 h-16 object-contain" />
                             <span className="text-white font-bold text-xl">NobelIQ<span className="text-blue-400"> Technologies</span></span>
                         </div>
 
@@ -87,7 +87,7 @@ export default function Login({
                         className="w-full max-w-sm"
                     >
                         <div className="flex items-center gap-2 mb-8 lg:hidden">
-                            <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-8 h-8 object-contain" />
+                            <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-16 h-16 object-contain" />
                             <span className="font-bold text-[#0F172A] text-lg">NobelIQ<span className="text-[#2563EB]"> Technologies</span></span>
                         </div>
 

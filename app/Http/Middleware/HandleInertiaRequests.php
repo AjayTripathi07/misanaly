@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Product;
 use App\Models\ProductWaitlist;
 use App\Models\SiteSetting;
 use Illuminate\Http\Request;
@@ -40,6 +41,9 @@ class HandleInertiaRequests extends Middleware
                 'cin_number'   => $settings->get('cin_number', ''),
                 'udyam_number' => $settings->get('udyam_number', ''),
             ],
+            'favoriteProduct' => Product::where('is_featured', true)
+                ->select('slug', 'name', 'tagline')
+                ->first(),
         ];
     }
 }

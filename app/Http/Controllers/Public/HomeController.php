@@ -18,7 +18,7 @@ class HomeController extends Controller
             ->orderBy('sort_order')
             ->get(['id', 'slug', 'name', 'tagline', 'icon', 'starting_price']);
 
-        $featuredProduct = Product::where('slug', 'tally-automation')
+        $featuredProduct = Product::where('is_featured', true)
             ->with([
                 'features' => fn ($q) => $q->orderBy('sort_order'),
             ])

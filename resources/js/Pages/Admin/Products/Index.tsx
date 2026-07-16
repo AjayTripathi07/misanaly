@@ -3,7 +3,7 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
 import { Card, CardContent } from '@/Components/ui/card';
-import { Plus, Pencil, Trash2, Package } from 'lucide-react';
+import { Plus, Pencil, Trash2, Package, Star } from 'lucide-react';
 
 interface Product {
     id: number;
@@ -13,6 +13,7 @@ interface Product {
     status: 'active' | 'inactive';
     sort_order: number;
     features_count: number;
+    is_featured: boolean;
 }
 
 interface Props {
@@ -24,6 +25,10 @@ export default function Index({ products }: Props) {
         if (confirm('Toggle product status?')) {
             router.patch(`/admin/products/${id}/toggle-status`);
         }
+    }
+
+    function handleToggleFavorite(id: number) {
+        router.patch(`/admin/products/${id}/toggle-favorite`);
     }
 
     function handleDelete(id: number) {
@@ -72,7 +77,12 @@ export default function Index({ products }: Props) {
                                             {product.sort_order}
                                         </td>
                                         <td className="px-4 py-3">
-                                            <p className="font-medium text-[#0F172A]">{product.name}</p>
+                                            <p className="font-medium text-[#0F172A] flex items-center gap-1.5">
+                                                {product.name}
+                                                {product.is_featured && (
+                                                    <Star className="h-3.5 w-3.5 text-amber-400 fill-amber-400" />
+                                                )}
+                                            </p>
                                             <p className="text-xs text-[#0F172A]/50">{product.tagline}</p>
                                         </td>
                                         <td className="px-4 py-3">
@@ -111,6 +121,15 @@ export default function Index({ products }: Props) {
                                                     title="Toggle status"
                                                 >
                                                     <span className="text-xs font-bold">{product.status === 'active' ? '●' : '○'}</span>
+                                                </Button>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className={`h-8 w-8 p-0 hover:bg-amber-50 ${product.is_featured ? 'text-amber-500' : 'text-gray-300 hover:text-amber-500'}`}
+                                                    onClick={() => handleToggleFavorite(product.id)}
+                                                    title={product.is_featured ? 'Unmark favorite' : 'Mark as favorite'}
+                                                >
+                                                    <Star className={`h-4 w-4 ${product.is_featured ? 'fill-amber-400' : ''}`} />
                                                 </Button>
                                                 <Button
                                                     variant="ghost"

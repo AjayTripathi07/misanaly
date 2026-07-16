@@ -24,6 +24,7 @@ class ProductsSeeder extends Seeder
                 'pricing_model' => 'one-time',
                 'demo_url'      => null,
                 'sort_order'    => 1,
+                'is_featured'   => true,
             ]
         );
 

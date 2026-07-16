@@ -85,6 +85,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::put('/products/{product}', [Admin\ProductsController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [Admin\ProductsController::class, 'destroy'])->name('products.destroy');
     Route::patch('/products/{product}/toggle-status', [Admin\ProductsController::class, 'toggleStatus'])->name('products.toggle-status');
+    Route::patch('/products/{product}/toggle-favorite', [Admin\ProductsController::class, 'toggleFavorite'])->name('products.toggle-favorite');
 
     // Product Screenshots
     Route::post('/products/{product}/screenshots', [Admin\ProductsController::class, 'storeScreenshot'])->name('products.screenshots.store');
