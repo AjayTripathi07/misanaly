@@ -14,8 +14,11 @@ class HomeController extends Controller
 {
     public function index(): Response
     {
+        $activeServicesCount = Service::where('status', 'active')->count();
+
         $services = Service::where('status', 'active')
             ->orderBy('sort_order')
+            ->limit(8)
             ->get(['id', 'slug', 'name', 'tagline', 'icon', 'starting_price']);
 
         $featuredProduct = Product::where('is_featured', true)
@@ -33,6 +36,7 @@ class HomeController extends Controller
 
         return Inertia::render('Home', [
             'services'        => $services,
+            'hasMoreServices' => $activeServicesCount > $services->count(),
             'featuredProduct' => $featuredProduct,
             'testimonials'    => $testimonials,
             'latestPosts'     => $latestPosts,

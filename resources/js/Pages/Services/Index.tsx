@@ -70,32 +70,32 @@ export default function Index({ services }: Props) {
             </section>
 
             {/* Services Grid */}
-            <section className="bg-[#F8FAFC] py-20 sm:py-24">
+            <section className="bg-[#F8FAFC] py-14 sm:py-16">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-14">
-                        <Badge variant="secondary" className="mb-3 bg-blue-50 text-[#2563EB] border-0 text-xs font-semibold uppercase tracking-wider px-4 py-1.5">
+                    <div className="text-center mb-8">
+                        <Badge variant="secondary" className="mb-2 bg-blue-50 text-[#2563EB] border-0 text-xs font-semibold uppercase tracking-wider px-4 py-1.5">
                             All Services
                         </Badge>
-                        <h2 className="text-3xl sm:text-4xl font-bold text-[#0F172A] tracking-tight">
+                        <h2 className="text-2xl sm:text-3xl font-bold text-[#0F172A] tracking-tight">
                             Everything You Need
                         </h2>
-                        <p className="mt-3 text-[#0F172A]/55 max-w-xl mx-auto">
+                        <p className="mt-2 text-[#0F172A]/55 max-w-xl mx-auto text-sm sm:text-base">
                             Choose the service that fits your needs, or combine several for a complete digital transformation.
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                         {services.map((service) => (
                             <Link key={service.id} href={`/services/${service.slug}`}>
                                 <Card className="group h-full bg-white border border-gray-100 hover:border-[#2563EB]/40 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer">
-                                    <CardContent className="p-7 flex flex-col h-full">
+                                    <CardContent className="p-5 flex flex-col h-full">
                                         {/* Icon */}
-                                        <div className="w-14 h-14 rounded-2xl bg-blue-50 group-hover:bg-[#2563EB] flex items-center justify-center mb-5 transition-colors">
-                                            <ServiceIcon name={service.icon} className="h-7 w-7 text-[#2563EB] group-hover:text-white transition-colors" />
+                                        <div className="w-12 h-12 rounded-xl bg-blue-50 group-hover:bg-[#2563EB] flex items-center justify-center mb-4 transition-colors">
+                                            <ServiceIcon name={service.icon} className="h-6 w-6 text-[#2563EB] group-hover:text-white transition-colors" />
                                         </div>
 
                                         {/* Name */}
-                                        <h3 className="font-bold text-[#0F172A] text-lg group-hover:text-[#2563EB] transition-colors mb-2">
+                                        <h3 className="font-bold text-[#0F172A] text-base group-hover:text-[#2563EB] transition-colors mb-1.5">
                                             {service.name}
                                         </h3>
 
@@ -113,7 +113,7 @@ export default function Index({ services }: Props) {
 
                                         {/* Features */}
                                         {service.features && service.features.length > 0 && (
-                                            <ul className="mt-4 space-y-2">
+                                            <ul className="mt-3 space-y-1.5">
                                                 {service.features.slice(0, 3).map((feature) => (
                                                     <li key={feature.id} className="flex items-center gap-2">
                                                         <CheckCircle2 className="h-4 w-4 text-green-500 flex-shrink-0" />
@@ -124,7 +124,7 @@ export default function Index({ services }: Props) {
                                         )}
 
                                         {/* Learn More */}
-                                        <div className="mt-auto pt-4 flex items-center gap-1 text-[#2563EB] text-sm font-semibold">
+                                        <div className="mt-auto pt-3 flex items-center gap-1 text-[#2563EB] text-sm font-semibold">
                                             Learn More
                                             <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                                         </div>

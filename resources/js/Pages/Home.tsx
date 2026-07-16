@@ -31,6 +31,7 @@ function ServiceIcon({ name, className }: { name: string; className?: string }) 
 /* ─── props ─── */
 interface Props {
     services: Service[];
+    hasMoreServices: boolean;
     featuredProduct: (Product & { features: { id: number; title: string; description: string }[] }) | null;
     testimonials: Testimonial[];
     latestPosts: BlogPost[];
@@ -94,7 +95,7 @@ const WHY_ITEMS = [
 ];
 
 /* ─── main component ─── */
-export default function Home({ services, featuredProduct, testimonials, latestPosts }: Props) {
+export default function Home({ services, hasMoreServices, featuredProduct, testimonials, latestPosts }: Props) {
     const { props: pageProps } = usePage<PageProps<{ siteSettings?: { udyam_number: string } }>>();
     const udyamNumber = pageProps.siteSettings?.udyam_number;
     const prefersReduced = useReducedMotion();
@@ -471,16 +472,16 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
             {/* ═══════════════════════════════════════════════
                 SECTION 3 — SERVICES
             ═══════════════════════════════════════════════ */}
-            <section className="py-20 sm:py-24 bg-[#F8FAFC]" ref={servicesRef}>
+            <section className="py-14 sm:py-16 bg-[#F8FAFC]" ref={servicesRef}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     {/* Title */}
                     <motion.div
                         initial={{ opacity: 0, x: -40 }}
                         animate={servicesInView ? { opacity: 1, x: 0 } : {}}
                         transition={{ duration: dur ?? 0.6 }}
-                        className="mb-4"
+                        className="mb-1.5"
                     >
-                        <h2 className="font-heading relative inline-block text-3xl sm:text-4xl font-bold text-[#0F172A]">
+                        <h2 className="font-heading relative inline-block text-2xl sm:text-3xl font-bold text-[#0F172A]">
                             What We Do
                             <motion.span
                                 className="absolute -bottom-1 left-0 h-1 bg-[#2563EB] rounded-full"
@@ -491,7 +492,7 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                         </h2>
                     </motion.div>
                     <motion.p
-                        className="text-[#0F172A]/60 text-lg max-w-2xl mb-12"
+                        className="text-[#0F172A]/55 text-sm sm:text-base max-w-2xl mb-6"
                         initial={{ opacity: 0, y: 20 }}
                         animate={servicesInView ? { opacity: 1, y: 0 } : {}}
                         transition={{ duration: dur ?? 0.6, delay: 0.2 }}
@@ -501,7 +502,7 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
 
                     {/* Cards stagger */}
                     <motion.div
-                        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+                        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3"
                         variants={stagger}
                         initial="hidden"
                         animate={servicesInView ? 'visible' : 'hidden'}
@@ -512,23 +513,17 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                             <motion.div key={service.id} variants={fadeUp}>
                                 <Link href={`/services/${service.slug}`}>
                                     <motion.div
-                                        className="card-gradient-border group h-full border border-gray-100 rounded-2xl bg-white p-6 cursor-pointer flex flex-col"
-                                        whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(37,99,235,0.15)' }}
-                                        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                                        className="group h-full border border-gray-100 rounded-xl bg-white p-4 cursor-pointer flex flex-col"
+                                        whileHover={{ y: -3, boxShadow: '0 10px 24px rgba(37,99,235,0.12)' }}
+                                        transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                                     >
-                                        <motion.div
-                                            className={`icon-bounce w-12 h-12 rounded-xl ${svcColor.bg} flex items-center justify-center mb-4`}
-                                            whileHover={{ scale: 1.1 }}
-                                        >
-                                            <ServiceIcon name={service.icon} className={`h-6 w-6 ${svcColor.icon}`} />
-                                        </motion.div>
-                                        <h3 className="font-semibold text-[#0F172A] text-base mb-2">{service.name}</h3>
-                                        <p className="text-[#0F172A]/55 text-sm flex-1">{service.tagline}</p>
-                                        {service.starting_price && (
-                                            <p className="mt-3 text-xs text-[#2563EB] font-semibold">From {service.starting_price}</p>
-                                        )}
-                                        <div className="mt-4 flex items-center gap-1 text-[#2563EB] text-sm font-medium">
-                                            Learn More <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                                        <div className={`w-9 h-9 rounded-lg ${svcColor.bg} flex items-center justify-center mb-3 transition-transform duration-150 group-hover:scale-110`}>
+                                            <ServiceIcon name={service.icon} className={`h-4 w-4 ${svcColor.icon}`} />
+                                        </div>
+                                        <h3 className="font-semibold text-[#0F172A] text-sm leading-snug">{service.name}</h3>
+                                        <p className="text-[#0F172A]/50 text-xs mt-1 truncate">{service.tagline}</p>
+                                        <div className="mt-2 flex items-center gap-1 text-[#2563EB] text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+                                            Learn More <ChevronRight className="h-3 w-3" />
                                         </div>
                                     </motion.div>
                                 </Link>
@@ -538,18 +533,20 @@ export default function Home({ services, featuredProduct, testimonials, latestPo
                     </motion.div>
 
                     {/* View all */}
-                    <motion.div
-                        className="mt-12 text-center"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={servicesInView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ duration: dur ?? 0.5, delay: 0.5 }}
-                    >
-                        <Link href="/services">
-                            <Button variant="outline" className="border-[#2563EB] text-[#2563EB] hover:bg-blue-50 rounded-full px-8">
-                                View All Services <ArrowRight className="ml-2 h-4 w-4" />
-                            </Button>
-                        </Link>
-                    </motion.div>
+                    {hasMoreServices && (
+                        <motion.div
+                            className="mt-8 text-center"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={servicesInView ? { opacity: 1, y: 0 } : {}}
+                            transition={{ duration: dur ?? 0.5, delay: 0.5 }}
+                        >
+                            <Link href="/services">
+                                <Button variant="outline" className="border-[#2563EB] text-[#2563EB] hover:bg-blue-50 rounded-full px-8">
+                                    View All Services <ArrowRight className="ml-2 h-4 w-4" />
+                                </Button>
+                            </Link>
+                        </motion.div>
+                    )}
                 </div>
             </section>
 
