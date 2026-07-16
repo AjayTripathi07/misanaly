@@ -5,7 +5,7 @@ Welcome to the **Statement2Books Early Access Programme** — you're officially 
 
 @component('mail::panel')
 **Your Early Access Benefit:**
-As one of our first signups, you'll receive **3 months FREE** subscription when Statement2Books launches — no credit card required at signup.
+As one of our first signups, you'll receive a **45-day FREE trial** when Statement2Books launches — no credit card required at signup.
 @endcomponent
 
 **What is Statement2Books?**
@@ -17,7 +17,7 @@ No more manual data entry. No cloud upload. Just seconds.
 **What happens next?**
 
 1. We're putting final touches on the product
-2. The moment we launch, you'll get an email with your exclusive 3-month free access code
+2. The moment we launch, you'll get an email with your exclusive 45-day free trial access code
 3. Install, import your first bank statement, and see it work in under 2 minutes
 
 If you have any questions or want to tell us about your use case, just reply to this email — we'd love to hear from you.

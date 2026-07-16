@@ -301,7 +301,7 @@ export default function ProductShow({ product, faqs }: Props) {
                             >
                                 <span className="inline-flex items-center gap-2 text-orange-200/80 text-sm">
                                     <Check className="h-4 w-4 text-orange-400 flex-shrink-0" />
-                                    First 100 signups get <strong className="text-orange-300">3 months free</strong> at launch
+                                    First 100 signups get <strong className="text-orange-300">45 days free</strong> at launch
                                 </span>
                             </motion.div>
 
@@ -757,7 +757,7 @@ export default function ProductShow({ product, faqs }: Props) {
                     >
                         <div className="bg-gradient-to-r from-orange-500/10 to-amber-500/10 border border-orange-400/30 rounded-2xl px-6 py-4 text-center">
                             <p className="text-orange-600 font-bold text-sm">
-                                🔥 Special Launch Offer — First 100 Early Access signups get <span className="underline">3 months FREE</span> on any plan
+                                🔥 Special Launch Offer — First 100 Early Access signups get <span className="underline">45 Days FREE</span> on any plan
                             </p>
                             <button
                                 onClick={scrollToWaitlist}
@@ -876,10 +876,10 @@ export default function ProductShow({ product, faqs }: Props) {
                             Early Access — Limited Spots
                         </div>
                         <h2 className="font-heading text-3xl sm:text-4xl font-extrabold tracking-tight">
-                            Reserve Your Free 3 Months
+                            Reserve Your Free 45-Day Trial
                         </h2>
                         <p className="text-blue-100/80 mt-3 text-lg">
-                            Statement2Books launches soon. Be first in line — early access users get 3 months completely free.
+                            Statement2Books launches soon. Be first in line — early access users get a 45-day free trial.
                         </p>
                     </motion.div>
 
@@ -1009,7 +1009,7 @@ export default function ProductShow({ product, faqs }: Props) {
                                         <div className="flex items-start gap-3 bg-white/8 rounded-xl px-4 py-3">
                                             <Rocket className="h-4 w-4 text-orange-300 mt-0.5 flex-shrink-0" />
                                             <p className="text-xs text-blue-100/70 leading-relaxed">
-                                                Early access users get <strong className="text-white">3 months completely free</strong> when Statement2Books launches — no credit card needed to reserve your spot.
+                                                Early access users get <strong className="text-white">a 45-day free trial</strong> when Statement2Books launches — no credit card needed to reserve your spot.
                                             </p>
                                         </div>
 
@@ -1028,7 +1028,7 @@ export default function ProductShow({ product, faqs }: Props) {
                                                     Reserving your spot…
                                                 </span>
                                             ) : (
-                                                <>Reserve My Free 3 Months <ArrowRight className="ml-2 h-4 w-4 inline" /></>
+                                                <>Reserve My 45-Day Trial <ArrowRight className="ml-2 h-4 w-4 inline" /></>
                                             )}
                                         </Button>
                                     </form>
@@ -1137,7 +1137,7 @@ export default function ProductShow({ product, faqs }: Props) {
                                 Be First When Statement2Books Launches
                             </h2>
                             <p className="text-gray-400 mb-8">
-                                Reserve your spot today — first 100 signups get 3 months completely free.
+                                Reserve your spot today — first 100 signups get a 45-day free trial.
                             </p>
 
                             <motion.div
@@ -1151,7 +1151,7 @@ export default function ProductShow({ product, faqs }: Props) {
                                     className="bg-orange-500 hover:bg-orange-600 rounded-full px-12 text-lg font-semibold shadow-2xl shadow-orange-900/40 text-white"
                                 >
                                     <Rocket className="mr-2 h-5 w-5" />
-                                    Reserve My Free 3 Months
+                                    Reserve My 45-Day Trial
                                 </Button>
                             </motion.div>
 
@@ -1175,7 +1175,7 @@ export default function ProductShow({ product, faqs }: Props) {
                     >
                         <span className="text-white text-sm font-medium hidden sm:block">Statement2Books — Early Access</span>
                         <div className="flex items-center gap-3 mx-auto sm:mx-0">
-                            <span className="text-gray-400 text-xs hidden md:block">🎉 First 100 signups get 3 months free</span>
+                            <span className="text-gray-400 text-xs hidden md:block">🎉 First 100 signups get 45 days free</span>
                             <button onClick={scrollToWaitlist} className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold px-4 py-1.5 rounded-full transition-colors">
                                 Get Early Access →
                             </button>

@@ -30,7 +30,7 @@ class WaitlistController extends Controller
         $existing = ProductWaitlist::where('email', $validated['email'])->first();
 
         if ($existing) {
-            return back()->with('waitlist_success', "You're already on the list! We'll email {$validated['email']} the moment Statement2Books launches with your free 3-month access.");
+            return back()->with('waitlist_success', "You're already on the list! We'll email {$validated['email']} the moment Statement2Books launches with your free 45-day trial access.");
         }
 
         $entry = ProductWaitlist::create([
@@ -59,6 +59,6 @@ class WaitlistController extends Controller
             Log::error('Waitlist admin notification failed', ['id' => $entry->id, 'error' => $e->getMessage()]);
         }
 
-        return back()->with('waitlist_success', "You're on the list! 🎉 We'll email you at {$entry->email} the moment Statement2Books launches with your free 3-month access.");
+        return back()->with('waitlist_success', "You're on the list! 🎉 We'll email you at {$entry->email} the moment Statement2Books launches with your free 45-day trial access.");
     }
 }

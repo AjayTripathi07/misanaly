@@ -104,7 +104,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                 <div className="relative bg-gradient-to-r from-[#2563EB] via-[#6D28D9] to-[#8B5CF6] text-white text-sm py-2 px-4 flex items-center justify-center gap-3 z-50">
                     <span className="hidden sm:inline">🚀</span>
                     <Link href="/products/statement2books" className="hover:underline underline-offset-2 font-medium text-center">
-                        <strong>Statement2Books is here!</strong> Automate your Tally entries — Join waitlist for <strong>3 months free</strong> →
+                        <strong>Statement2Books is here!</strong> Automate your Tally entries — Join waitlist for <strong>45 days free</strong> →
                     </Link>
                     <button onClick={dismissBar} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors p-1" aria-label="Dismiss">
                         <X className="h-3.5 w-3.5" />
@@ -394,7 +394,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                         className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-[#0F172A] border border-white/10 text-white px-5 py-3 rounded-2xl shadow-2xl shadow-black/40 backdrop-blur-sm"
                     >
                         <span className="text-orange-400">🚀</span>
-                        <span className="text-sm font-medium">Statement2Books Early Access — 3 months free</span>
+                        <span className="text-sm font-medium">Statement2Books Early Access — 45 days free</span>
                         <Link href="/products/statement2books#waitlist">
                             <Button size="sm" className="bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-4 text-xs font-bold ml-1">
                                 Join Waitlist →

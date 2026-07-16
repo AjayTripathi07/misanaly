@@ -229,6 +229,14 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                 SECTION 1 — HERO: STATEMENT2BOOKS
             ═══════════════════════════════════════════════ */}
             <section className="relative flex items-center bg-[#0F172A] text-white overflow-hidden">
+                {/* Dot-grid texture — matches Final CTA treatment */}
+                <div
+                    className="absolute inset-0 opacity-[0.1] pointer-events-none"
+                    style={{
+                        backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.9) 1px, transparent 1px)',
+                        backgroundSize: '28px 28px',
+                    }}
+                />
                 {/* Background glow blobs — matches Products/Show.tsx hero */}
                 <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
                 <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-indigo-600/8 rounded-full blur-3xl pointer-events-none" />
@@ -899,9 +907,18 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
             >
                 {/* Background glow */}
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.08)_0%,transparent_60%)] pointer-events-none" />
+                {/* Dot-grid texture */}
+                <div
+                    className="absolute inset-0 opacity-[0.12] pointer-events-none"
+                    style={{
+                        backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.9) 1px, transparent 1px)',
+                        backgroundSize: '28px 28px',
+                    }}
+                />
                 {/* Floating shapes */}
                 <div className="absolute top-0 left-0 w-64 h-64 bg-white/5 rounded-full blur-3xl pointer-events-none -translate-x-1/2 -translate-y-1/2" />
                 <div className="absolute bottom-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl pointer-events-none translate-x-1/3 translate-y-1/3" />
+                <div className="absolute top-1/3 right-1/4 w-72 h-72 bg-violet-400/10 rounded-full blur-3xl pointer-events-none" />
 
                 <motion.div
                     className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8"
