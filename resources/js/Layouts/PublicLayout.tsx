@@ -1,6 +1,7 @@
 import { useState, useEffect, ReactNode } from 'react';
 import { Link, usePage } from '@inertiajs/react';
-import { Menu, X, Phone, Mail, MapPin, ChevronRight } from 'lucide-react';
+import { Menu, X, Phone, Mail, MapPin, ChevronRight, Rocket } from 'lucide-react';
+import { LinkedinIcon, TwitterIcon, FacebookIcon, InstagramIcon } from '@/Components/icons/SocialIcons';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Button } from '@/Components/ui/button';
 import { Sheet, SheetContent, SheetClose } from '@/Components/ui/sheet';
@@ -54,6 +55,13 @@ function buildNavItems(favoriteProduct?: FavoriteProduct | null): NavItem[] {
     return items;
 }
 
+const socialLinks = [
+    { name: 'LinkedIn', icon: LinkedinIcon, href: '#' },
+    { name: 'Twitter', icon: TwitterIcon, href: '#' },
+    { name: 'Facebook', icon: FacebookIcon, href: '#' },
+    { name: 'Instagram', icon: InstagramIcon, href: '#' },
+];
+
 const serviceLinks = [
     { label: 'Website Development', href: '/services/website-development' },
     { label: 'Mobile App Development', href: '/services/mobile-app-development' },
@@ -76,10 +84,19 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
         if (typeof window === 'undefined') return false;
         return sessionStorage.getItem('bar_dismissed') === '1';
     });
+    const [stickyBarDismissed, setStickyBarDismissed] = useState(() => {
+        if (typeof window === 'undefined') return false;
+        return sessionStorage.getItem('sticky_cta_dismissed') === '1';
+    });
 
     function dismissBar() {
         sessionStorage.setItem('bar_dismissed', '1');
         setBarDismissed(true);
+    }
+
+    function dismissStickyBar() {
+        sessionStorage.setItem('sticky_cta_dismissed', '1');
+        setStickyBarDismissed(true);
     }
 
     useEffect(() => {
@@ -102,7 +119,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
             {/* ── ANNOUNCEMENT BAR ── */}
             {!barDismissed && !onStatement2BooksPage && (
                 <div className="relative bg-gradient-to-r from-[#2563EB] via-[#6D28D9] to-[#8B5CF6] text-white text-sm py-2 px-4 flex items-center justify-center gap-3 z-50">
-                    <span className="hidden sm:inline">🚀</span>
+                    <Rocket className="hidden sm:inline h-4 w-4 flex-shrink-0" />
                     <Link href="/products/statement2books" className="hover:underline underline-offset-2 font-medium text-center">
                         <strong>Statement2Books is here!</strong> Automate your Tally entries — Join waitlist for <strong>45 days free</strong> →
                     </Link>
@@ -150,7 +167,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                                 >
                                     {link.isFavorite ? (
                                         <span className="relative inline-flex items-center gap-1.5 font-semibold">
-                                            🚀 {link.label}
+                                            <Rocket className="h-3.5 w-3.5" /> {link.label}
                                             <span className="relative flex h-2 w-2">
                                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75" />
                                                 <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500" />
@@ -224,7 +241,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                                     )}
                                 >
                                     <span className="flex items-center gap-1.5">
-                                        {link.isFavorite && '🚀'} {link.label}
+                                        {link.isFavorite && <Rocket className="h-3.5 w-3.5" />} {link.label}
                                     </span>
                                     <ChevronRight className="h-4 w-4 opacity-40" />
                                 </Link>
@@ -266,14 +283,14 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                             </p>
                             {/* Social links */}
                             <div className="flex gap-3">
-                                {(['LinkedIn', 'Twitter', 'Facebook', 'Instagram'] as const).map((s) => (
+                                {socialLinks.map(({ name, icon: Icon, href }) => (
                                     <a
-                                        key={s}
-                                        href="#"
-                                        aria-label={s}
-                                        className="w-8 h-8 rounded-full bg-white/10 hover:bg-[#2563EB] flex items-center justify-center transition-colors text-xs text-gray-400 hover:text-white"
+                                        key={name}
+                                        href={href}
+                                        aria-label={`Follow us on ${name}`}
+                                        className="w-10 h-10 rounded-full bg-white/10 border border-white/10 hover:bg-white hover:border-white flex items-center justify-center text-gray-300 hover:text-[#0F172A] transition-all duration-200 hover:scale-110"
                                     >
-                                        {s[0]}
+                                        <Icon className="h-5 w-5" />
                                     </a>
                                 ))}
                             </div>
@@ -381,25 +398,35 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                     </div>
                 </div>
             </footer>
-            <BackToTop />
+            <BackToTop raised={showStickyCta && !stickyBarDismissed && !onStatement2BooksPage} />
 
             {/* ── STICKY BOTTOM CTA ── */}
             <AnimatePresence>
-                {showStickyCta && !onStatement2BooksPage && (
+                {showStickyCta && !stickyBarDismissed && !onStatement2BooksPage && (
                     <motion.div
                         initial={{ y: 80, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         exit={{ y: 80, opacity: 0 }}
                         transition={{ duration: 0.3, ease: 'easeOut' }}
-                        className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-[#0F172A] border border-white/10 text-white px-5 py-3 rounded-2xl shadow-2xl shadow-black/40 backdrop-blur-sm"
+                        className="fixed bottom-4 left-4 right-4 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 sm:w-auto z-40 flex items-center gap-3 bg-[#0F172A] border border-white/10 text-white px-4 py-3 rounded-2xl shadow-2xl shadow-black/40 backdrop-blur-sm"
                     >
-                        <span className="text-orange-400">🚀</span>
-                        <span className="text-sm font-medium">Statement2Books Early Access — 45 days free</span>
-                        <Link href="/products/statement2books#waitlist">
-                            <Button size="sm" className="bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-4 text-xs font-bold ml-1">
+                        <Rocket className="h-4 w-4 text-orange-400 flex-shrink-0" />
+                        <span className="text-sm font-medium min-w-0 flex-1 sm:flex-initial truncate">
+                            <span className="hidden sm:inline">Statement2Books Early Access — 45 days free</span>
+                            <span className="sm:hidden">45 days free trial</span>
+                        </span>
+                        <Link href="/products/statement2books#waitlist" className="flex-shrink-0">
+                            <Button size="sm" className="bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-4 text-xs font-bold whitespace-nowrap">
                                 Join Waitlist →
                             </Button>
                         </Link>
+                        <button
+                            onClick={dismissStickyBar}
+                            className="flex-shrink-0 p-1 rounded-full text-white/50 hover:text-white hover:bg-white/10 transition-colors"
+                            aria-label="Dismiss"
+                        >
+                            <X className="h-4 w-4" />
+                        </button>
                     </motion.div>
                 )}
             </AnimatePresence>

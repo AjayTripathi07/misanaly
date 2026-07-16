@@ -2,7 +2,12 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronUp } from 'lucide-react';
 
-export default function BackToTop() {
+interface BackToTopProps {
+    /** Shift the button up so it doesn't overlap a sticky bottom bar. */
+    raised?: boolean;
+}
+
+export default function BackToTop({ raised = false }: BackToTopProps) {
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
@@ -15,12 +20,12 @@ export default function BackToTop() {
         <AnimatePresence>
             {visible && (
                 <motion.button
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0, scale: 0.8, bottom: raised ? 96 : 32 }}
+                    animate={{ opacity: 1, scale: 1, bottom: raised ? 96 : 32 }}
                     exit={{ opacity: 0, scale: 0.8 }}
                     transition={{ duration: 0.2 }}
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                    className="fixed bottom-8 right-8 z-50 w-12 h-12 rounded-full bg-[#2563EB] text-white shadow-lg hover:bg-[#1D4ED8] flex items-center justify-center transition-colors hover:shadow-xl hover:shadow-blue-500/30"
+                    className="fixed right-4 sm:right-8 z-40 w-12 h-12 rounded-full bg-[#2563EB] text-white shadow-lg hover:bg-[#1D4ED8] flex items-center justify-center transition-colors hover:shadow-xl hover:shadow-blue-500/30"
                     aria-label="Back to top"
                 >
                     <ChevronUp className="h-5 w-5" />
