@@ -6,6 +6,7 @@ import NumberFlow from '@number-flow/react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import StatementSimulator from '@/Components/Products/StatementSimulator';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import { lenisScrollTo } from '@/lib/lenis';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
 import { Card, CardContent } from '@/Components/ui/card';
@@ -131,7 +132,9 @@ export default function ProductShow({ product, faqs }: Props) {
     });
 
     function scrollToWaitlist() {
-        waitlistRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (waitlistRef.current) {
+            lenisScrollTo(waitlistRef.current);
+        }
     }
 
     function handleWaitlistSubmit(e: FormEvent) {
