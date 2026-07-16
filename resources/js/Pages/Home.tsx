@@ -3,7 +3,7 @@ import { Head, Link, usePage } from '@inertiajs/react';
 import SeoHead from '@/Components/SeoHead';
 import {
     Globe, Smartphone, Code2, Brain, Network, Palette,
-    Cloud, Wrench, HeadphonesIcon, Building2, Star,
+    Cloud, Wrench, HeadphonesIcon, Building2, Star, Quote,
     CheckCircle2, ArrowRight, Users, Lightbulb, Clock, LifeBuoy,
     CalendarDays, ChevronRight, Layers, ChevronDown, Shield, Monitor, Rocket,
 } from 'lucide-react';
@@ -34,20 +34,76 @@ interface Props {
     hasMoreServices: boolean;
     featuredProduct: (Product & { features: { id: number; title: string; description: string }[] }) | null;
     testimonials: Testimonial[];
+    avgRating: number;
     latestPosts: BlogPost[];
 }
 
 /* ─── star rating ─── */
-function StarRating({ rating }: { rating: number }) {
+function StarRating({ rating, size = 'h-4 w-4' }: { rating: number; size?: string }) {
     return (
         <div className="flex gap-0.5">
             {Array.from({ length: 5 }).map((_, i) => (
                 <Star
                     key={i}
-                    className={`h-4 w-4 ${i < rating ? 'text-amber-400 fill-amber-400' : 'text-gray-200 fill-gray-200'}`}
+                    className={`${size} ${i < rating ? 'text-amber-400 fill-amber-400' : 'text-gray-200 fill-gray-200'}`}
                 />
             ))}
         </div>
+    );
+}
+
+/* ─── testimonial card ─── */
+const TESTIMONIAL_ACCENTS = [
+    { bar: 'bg-[#2563EB]', ring: 'ring-blue-200', avatarBg: 'bg-gradient-to-br from-blue-500 to-indigo-600' },
+    { bar: 'bg-emerald-500', ring: 'ring-emerald-200', avatarBg: 'bg-gradient-to-br from-emerald-500 to-teal-600' },
+    { bar: 'bg-violet-500', ring: 'ring-violet-200', avatarBg: 'bg-gradient-to-br from-violet-500 to-purple-600' },
+    { bar: 'bg-amber-500', ring: 'ring-amber-200', avatarBg: 'bg-gradient-to-br from-amber-500 to-orange-600' },
+];
+
+interface TestimonialCardData {
+    name: string;
+    role: string;
+    company: string;
+    quote: string;
+    rating: number;
+    photo?: string | null;
+}
+
+function TestimonialCard({ t, i, inView, dur }: { t: TestimonialCardData; i: number; inView: boolean; dur: number | undefined }) {
+    const accent = TESTIMONIAL_ACCENTS[i % TESTIMONIAL_ACCENTS.length];
+    return (
+        <motion.div
+            className="relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden h-full flex flex-col"
+            initial={{ opacity: 0, y: 30 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: dur ?? 0.5, delay: i * 0.08 }}
+        >
+            <div className={`h-1 w-full ${accent.bar}`} />
+            <div className="p-7 flex flex-col flex-1 relative">
+                <Quote className="absolute top-4 right-5 h-16 w-16 text-gray-100 pointer-events-none" strokeWidth={1.5} />
+                <StarRating rating={t.rating} size="h-4 w-4" />
+                <blockquote className="mt-4 text-[#0F172A]/70 text-sm leading-relaxed flex-1 relative">
+                    {t.quote}
+                </blockquote>
+                <div className="mt-5 flex items-center gap-3 pt-4 border-t border-gray-100">
+                    {t.photo ? (
+                        <img
+                            src={t.photo}
+                            alt={t.name}
+                            className={`w-12 h-12 rounded-full object-cover ring-2 ring-offset-2 ${accent.ring} flex-shrink-0`}
+                        />
+                    ) : (
+                        <div className={`w-12 h-12 rounded-full ${accent.avatarBg} flex items-center justify-center text-white font-bold text-base ring-2 ring-offset-2 ${accent.ring} flex-shrink-0`}>
+                            {t.name.charAt(0)}
+                        </div>
+                    )}
+                    <div>
+                        <p className="font-bold text-[#0F172A] text-sm">{t.name}</p>
+                        <p className="text-xs text-[#0F172A]/50">{t.role} · {t.company}</p>
+                    </div>
+                </div>
+            </div>
+        </motion.div>
     );
 }
 
@@ -95,7 +151,7 @@ const WHY_ITEMS = [
 ];
 
 /* ─── main component ─── */
-export default function Home({ services, hasMoreServices, featuredProduct, testimonials, latestPosts }: Props) {
+export default function Home({ services, hasMoreServices, featuredProduct, testimonials, avgRating, latestPosts }: Props) {
     const { props: pageProps } = usePage<PageProps<{ siteSettings?: { udyam_number: string } }>>();
     const udyamNumber = pageProps.siteSettings?.udyam_number;
     const prefersReduced = useReducedMotion();
@@ -131,8 +187,7 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
 
     const { ref: whyRef, isVisible: whyInView } = useScrollAnimation({ once: true, threshold: 0.15 });
 
-    const testimonialsRef = useRef(null);
-    const testimonialsInView = useInView(testimonialsRef, { once: true, margin: '-100px' });
+    const { ref: testimonialsRef, isVisible: testimonialsInView } = useScrollAnimation({ once: true, threshold: 0.1 });
 
     const blogRef = useRef(null);
     const blogInView = useInView(blogRef, { once: true, margin: '-100px' });
@@ -699,10 +754,10 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
             {/* ═══════════════════════════════════════════════
                 SECTION 5 — TESTIMONIALS
             ═══════════════════════════════════════════════ */}
-            <section className="py-20 sm:py-24 bg-[#F8FAFC] overflow-hidden border-t-[3px] border-amber-400/30" ref={testimonialsRef}>
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+            <section className="py-20 sm:py-24 bg-[#F8FAFC] overflow-hidden border-t-[3px] border-amber-400/30">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" ref={testimonialsRef}>
                     <motion.div
-                        className="text-center"
+                        className="text-center mb-4"
                         initial={{ opacity: 0, y: 30 }}
                         animate={testimonialsInView ? { opacity: 1, y: 0 } : {}}
                         transition={{ duration: dur ?? 0.6 }}
@@ -717,61 +772,39 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                             Hear from the teams that rely on NobelIQ Technologies every day.
                         </p>
                     </motion.div>
-                </div>
 
-                {testimonials.length > 0 ? (
-                    /* Auto-scroll carousel */
-                    <div className="overflow-hidden">
-                        <div className="flex gap-6 animate-scroll-left" style={{ width: 'max-content' }}>
-                            {[...testimonials, ...testimonials].map((t, i) => (
-                                <div key={i} className="w-80 flex-shrink-0 bg-white rounded-2xl border border-gray-100 p-7 shadow-sm">
-                                    <StarRating rating={t.rating} />
-                                    <blockquote className="mt-4 text-[#0F172A]/70 text-sm italic leading-relaxed">"{t.quote}"</blockquote>
-                                    <div className="mt-5 flex items-center gap-3 pt-4 border-t border-gray-100">
-                                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
-                                            {t.name.charAt(0)}
-                                        </div>
-                                        <div>
-                                            <p className="font-semibold text-[#0F172A] text-sm">{t.name}</p>
-                                            <p className="text-xs text-[#0F172A]/50">{t.role}, {t.company}</p>
-                                        </div>
-                                    </div>
-                                </div>
+                    {/* Aggregate rating */}
+                    <motion.div
+                        className="flex justify-center mb-12"
+                        initial={{ opacity: 0 }}
+                        animate={testimonialsInView ? { opacity: 1 } : {}}
+                        transition={{ duration: dur ?? 0.5, delay: 0.15 }}
+                    >
+                        <div className="inline-flex items-center gap-2 bg-white border border-gray-100 shadow-sm rounded-full px-4 py-2">
+                            <StarRating rating={Math.round(avgRating)} size="h-3.5 w-3.5" />
+                            <span className="font-mono text-sm font-bold text-[#0F172A]">{avgRating}/5</span>
+                            <span className="text-xs text-[#0F172A]/50">average rating from 99+ businesses</span>
+                        </div>
+                    </motion.div>
+
+                    {testimonials.length > 0 ? (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {testimonials.map((t, i) => (
+                                <TestimonialCard key={t.id} t={t} i={i} inView={testimonialsInView} dur={dur} />
                             ))}
                         </div>
-                    </div>
-                ) : (
-                    /* Placeholder cards */
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             {[
                                 { name: 'Ramesh Gupta', role: 'CA', company: 'Gupta & Co', quote: 'NobelIQ Technologies transformed the way we handle Tally entries. What used to take half a day now takes minutes.', rating: 5 },
                                 { name: 'Priya Sharma', role: 'Finance Manager', company: 'Sharma Exports', quote: 'Excellent web application built on time. The team understood our requirements perfectly.', rating: 5 },
                                 { name: 'Anil Patel', role: 'Director', company: 'Patel Industries', quote: 'Outstanding support and a product that genuinely works. Highly recommend for any CA firm.', rating: 5 },
                             ].map((t, i) => (
-                                <motion.div
-                                    key={i}
-                                    className="bg-white rounded-2xl border border-gray-100 p-7 shadow-sm"
-                                    initial={{ opacity: 0, y: 30 }}
-                                    animate={testimonialsInView ? { opacity: 1, y: 0 } : {}}
-                                    transition={{ duration: dur ?? 0.5, delay: i * 0.1 }}
-                                >
-                                    <StarRating rating={t.rating} />
-                                    <blockquote className="mt-4 text-[#0F172A]/70 text-sm italic leading-relaxed">"{t.quote}"</blockquote>
-                                    <div className="mt-5 flex items-center gap-3 pt-4 border-t border-gray-100">
-                                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
-                                            {t.name.charAt(0)}
-                                        </div>
-                                        <div>
-                                            <p className="font-semibold text-[#0F172A] text-sm">{t.name}</p>
-                                            <p className="text-xs text-[#0F172A]/50">{t.role}, {t.company}</p>
-                                        </div>
-                                    </div>
-                                </motion.div>
+                                <TestimonialCard key={t.name} t={t} i={i} inView={testimonialsInView} dur={dur} />
                             ))}
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </section>
 
             {/* ═══════════════════════════════════════════════

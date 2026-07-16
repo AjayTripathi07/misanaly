@@ -27,7 +27,8 @@ class HomeController extends Controller
             ])
             ->first();
 
-        $testimonials = Testimonial::latest()->limit(3)->get();
+        $testimonials = Testimonial::latest()->limit(6)->get();
+        $avgRating = round((float) (Testimonial::avg('rating') ?? 4.9), 1);
 
         $latestPosts = BlogPost::where('status', 'published')
             ->orderByDesc('published_at')
@@ -39,6 +40,7 @@ class HomeController extends Controller
             'hasMoreServices' => $activeServicesCount > $services->count(),
             'featuredProduct' => $featuredProduct,
             'testimonials'    => $testimonials,
+            'avgRating'       => $avgRating,
             'latestPosts'     => $latestPosts,
         ]);
     }
