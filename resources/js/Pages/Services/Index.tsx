@@ -4,7 +4,6 @@ import { motion, useInView } from 'framer-motion';
 import PublicLayout from '@/Layouts/PublicLayout';
 import SeoHead from '@/Components/SeoHead';
 import { Button } from '@/Components/ui/button';
-import { Badge } from '@/Components/ui/badge';
 import { ServiceIcon } from '@/Components/ServiceIcon';
 import { CheckCircle2, ArrowRight, ChevronRight, Shield, Clock } from 'lucide-react';
 
@@ -40,10 +39,11 @@ const stagger = {
 };
 
 const SERVICE_COLORS = [
-    { bg: 'bg-blue-500/10', icon: 'text-[#2563EB]', border: 'hover:border-blue-500/40' },
-    { bg: 'bg-emerald-500/10', icon: 'text-[#10B981]', border: 'hover:border-emerald-500/40' },
-    { bg: 'bg-violet-500/10', icon: 'text-[#6366F1]', border: 'hover:border-violet-500/40' },
-    { bg: 'bg-amber-500/10', icon: 'text-[#F59E0B]', border: 'hover:border-amber-500/40' },
+    { soft: 'bg-blue-500/10', text: 'text-[#2563EB]', border: 'hover:border-blue-500/40', grad: 'from-blue-400 to-blue-600', shadow: 'shadow-blue-500/25', glow: 'bg-blue-500/10', pillHover: 'group-hover:border-blue-500/40 group-hover:text-[#2563EB]' },
+    { soft: 'bg-teal-500/10', text: 'text-[#0D9488]', border: 'hover:border-teal-500/40', grad: 'from-teal-400 to-teal-600', shadow: 'shadow-teal-500/25', glow: 'bg-teal-500/10', pillHover: 'group-hover:border-teal-500/40 group-hover:text-[#0D9488]' },
+    { soft: 'bg-violet-500/10', text: 'text-[#7C3AED]', border: 'hover:border-violet-500/40', grad: 'from-violet-400 to-violet-600', shadow: 'shadow-violet-500/25', glow: 'bg-violet-500/10', pillHover: 'group-hover:border-violet-500/40 group-hover:text-[#7C3AED]' },
+    { soft: 'bg-amber-500/10', text: 'text-[#D97706]', border: 'hover:border-amber-500/40', grad: 'from-amber-400 to-amber-600', shadow: 'shadow-amber-500/25', glow: 'bg-amber-500/10', pillHover: 'group-hover:border-amber-500/40 group-hover:text-[#D97706]' },
+    { soft: 'bg-rose-500/10', text: 'text-[#E11D48]', border: 'hover:border-rose-500/40', grad: 'from-rose-400 to-rose-600', shadow: 'shadow-rose-500/25', glow: 'bg-rose-500/10', pillHover: 'group-hover:border-rose-500/40 group-hover:text-[#E11D48]' },
 ];
 
 export default function Index({ services }: Props) {
@@ -61,53 +61,18 @@ export default function Index({ services }: Props) {
                 keywords="IT services India, web development, mobile app development, custom software, AI solutions"
             />
 
-            {/* Compact Hero */}
-            <section className="relative overflow-hidden bg-gradient-to-br from-[#E8F4FD] via-white to-[#F0F7FF] pt-14 pb-8">
-                <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-blue-100/50 blur-3xl pointer-events-none" />
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <Badge variant="secondary" className="mb-3 bg-blue-50 text-[#2563EB] border-0 text-xs font-semibold uppercase tracking-wider px-4 py-1.5">
-                        What We Offer
-                    </Badge>
-                    <h1 className="text-3xl sm:text-4xl font-extrabold text-[#0F172A] tracking-tight">
-                        Our Services
-                    </h1>
-                    <p className="text-base sm:text-lg text-[#0F172A]/60 max-w-2xl mx-auto mt-3">
-                        From web and mobile development to AI solutions and cloud infrastructure — we deliver end-to-end technology services.
-                    </p>
-
-                    {/* Inline stat strip */}
-                    <div className="flex items-center justify-center divide-x divide-gray-200 mt-6">
-                        {[
-                            { value: '10+', label: 'Services' },
-                            { value: '50+', label: 'Clients Served' },
-                            { value: '3+', label: 'Years Experience' },
-                        ].map((stat) => (
-                            <div key={stat.label} className="px-5 first:pl-0 last:pr-0">
-                                <span className="text-lg font-bold text-[#2563EB]">{stat.value}</span>
-                                <span className="text-[#0F172A]/50 text-xs ml-1.5">{stat.label}</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
+            {/* Minimal breadcrumb — no hero block */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-2">
+                <p className="text-xs font-semibold uppercase tracking-widest text-[#0F172A]/40">
+                    Services {services.length > 0 && <span className="text-[#0F172A]/25">· {services.length} available</span>}
+                </p>
+            </div>
 
             {/* Services Grid */}
-            <section className="bg-[#F8FAFC] py-14 sm:py-16" ref={gridRef}>
+            <section className="bg-[#F8FAFC] py-10 sm:py-12 mt-2" ref={gridRef}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-8">
-                        <Badge variant="secondary" className="mb-2 bg-blue-50 text-[#2563EB] border-0 text-xs font-semibold uppercase tracking-wider px-4 py-1.5">
-                            All Services
-                        </Badge>
-                        <h2 className="text-2xl sm:text-3xl font-bold text-[#0F172A] tracking-tight">
-                            Everything You Need
-                        </h2>
-                        <p className="mt-2 text-[#0F172A]/55 max-w-xl mx-auto text-sm sm:text-base">
-                            Choose the service that fits your needs, or combine several for a complete digital transformation.
-                        </p>
-                    </div>
-
                     <motion.div
-                        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
+                        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
                         variants={stagger}
                         initial="hidden"
                         animate={gridInView ? 'visible' : 'hidden'}
@@ -115,45 +80,57 @@ export default function Index({ services }: Props) {
                         {services.map((service, i) => {
                             const color = SERVICE_COLORS[i % SERVICE_COLORS.length];
                             return (
-                                <motion.div key={service.id} variants={fadeUp}>
+                                <motion.div key={service.id} variants={fadeUp} className="h-full">
                                     <Link href={`/services/${service.slug}`}>
                                         <motion.div
-                                            className={`group h-full border border-gray-100 ${color.border} rounded-2xl bg-white p-6 cursor-pointer flex flex-col`}
-                                            whileHover={{ y: -4, boxShadow: '0 14px 32px rgba(37,99,235,0.12)' }}
+                                            className={`group relative h-full overflow-hidden border border-gray-100 ${color.border} rounded-2xl bg-white p-6 cursor-pointer flex flex-col transition-colors`}
+                                            whileHover={{ y: -5, boxShadow: '0 18px 36px rgba(15,23,42,0.12)' }}
                                             transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                                         >
-                                            <div className={`w-12 h-12 rounded-xl ${color.bg} flex items-center justify-center mb-4 transition-transform duration-150 group-hover:scale-110`}>
-                                                <ServiceIcon name={service.icon} className={`h-6 w-6 ${color.icon}`} />
+                                            {/* Subtle corner accent */}
+                                            <div className={`absolute -top-10 -right-10 w-32 h-32 rounded-full ${color.glow} blur-2xl opacity-70 pointer-events-none transition-opacity duration-300 group-hover:opacity-100`} />
+
+                                            <div className="relative">
+                                                {/* Icon badge */}
+                                                <motion.div
+                                                    className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${color.grad} shadow-lg ${color.shadow} flex items-center justify-center mb-5`}
+                                                    whileHover={{ rotate: 6, scale: 1.08 }}
+                                                    transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+                                                >
+                                                    <ServiceIcon name={service.icon} className="h-7 w-7 text-white" />
+                                                </motion.div>
+
+                                                <h3 className="font-extrabold text-[#0F172A] text-lg group-hover:text-[#2563EB] transition-colors mb-1.5">
+                                                    {service.name}
+                                                </h3>
+
+                                                <p className="text-[#0F172A]/55 text-sm leading-relaxed">
+                                                    {service.tagline}
+                                                </p>
+
+                                                {service.starting_price && (
+                                                    <span className={`inline-flex items-center mt-3 ${color.soft} ${color.text} text-xs font-semibold rounded-full px-3 py-1`}>
+                                                        From {service.starting_price}
+                                                    </span>
+                                                )}
+
+                                                {service.features && service.features.length > 0 && (
+                                                    <ul className="mt-4 space-y-2">
+                                                        {service.features.slice(0, 3).map((feature) => (
+                                                            <li key={feature.id} className="flex items-center gap-2">
+                                                                <CheckCircle2 className={`h-3.5 w-3.5 ${color.text} flex-shrink-0`} />
+                                                                <span className="text-xs text-[#0F172A]/60">{feature.title}</span>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                )}
                                             </div>
 
-                                            <h3 className="font-bold text-[#0F172A] text-base group-hover:text-[#2563EB] transition-colors mb-1">
-                                                {service.name}
-                                            </h3>
-
-                                            <p className="text-[#0F172A]/55 text-sm leading-relaxed">
-                                                {service.tagline}
-                                            </p>
-
-                                            {service.starting_price && (
-                                                <p className="mt-2 text-xs font-semibold text-[#2563EB]">
-                                                    From {service.starting_price}
-                                                </p>
-                                            )}
-
-                                            {service.features && service.features.length > 0 && (
-                                                <ul className="mt-3 space-y-1.5">
-                                                    {service.features.slice(0, 3).map((feature) => (
-                                                        <li key={feature.id} className="flex items-center gap-2">
-                                                            <CheckCircle2 className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
-                                                            <span className="text-xs text-[#0F172A]/60">{feature.title}</span>
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            )}
-
-                                            <div className="mt-auto pt-4 flex items-center gap-1 text-[#2563EB] text-sm font-semibold">
-                                                Learn More
-                                                <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                                            <div className="relative mt-auto pt-5">
+                                                <span className={`inline-flex items-center gap-1 border border-gray-200 ${color.pillHover} rounded-full px-4 py-1.5 text-sm font-semibold text-[#0F172A] transition-colors`}>
+                                                    Learn More
+                                                    <ChevronRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                                                </span>
                                             </div>
                                         </motion.div>
                                     </Link>
@@ -161,6 +138,11 @@ export default function Index({ services }: Props) {
                             );
                         })}
                     </motion.div>
+                </div>
+
+                {/* Section transition divider */}
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="h-1 w-24 mx-auto mt-14 rounded-full bg-gradient-to-r from-blue-400 via-violet-400 to-amber-400 opacity-60" />
                 </div>
             </section>
 
