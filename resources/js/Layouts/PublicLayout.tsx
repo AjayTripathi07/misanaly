@@ -131,7 +131,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
             {/* ── NAVBAR ── */}
             <header
                 className={cn(
-                    'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+                    'sticky top-0 z-50 transition-all duration-300',
                     scrolled
                         ? 'bg-white/95 backdrop-blur-sm shadow-sm border-b border-gray-100'
                         : 'bg-white/90 backdrop-blur-sm',
@@ -143,41 +143,45 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                     style={{ width: `${scrollProgress * 100}%` }}
                 />
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center justify-between h-20">
+                    <div className="flex items-center justify-between h-16">
                         {/* Logo */}
                         <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-                            <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-20 h-20 object-contain" />
-                            <span className="text-[#0F172A] font-bold text-lg leading-none">
+                            <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-11 h-11 object-contain" />
+                            <span className="font-heading text-[#0F172A] font-bold text-lg leading-none">
                                 NobelIQ<span className="text-[#2563EB]"> Technologies</span>
                             </span>
                         </Link>
 
-                        {/* Desktop nav */}
-                        <nav className="hidden lg:flex items-center gap-1">
-                            {navItems.map((link) => (
-                                <Link
-                                    key={link.href}
-                                    href={link.href}
-                                    className={cn(
-                                        'px-3 py-2 text-sm font-medium transition-colors rounded-md',
-                                        link.isFavorite
-                                            ? 'text-orange-600 hover:text-orange-700 hover:bg-orange-50'
-                                            : 'text-[#0F172A]/70 hover:text-[#2563EB] hover:bg-blue-50',
-                                    )}
-                                >
-                                    {link.isFavorite ? (
-                                        <span className="relative inline-flex items-center gap-1.5 font-semibold">
-                                            <Rocket className="h-3.5 w-3.5" /> {link.label}
-                                            <span className="relative flex h-2 w-2">
-                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75" />
-                                                <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500" />
-                                            </span>
+                        {/* Desktop nav — rounded pill/capsule container */}
+                        <nav className="hidden lg:flex items-center gap-0.5 bg-slate-100 rounded-full p-1.5">
+                            {navItems.map((link) => {
+                                const isActive = link.href === '/' ? url === '/' : url.startsWith(link.href);
+                                return (
+                                    <Link
+                                        key={link.href}
+                                        href={link.href}
+                                        className={cn(
+                                            'relative px-2.5 lg:px-3.5 py-1.5 text-[13px] lg:text-sm font-medium rounded-full transition-all duration-200 whitespace-nowrap',
+                                            link.isFavorite
+                                                ? 'bg-orange-50 text-orange-600 font-semibold hover:bg-orange-100'
+                                                : isActive
+                                                    ? 'bg-white text-[#0F172A] shadow-sm'
+                                                    : 'text-[#0F172A]/60 hover:text-[#0F172A] hover:bg-white/70',
+                                        )}
+                                    >
+                                        <span className="inline-flex items-center gap-1.5">
+                                            {link.isFavorite && <Rocket className="h-3.5 w-3.5" />}
+                                            {link.label}
                                         </span>
-                                    ) : (
-                                        link.label
-                                    )}
-                                </Link>
-                            ))}
+                                        {link.isFavorite && (
+                                            <span className="absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5">
+                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75" />
+                                                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-orange-500 border border-white" />
+                                            </span>
+                                        )}
+                                    </Link>
+                                );
+                            })}
                         </nav>
 
                         {/* CTA + Mobile trigger */}
@@ -215,8 +219,8 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                                 onClick={() => setMobileOpen(false)}
                                 className="flex items-center gap-2"
                             >
-                                <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-20 h-20 object-contain" />
-                                <span className="text-[#0F172A] font-bold text-base">
+                                <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-10 h-10 object-contain" />
+                                <span className="font-heading text-[#0F172A] font-bold text-base">
                                     NobelIQ<span className="text-[#2563EB]"> Technologies</span>
                                 </span>
                             </Link>
@@ -264,7 +268,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
             </Sheet>
 
             {/* ── MAIN CONTENT ── */}
-            <main className="flex-1 pt-20">{children}</main>
+            <main className="flex-1">{children}</main>
 
             {/* ── FOOTER ── */}
             <footer className="bg-[#0F172A] text-white">
@@ -273,8 +277,8 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                         {/* Company */}
                         <div className="lg:col-span-1">
                             <Link href="/" className="flex items-center gap-2 mb-4">
-                                <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-20 h-20 object-contain" />
-                                <span className="text-white font-bold text-lg">
+                                <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-11 h-11 object-contain" />
+                                <span className="font-heading text-white font-bold text-lg">
                                     NobelIQ<span className="text-[#60A5FA]"> Technologies</span>
                                 </span>
                             </Link>

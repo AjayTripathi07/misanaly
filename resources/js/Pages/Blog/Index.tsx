@@ -174,7 +174,7 @@ export default function BlogIndex({ posts, categories, activeCategory }: Props) 
             </section>
 
             {/* ── CATEGORY FILTER ── */}
-            <section className="bg-white border-b border-gray-100 sticky top-20 z-20">
+            <section className="bg-white border-b border-gray-100 sticky top-16 z-20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center gap-2 py-4 overflow-x-auto scrollbar-none">
                         {/* All pill */}
