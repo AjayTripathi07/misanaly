@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/Components/ui/badge';
+import BrandName from '@/Components/BrandName';
 import { type User } from '@/types';
 import { ToastContainer } from '@/Components/Toast';
 import { useToast } from '@/hooks/useToast';
@@ -147,7 +148,7 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
             <div className="flex items-center gap-2.5 px-4 py-5 border-b border-white/8">
                 <img src="/images/branding/Icon.png" alt="NobelIQ" className="w-10 h-10 object-contain flex-shrink-0" />
                 <div>
-                    <p className="font-heading text-white font-bold text-sm leading-none">NobelIQ</p>
+                    <BrandName short variant="onDark" className="text-white font-bold text-sm leading-none block" />
                     <p className="text-slate-500 text-xs mt-0.5">Admin Panel</p>
                 </div>
             </div>

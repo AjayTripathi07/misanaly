@@ -15,6 +15,7 @@ import FavoriteProductPopup from '@/Components/FavoriteProductPopup';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
+import BrandName from '@/Components/BrandName';
 import { type Service, type Product, type Testimonial, type BlogPost, type PageProps } from '@/types';
 
 /* ─── icon map ─── */
@@ -456,8 +457,8 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                         transition={{ duration: dur ?? 0.6, delay: 0.1 }}
                     >
                         <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-20 h-20 sm:w-24 sm:h-24 object-contain" />
-                        <h2 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
-                            NobelIQ Technologies
+                        <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
+                            <BrandName accent={false} />
                         </h2>
                     </motion.div>
 
@@ -635,7 +636,7 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                     {[...['Laravel', 'React', 'AI / ML', 'Statement2Books', 'Tally Integration', 'NobelIQ Technologies', 'Mobile Apps', 'Cloud Solutions', 'Custom Software', 'REST APIs', 'UI / UX Design'], ...['Laravel', 'React', 'AI / ML', 'Statement2Books', 'Tally Integration', 'NobelIQ Technologies', 'Mobile Apps', 'Cloud Solutions', 'Custom Software', 'REST APIs', 'UI / UX Design']].map((item, i) => (
                         <span key={i} className="flex items-center gap-3 mx-6 text-sm font-medium text-white/50 whitespace-nowrap">
                             <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB] flex-shrink-0" />
-                            {item}
+                            {item === 'NobelIQ Technologies' ? <BrandName accent={false} className="text-inherit" /> : item}
                         </span>
                     ))}
                 </div>
@@ -777,7 +778,7 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                             Trusted by Businesses Across India
                         </h2>
                         <p className="text-[#0F172A]/60 text-lg max-w-2xl mx-auto">
-                            Hear from the teams that rely on NobelIQ Technologies every day.
+                            Hear from the teams that rely on <BrandName accent={false} className="text-inherit" /> every day.
                         </p>
                     </motion.div>
 
@@ -836,7 +837,7 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                                     Latest Insights
                                 </h2>
                                 <p className="text-[#0F172A]/60 text-lg">
-                                    Tips, guides, and updates from the NobelIQ Technologies team.
+                                    Tips, guides, and updates from the <BrandName accent={false} className="text-inherit" /> team.
                                 </p>
                             </div>
                             <Link href="/blog">
@@ -940,7 +941,7 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                     </h2>
 
                     <p className="text-white/75 text-lg mb-10 leading-relaxed max-w-xl mx-auto">
-                        Join 500+ businesses and CA firms across India who trust NobelIQ Technologies for their technology needs. Let's build something great together.
+                        Join 500+ businesses and CA firms across India who trust <BrandName variant="onDark" accent={false} className="text-inherit" /> for their technology needs. Let's build something great together.
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">

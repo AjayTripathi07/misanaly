@@ -15,6 +15,7 @@ import PublicLayout from '@/Layouts/PublicLayout';
 import { Badge } from '@/Components/ui/badge';
 import { Button } from '@/Components/ui/button';
 import { Card, CardContent } from '@/Components/ui/card';
+import BrandName from '@/Components/BrandName';
 import { type BlogPost } from '@/types';
 
 interface Props {
@@ -172,7 +173,7 @@ export default function BlogShow({ post, related }: Props) {
                             <div className="w-7 h-7 rounded-full bg-[#2563EB] flex items-center justify-center text-white text-xs font-bold">
                                 {post.author?.name?.charAt(0) ?? 'M'}
                             </div>
-                            <span className="text-white/70">{post.author?.name ?? 'NobelIQ Technologies'}</span>
+                            <span className="text-white/70">{post.author?.name ?? <BrandName variant="onDark" accent={false} className="text-inherit" />}</span>
                         </div>
                         <span className="text-white/20">·</span>
                         {/* Date */}
@@ -233,8 +234,8 @@ export default function BlogShow({ post, related }: Props) {
                         </div>
                         <div>
                             <p className="text-xs uppercase tracking-widest text-[#0F172A]/40 mb-0.5 font-medium">Written by</p>
-                            <p className="font-bold text-[#0F172A] text-base">{post.author?.name ?? 'NobelIQ Technologies'}</p>
-                            <p className="text-sm text-[#0F172A]/50 mt-0.5">NobelIQ Technologies Team</p>
+                            <p className="font-bold text-[#0F172A] text-base">{post.author?.name ?? <BrandName accent={false} className="text-inherit" />}</p>
+                            <p className="text-sm text-[#0F172A]/50 mt-0.5"><BrandName accent={false} className="text-inherit" /> Team</p>
                         </div>
                     </div>
 
@@ -302,7 +303,7 @@ export default function BlogShow({ post, related }: Props) {
                         Need help with technology for your business?
                     </h2>
                     <p className="text-blue-100 mb-8 text-base leading-relaxed">
-                        Let's discuss how NobelIQ Technologies can streamline your operations with custom software and automation.
+                        Let's discuss how <BrandName accent={false} variant="onDark" className="text-inherit" /> can streamline your operations with custom software and automation.
                     </p>
                     <Link href="/get-quote">
                         <Button

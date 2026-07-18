@@ -6,6 +6,7 @@ import { CalendarDays, BookOpen, ChevronLeft, ChevronRight, Tag } from 'lucide-r
 import PublicLayout from '@/Layouts/PublicLayout';
 import { Badge } from '@/Components/ui/badge';
 import { Card, CardContent } from '@/Components/ui/card';
+import BrandName from '@/Components/BrandName';
 import { type BlogPost, type BlogCategory } from '@/types';
 
 interface CategoryWithCount extends BlogCategory {
@@ -103,7 +104,7 @@ function PostCard({ post, index }: { post: BlogPost; index: number }) {
                             </div>
                             <div className="min-w-0">
                                 <p className="text-xs font-medium text-[#0F172A] truncate">
-                                    {post.author?.name ?? 'NobelIQ Technologies'}
+                                    {post.author?.name ?? <BrandName accent={false} className="text-inherit" />}
                                 </p>
                                 <p className="text-xs text-[#0F172A]/40">
                                     {post.published_at ? formatDate(post.published_at) : 'Coming soon'}

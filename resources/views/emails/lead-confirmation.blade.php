@@ -28,7 +28,7 @@ Visit NobelIQ Technologies
 @endcomponent
 
 Warm regards,
-**NobelIQ Technologies Team**
+**<span style="font-family: Georgia, 'Times New Roman', serif;">NobelIQ Technologies</span> Team**
 
 ---
 

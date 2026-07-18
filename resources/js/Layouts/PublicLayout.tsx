@@ -8,6 +8,7 @@ import { Sheet, SheetContent, SheetClose } from '@/Components/ui/sheet';
 import { Separator } from '@/Components/ui/separator';
 import { cn } from '@/lib/utils';
 import BackToTop from '@/Components/BackToTop';
+import BrandName from '@/Components/BrandName';
 import { type PageProps } from '@/types';
 
 interface PublicLayoutProps {
@@ -147,9 +148,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                         {/* Logo */}
                         <Link href="/" className="flex items-center gap-2 flex-shrink-0">
                             <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-11 h-11 object-contain" />
-                            <span className="font-heading text-[#0F172A] font-bold text-lg leading-none">
-                                NobelIQ<span className="text-[#2563EB]"> Technologies</span>
-                            </span>
+                            <BrandName className="text-[#0F172A] font-bold text-lg leading-none" />
                         </Link>
 
                         {/* Desktop nav — rounded pill/capsule container */}
@@ -220,9 +219,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                                 className="flex items-center gap-2"
                             >
                                 <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-10 h-10 object-contain" />
-                                <span className="font-heading text-[#0F172A] font-bold text-base">
-                                    NobelIQ<span className="text-[#2563EB]"> Technologies</span>
-                                </span>
+                                <BrandName className="text-[#0F172A] font-bold text-base" />
                             </Link>
                             <SheetClose className="rounded-sm opacity-70 hover:opacity-100 transition-opacity">
                                 <X className="h-5 w-5" />
@@ -278,9 +275,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                         <div className="lg:col-span-1">
                             <Link href="/" className="flex items-center gap-2 mb-4">
                                 <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-11 h-11 object-contain" />
-                                <span className="font-heading text-white font-bold text-lg">
-                                    NobelIQ<span className="text-[#60A5FA]"> Technologies</span>
-                                </span>
+                                <BrandName variant="onDark" className="text-white font-bold text-lg" />
                             </Link>
                             <p className="text-gray-400 text-sm leading-relaxed mb-5">
                                 Innovative IT solutions and software products designed to transform businesses through technology.
@@ -394,7 +389,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                     <Separator className="bg-white/10 mb-6" />
 
                     <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-gray-500">
-                        <p>© {new Date().getFullYear()} NobelIQ Technologies. All rights reserved.</p>
+                        <p>© {new Date().getFullYear()} <BrandName variant="onDark" accent={false} />. All rights reserved.</p>
                         <div className="flex gap-4">
                             <Link href="/privacy" className="hover:text-gray-300 transition-colors">Privacy Policy</Link>
                             <Link href="/terms" className="hover:text-gray-300 transition-colors">Terms of Service</Link>

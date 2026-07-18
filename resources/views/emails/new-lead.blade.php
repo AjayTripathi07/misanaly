@@ -1,7 +1,7 @@
 @component('mail::message')
 # New Lead Received! 🎉
 
-A new enquiry has been submitted on the NobelIQ Technologies website.
+A new enquiry has been submitted on the <span style="font-family: Georgia, 'Times New Roman', serif;">NobelIQ Technologies</span> website.
 
 ---
 
@@ -40,5 +40,5 @@ View in Admin Panel
 
 ---
 
-*This is an automated notification from the NobelIQ Technologies website.*
+*This is an automated notification from the <span style="font-family: Georgia, 'Times New Roman', serif;">NobelIQ Technologies</span> website.*
 @endcomponent

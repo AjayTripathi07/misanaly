@@ -29,7 +29,7 @@ Learn More About Statement2Books
 Stay tuned — big things are coming!
 
 Warm regards,
-**Team NobelIQ Technologies**
+**Team <span style="font-family: Georgia, 'Times New Roman', serif;">NobelIQ Technologies</span>**
 
 ---
 *You registered with email: {{ $entry->email }}. To unsubscribe, reply with "remove me" in the subject line.*
