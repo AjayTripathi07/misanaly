@@ -1,34 +1,47 @@
 import { Link } from '@inertiajs/react';
+import { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
+import NumberFlow from '@number-flow/react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import SeoHead from '@/Components/SeoHead';
+import StatementSimulatorPreview from '@/Components/Products/StatementSimulatorPreview';
+import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
-import { Card, CardContent } from '@/Components/ui/card';
-import { CheckCircle2, ArrowRight } from 'lucide-react';
-
-interface ProductFeature {
-    id: number;
-    title: string;
-    description: string;
-    icon: string | null;
-}
-
-interface Product {
-    id: number;
-    slug: string;
-    name: string;
-    tagline: string;
-    description: string;
-    pricing_model: string;
-    demo_url: string | null;
-    features?: ProductFeature[];
-}
+import { CheckCircle2, ArrowRight, Rocket, Star, Package, Sparkles } from 'lucide-react';
+import { type Product } from '@/types';
 
 interface Props {
     products: Product[];
 }
 
+const fadeUp = {
+    hidden: { opacity: 0, y: 24 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+};
+
+const stagger = {
+    hidden: {},
+    visible: { transition: { staggerChildren: 0.08 } },
+};
+
+const FLAGSHIP_STATS = [
+    { value: 99, suffix: '+', label: 'CA Firms' },
+    { value: 100, suffix: '+', label: 'Bank Formats' },
+    { value: 98.7, suffix: '%', label: 'Accuracy Rate' },
+    { value: 3, suffix: ' hrs', label: 'Saved Daily' },
+];
+
 export default function ProductsIndex({ products }: Props) {
+    const featured = products.find((p) => p.is_featured) ?? products[0] ?? null;
+    const rest = products.filter((p) => p.id !== featured?.id);
+
+    const spotlightRef = useRef(null);
+    const spotlightInView = useInView(spotlightRef, { once: true, margin: '-100px' });
+    const { ref: statsRef, isVisible: statsVisible } = useScrollAnimation({ once: true });
+    const gridRef = useRef(null);
+    const gridInView = useInView(gridRef, { once: true, margin: '-100px' });
+
     return (
         <PublicLayout>
             <SeoHead
@@ -37,106 +50,193 @@ export default function ProductsIndex({ products }: Props) {
                 keywords="Statement2Books, bank statement to Tally, CA firm software, accounting automation, NobelIQ Technologies products"
             />
 
-            {/* Hero */}
-            <section className="bg-gradient-to-br from-[#E8F4FD] via-white to-[#F0F7FF] pt-20 pb-24 relative overflow-hidden text-center">
-                <div className="absolute top-0 left-1/4 w-72 h-72 bg-blue-200/30 rounded-full blur-3xl -translate-y-1/2 pointer-events-none" />
-                <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-200/20 rounded-full blur-3xl translate-y-1/3 pointer-events-none" />
+            {/* Compact header */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-2">
+                <p className="text-xs font-semibold uppercase tracking-widest text-[#0F172A]/40">
+                    Products {products.length > 0 && <span className="text-[#0F172A]/25">· {products.length} available</span>}
+                </p>
+            </div>
 
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <Badge variant="secondary" className="mb-3 bg-blue-50 text-[#2563EB] border-0 text-xs font-semibold uppercase tracking-wider px-4 py-1.5">
-                        Software Products
-                    </Badge>
-                    <h1 className="text-4xl sm:text-5xl font-extrabold text-[#0F172A] tracking-tight">
-                        Our Products
-                    </h1>
-                    <p className="text-lg text-[#0F172A]/60 mt-4 max-w-2xl mx-auto">
-                        Purpose-built software products designed for specific industries and workflows.
-                    </p>
-                </div>
-            </section>
+            {/* Featured Product Spotlight */}
+            {featured && (
+                <section
+                    ref={spotlightRef}
+                    className="relative overflow-hidden bg-gradient-to-br from-[#0F172A] via-[#1E3A8A] to-[#0F172A] text-white mt-4 mx-4 sm:mx-6 lg:mx-8 rounded-3xl"
+                >
+                    {/* Decorative floating blobs */}
+                    <motion.div
+                        className="absolute top-0 left-1/4 w-72 h-72 bg-blue-500/20 rounded-full blur-3xl pointer-events-none"
+                        animate={{ y: [0, -20, 0] }}
+                        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+                    />
+                    <motion.div
+                        className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"
+                        animate={{ y: [0, 20, 0] }}
+                        transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
+                    />
 
-            {/* Products Section */}
-            <section className="bg-[#F8FAFC] py-20">
+                    <div className="relative max-w-6xl mx-auto px-6 sm:px-10 py-16 sm:py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                        <motion.div
+                            initial={{ opacity: 0, x: -30 }}
+                            animate={spotlightInView ? { opacity: 1, x: 0 } : {}}
+                            transition={{ duration: 0.6 }}
+                        >
+                            <span className="inline-flex items-center gap-2 bg-orange-500/20 border border-orange-500/40 text-orange-300 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6">
+                                <Star className="h-3 w-3 fill-orange-300" />
+                                Our Flagship Product
+                            </span>
+
+                            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight mb-4">
+                                Meet{' '}
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+                                    {featured.name}
+                                </span>
+                            </h2>
+
+                            <p className="text-gray-300 text-lg leading-relaxed mb-6 max-w-lg">
+                                {featured.tagline}
+                            </p>
+
+                            {featured.features && featured.features.length > 0 && (
+                                <motion.ul
+                                    className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2.5 mb-8"
+                                    variants={stagger}
+                                    initial="hidden"
+                                    animate={spotlightInView ? 'visible' : 'hidden'}
+                                >
+                                    {featured.features.slice(0, 4).map((f) => (
+                                        <motion.li key={f.id} variants={fadeUp} className="flex items-center gap-3">
+                                            <CheckCircle2 className="h-5 w-5 text-[#10B981] flex-shrink-0" />
+                                            <span className="font-semibold text-white text-sm">{f.title}</span>
+                                        </motion.li>
+                                    ))}
+                                </motion.ul>
+                            )}
+
+                            <div className="flex flex-col sm:flex-row gap-4">
+                                <Link href={`/products/${featured.slug}`}>
+                                    <Button size="lg" className="bg-orange-500 hover:bg-orange-600 rounded-full px-8 shadow-xl shadow-orange-900/40 font-semibold text-white">
+                                        Explore {featured.name}
+                                        <ArrowRight className="ml-2 h-4 w-4" />
+                                    </Button>
+                                </Link>
+                                <Link href={`/products/${featured.slug}#waitlist`}>
+                                    <Button variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10 rounded-full px-8 bg-transparent font-semibold">
+                                        <Rocket className="mr-2 h-4 w-4" />
+                                        Join Waitlist
+                                    </Button>
+                                </Link>
+                            </div>
+                        </motion.div>
+
+                        <motion.div
+                            className="flex justify-center lg:justify-end"
+                            initial={{ opacity: 0, x: 30 }}
+                            animate={spotlightInView ? { opacity: 1, x: 0 } : {}}
+                            transition={{ duration: 0.6, delay: 0.15 }}
+                        >
+                            {featured.slug === 'statement2books' ? (
+                                <StatementSimulatorPreview />
+                            ) : (
+                                <div className="w-full max-w-md aspect-square rounded-2xl border border-white/10 bg-white/5 flex items-center justify-center">
+                                    <Sparkles className="h-16 w-16 text-blue-300" />
+                                </div>
+                            )}
+                        </motion.div>
+                    </div>
+
+                    {/* Stats strip — reused from the Statement2Books product page for consistency */}
+                    {featured.slug === 'statement2books' && (
+                        <div ref={statsRef} className="relative border-t border-white/10 py-10">
+                            <div className="max-w-5xl mx-auto px-6 grid grid-cols-2 sm:grid-cols-4 gap-6">
+                                {FLAGSHIP_STATS.map((stat) => (
+                                    <div key={stat.label} className="text-center">
+                                        <p className="font-mono text-2xl sm:text-3xl font-bold text-white">
+                                            <NumberFlow value={statsVisible ? stat.value : 0} />{stat.suffix}
+                                        </p>
+                                        <p className="text-gray-400 text-xs sm:text-sm mt-1.5">{stat.label}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </section>
+            )}
+
+            {/* All Products Grid */}
+            <section className="bg-[#F8FAFC] py-20 mt-4" ref={gridRef}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    {/* Section Heading */}
-                    <div className="text-center mb-12">
+                    <div className="text-center mb-10">
                         <Badge variant="secondary" className="mb-3 bg-blue-50 text-[#2563EB] border-0 text-xs font-semibold uppercase tracking-wider px-4 py-1.5">
-                            Available Products
+                            All Products
                         </Badge>
-                        <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F172A] tracking-tight">
+                        <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight">
                             Built for Real Business Problems
                         </h2>
-                        <p className="text-[#0F172A]/60 mt-3 max-w-2xl mx-auto">
-                            Each product is the result of years of industry experience and direct client feedback.
-                        </p>
                     </div>
 
-                    {/* Product Cards */}
-                    <div className="space-y-8">
+                    <motion.div
+                        className={
+                            products.length === 1
+                                ? 'grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-2xl mx-auto'
+                                : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5'
+                        }
+                        variants={stagger}
+                        initial="hidden"
+                        animate={gridInView ? 'visible' : 'hidden'}
+                    >
                         {products.map((product) => (
-                            <Card
-                                key={product.id}
-                                className="bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all"
-                            >
-                                <CardContent className="p-0 overflow-hidden">
-                                    <div className="grid grid-cols-1 lg:grid-cols-5">
-                                        {/* Left Panel */}
-                                        <div className="lg:col-span-2 bg-gradient-to-br from-[#1E3A8A] to-[#2563EB] text-white p-10 flex flex-col justify-between">
-                                            <div>
-                                                <Badge className="mb-4 bg-white/15 text-white border-0 text-xs font-semibold uppercase tracking-wider px-4 py-1.5">
-                                                    {product.pricing_model}
+                            <motion.div key={product.id} variants={fadeUp}>
+                                <Link href={`/products/${product.slug}`}>
+                                    <motion.div
+                                        className="group h-full border border-gray-100 rounded-2xl bg-white p-6 cursor-pointer flex flex-col"
+                                        whileHover={{ y: -4, boxShadow: '0 14px 32px rgba(37,99,235,0.12)' }}
+                                        transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                                    >
+                                        <div className="flex items-start justify-between mb-4">
+                                            <div className="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center transition-transform duration-150 group-hover:scale-110">
+                                                <Package className="h-5 w-5 text-[#2563EB]" />
+                                            </div>
+                                            {product.is_featured && (
+                                                <Badge className="bg-orange-50 text-orange-600 border-0 text-[10px] font-bold uppercase tracking-wide px-2.5 py-1">
+                                                    <Star className="h-3 w-3 mr-1 fill-orange-500" />
+                                                    Featured
                                                 </Badge>
-                                                <h2 className="text-2xl font-bold">{product.name}</h2>
-                                                <p className="text-blue-200 text-sm mt-3 leading-relaxed">
-                                                    {product.tagline}
-                                                </p>
-                                            </div>
-                                            <div className="mt-8 flex gap-3 flex-wrap">
-                                                <Link href={`/products/${product.slug}`}>
-                                                    <Button className="bg-white text-[#2563EB] hover:bg-blue-50 rounded-full text-sm">
-                                                        Learn More
-                                                    </Button>
-                                                </Link>
-                                                <Link href={`/request-demo?product=${product.id}`}>
-                                                    <Button
-                                                        variant="outline"
-                                                        className="border-white/30 text-white hover:bg-white/10 rounded-full text-sm bg-transparent"
-                                                    >
-                                                        Request Demo
-                                                    </Button>
-                                                </Link>
-                                            </div>
+                                            )}
                                         </div>
 
-                                        {/* Right Panel */}
-                                        <div className="lg:col-span-3 p-10">
-                                            <h3 className="font-semibold text-[#0F172A] mb-4">Key Features</h3>
-                                            {product.features && product.features.length > 0 && (
-                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                                    {product.features.map((feature) => (
-                                                        <div key={feature.id} className="flex items-start gap-3">
-                                                            <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-                                                            <div>
-                                                                <p className="font-medium text-[#0F172A] text-sm">
-                                                                    {feature.title}
-                                                                </p>
-                                                                <p className="text-[#0F172A]/55 text-xs mt-0.5">
-                                                                    {feature.description}
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                            <p className="mt-6 text-[#0F172A]/60 text-sm leading-relaxed line-clamp-3">
-                                                {product.description}
-                                            </p>
+                                        <h3 className="font-bold text-[#0F172A] text-lg">{product.name}</h3>
+                                        <p className="text-[#0F172A]/55 text-sm mt-1">{product.tagline}</p>
+
+                                        {product.features && product.features.length > 0 && (
+                                            <ul className="mt-4 space-y-2 flex-1">
+                                                {product.features.slice(0, 3).map((f) => (
+                                                    <li key={f.id} className="flex items-center gap-2 text-xs text-[#0F172A]/70">
+                                                        <CheckCircle2 className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
+                                                        {f.title}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        )}
+
+                                        <div className="mt-5 flex items-center gap-1 text-[#2563EB] text-sm font-medium">
+                                            Learn More <ArrowRight className="h-3.5 w-3.5 transition-transform duration-150 group-hover:translate-x-1" />
                                         </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
+                                    </motion.div>
+                                </Link>
+                            </motion.div>
                         ))}
-                    </div>
+
+                        {products.length === 1 && (
+                            <motion.div variants={fadeUp}>
+                                <div className="h-full border-2 border-dashed border-gray-200 rounded-2xl p-6 flex flex-col items-center justify-center text-center text-[#0F172A]/40 min-h-[220px]">
+                                    <Package className="h-8 w-8 mb-3" />
+                                    <p className="text-sm font-medium">More products coming soon</p>
+                                    <p className="text-xs mt-1 max-w-[180px]">We're building the next addition to the lineup.</p>
+                                </div>
+                            </motion.div>
+                        )}
+                    </motion.div>
                 </div>
             </section>
 

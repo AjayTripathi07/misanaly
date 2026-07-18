@@ -83,6 +83,7 @@ export interface Product {
     pricing_model: string;
     demo_url: string | null;
     sort_order: number;
+    is_featured?: boolean;
     features?: ProductFeature[];
     pricing_tiers?: ProductPricingTier[];
     screenshots?: ProductScreenshot[];

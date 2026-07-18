@@ -13,7 +13,7 @@ class ProductsController extends Controller
     public function index(): Response
     {
         $products = Product::where('status', 'active')
-            ->with(['features' => fn ($q) => $q->orderBy('sort_order')->limit(3)])
+            ->with(['features' => fn ($q) => $q->orderBy('sort_order')])
             ->orderBy('sort_order')
             ->get();
 
