@@ -1,11 +1,10 @@
 import '../css/app.css';
 import './bootstrap';
 
-import { useEffect, useRef, useState, type ElementType } from 'react';
+import { useEffect, useRef, type ElementType } from 'react';
 import { createInertiaApp, router } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
-import { AnimatePresence, motion } from 'framer-motion';
 import Lenis from 'lenis';
 import { setLenisInstance } from './lib/lenis';
 
@@ -19,14 +18,16 @@ interface AppRootProps {
 }
 
 function AppRoot({ App, props }: AppRootProps) {
-    const [url, setUrl] = useState(props.initialPage.url);
     const lenisRef = useRef<Lenis | null>(null);
 
-    // Keep the AnimatePresence key in sync with every Inertia navigation
-    // (not just the first load), and reset scroll to top on each new page.
+    // Reset scroll to top on each new page. NOTE: `<App>` must never be
+    // unmounted/remounted here (e.g. by wrapping it in a keyed element for
+    // page-transition animations) — Inertia's `App` component re-runs
+    // `router.init()` on mount using the `initialPage` captured once in this
+    // closure, which resets routing state back to whatever page the tab
+    // first loaded and causes a visible flash of that page on every nav.
     useEffect(() => {
-        return router.on('navigate', (event) => {
-            setUrl(event.detail.page.url);
+        return router.on('navigate', () => {
             lenisRef.current?.scrollTo(0, { immediate: true });
         });
     }, []);
@@ -64,20 +65,7 @@ function AppRoot({ App, props }: AppRootProps) {
         };
     }, []);
 
-    return (
-        <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-                key={url}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.18, ease: 'easeOut' }}
-                style={{ minHeight: '100vh' }}
-            >
-                <App {...props} />
-            </motion.div>
-        </AnimatePresence>
-    );
+    return <App {...props} />;
 }
 
 createInertiaApp({
