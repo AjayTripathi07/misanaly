@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { Link, router } from '@inertiajs/react';
 import SeoHead from '@/Components/SeoHead';
 import { motion, useInView } from 'framer-motion';
-import { CalendarDays, BookOpen, ChevronLeft, ChevronRight, Tag } from 'lucide-react';
+import { BookOpen, ChevronLeft, ChevronRight } from 'lucide-react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import { Badge } from '@/Components/ui/badge';
 import { Card, CardContent } from '@/Components/ui/card';
@@ -12,6 +12,14 @@ import { type BlogPost, type BlogCategory } from '@/types';
 interface CategoryWithCount extends BlogCategory {
     posts_count: number;
 }
+
+/* Shared accent palette — matches the rotation used on Home/Services/About */
+const CARD_COLORS = [
+    { grad: 'from-blue-500 to-blue-600', soft: 'bg-blue-50', hoverSoft: 'hover:bg-blue-50', text: 'text-[#2563EB]', border: 'border-blue-100' },
+    { grad: 'from-teal-500 to-teal-600', soft: 'bg-teal-50', hoverSoft: 'hover:bg-teal-50', text: 'text-[#0D9488]', border: 'border-teal-100' },
+    { grad: 'from-violet-500 to-violet-600', soft: 'bg-violet-50', hoverSoft: 'hover:bg-violet-50', text: 'text-[#7C3AED]', border: 'border-violet-100' },
+    { grad: 'from-amber-500 to-amber-600', soft: 'bg-amber-50', hoverSoft: 'hover:bg-amber-50', text: 'text-[#D97706]', border: 'border-amber-100' },
+];
 
 interface PaginationLink {
     url: string | null;
@@ -48,9 +56,10 @@ function estimateReadTime(body?: string): string {
     return Math.max(1, Math.ceil(words / 200)) + ' min read';
 }
 
-function PostCard({ post, index }: { post: BlogPost; index: number }) {
+function PostCard({ post, index, categoryColor }: { post: BlogPost; index: number; categoryColor: (typeof CARD_COLORS)[number] }) {
     const ref = useRef<HTMLDivElement>(null);
     const inView = useInView(ref, { once: true, margin: '-60px' });
+    const placeholderColor = CARD_COLORS[index % CARD_COLORS.length];
 
     return (
         <motion.div
@@ -58,71 +67,86 @@ function PostCard({ post, index }: { post: BlogPost; index: number }) {
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5, delay: index * 0.08 }}
+            className="h-full"
         >
-            <Card className="group h-full flex flex-col overflow-hidden border border-gray-100 hover:border-blue-200 hover:shadow-lg hover:shadow-blue-50/50 transition-all duration-300 rounded-2xl">
-                {/* Cover image / placeholder */}
-                {post.cover_image ? (
-                    <div className="h-48 overflow-hidden">
-                        <img
-                            src={post.cover_image}
-                            alt={post.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                    </div>
-                ) : (
-                    <div className="h-48 bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-                        <CalendarDays className="h-10 w-10 text-blue-200" />
-                    </div>
-                )}
-
-                <CardContent className="flex flex-col flex-1 p-5">
-                    {/* Category badge */}
-                    {post.category && (
-                        <div className="mb-3">
-                            <Badge className="bg-blue-50 text-[#2563EB] border border-blue-100 hover:bg-blue-100 text-xs font-medium rounded-full px-2.5 py-0.5">
-                                {post.category.name}
-                            </Badge>
+            <motion.div
+                whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(15,23,42,0.12)' }}
+                transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                className="h-full"
+            >
+                <Card className="group h-full flex flex-col overflow-hidden border border-gray-100 hover:border-blue-200 transition-colors duration-300 rounded-2xl">
+                    {/* Cover image / placeholder */}
+                    {post.cover_image ? (
+                        <div className="h-48 overflow-hidden">
+                            <img
+                                src={post.cover_image}
+                                alt={post.title}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
+                        </div>
+                    ) : (
+                        <div className={`relative h-48 overflow-hidden bg-gradient-to-br ${placeholderColor.grad} flex items-center justify-center`}>
+                            {/* Subtle dot-grid texture */}
+                            <div
+                                className="absolute inset-0 opacity-[0.15] pointer-events-none"
+                                style={{
+                                    backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.9) 1px, transparent 1px)',
+                                    backgroundSize: '18px 18px',
+                                }}
+                            />
+                            <BookOpen className="relative h-12 w-12 text-white/90 transition-transform duration-500 group-hover:scale-105" />
                         </div>
                     )}
 
-                    {/* Title */}
-                    <h2 className="font-bold text-[#0F172A] text-lg leading-snug mb-2 group-hover:text-[#2563EB] transition-colors line-clamp-2">
-                        <Link href={`/blog/${post.slug}`}>{post.title}</Link>
-                    </h2>
-
-                    {/* Excerpt */}
-                    <p className="text-sm text-[#0F172A]/60 leading-relaxed line-clamp-3 flex-1 mb-4">
-                        {post.excerpt}
-                    </p>
-
-                    {/* Footer */}
-                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                        <div className="flex items-center gap-2 min-w-0">
-                            {/* Author avatar */}
-                            <div className="w-7 h-7 rounded-full bg-[#2563EB] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                                {post.author?.name?.charAt(0) ?? 'M'}
+                    <CardContent className="flex flex-col flex-1 p-6">
+                        {/* Category badge */}
+                        {post.category && (
+                            <div className="mb-3">
+                                <Badge className={`${categoryColor.soft} ${categoryColor.text} border ${categoryColor.border} ${categoryColor.hoverSoft} text-xs font-medium rounded-full px-2.5 py-0.5`}>
+                                    {post.category.name}
+                                </Badge>
                             </div>
-                            <div className="min-w-0">
-                                <p className="text-xs font-medium text-[#0F172A] truncate">
-                                    {post.author?.name ?? <BrandName accent={false} className="text-inherit" />}
-                                </p>
-                                <p className="text-xs text-[#0F172A]/40">
-                                    {post.published_at ? formatDate(post.published_at) : 'Coming soon'}
-                                </p>
+                        )}
+
+                        {/* Title */}
+                        <h2 className="font-bold text-[#0F172A] text-lg leading-snug mb-2 group-hover:text-[#2563EB] transition-colors line-clamp-2">
+                            <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+                        </h2>
+
+                        {/* Excerpt */}
+                        <p className="text-sm text-[#0F172A]/60 leading-relaxed line-clamp-3 flex-1 mb-4">
+                            {post.excerpt}
+                        </p>
+
+                        {/* Footer */}
+                        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                            <div className="flex items-center gap-2 min-w-0">
+                                {/* Author avatar */}
+                                <div className="w-7 h-7 rounded-full bg-[#2563EB] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                                    {post.author?.name?.charAt(0) ?? 'M'}
+                                </div>
+                                <div className="min-w-0">
+                                    <p className="text-xs font-medium text-[#0F172A] truncate">
+                                        {post.author?.name ?? <BrandName accent={false} className="text-inherit" />}
+                                    </p>
+                                    <p className="text-xs text-[#0F172A]/40">
+                                        {post.published_at ? formatDate(post.published_at) : 'Coming soon'}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-3 flex-shrink-0">
+                                <span className="text-xs text-[#0F172A]/40">{estimateReadTime(post.body)}</span>
+                                <Link
+                                    href={`/blog/${post.slug}`}
+                                    className="text-xs font-semibold text-[#2563EB] hover:underline whitespace-nowrap"
+                                >
+                                    Read More →
+                                </Link>
                             </div>
                         </div>
-                        <div className="flex items-center gap-3 flex-shrink-0">
-                            <span className="text-xs text-[#0F172A]/40">{estimateReadTime(post.body)}</span>
-                            <Link
-                                href={`/blog/${post.slug}`}
-                                className="text-xs font-semibold text-[#2563EB] hover:underline whitespace-nowrap"
-                            >
-                                Read More →
-                            </Link>
-                        </div>
-                    </div>
-                </CardContent>
-            </Card>
+                    </CardContent>
+                </Card>
+            </motion.div>
         </motion.div>
     );
 }
@@ -142,6 +166,10 @@ export default function BlogIndex({ posts, categories, activeCategory }: Props) 
     // Filter pagination links to only page numbers + prev/next (strip HTML entities from label)
     const pageLinks = posts.links;
 
+    // Stable category → accent color mapping (by list position), so the same category
+    // always gets the same color across every card, independent of card position in the grid.
+    const categoryColorMap = new Map(categories.map((cat, i) => [cat.id, CARD_COLORS[i % CARD_COLORS.length]]));
+
     return (
         <PublicLayout>
             <SeoHead
@@ -151,7 +179,7 @@ export default function BlogIndex({ posts, categories, activeCategory }: Props) 
             />
 
             {/* ── HERO ── */}
-            <section className="bg-gradient-to-br from-[#F0F7FF] via-white to-[#F8FAFC] pt-20 pb-16">
+            <section className="bg-gradient-to-br from-[#F0F7FF] via-white to-[#F8FAFC] pt-12 pb-6">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <motion.div
                         ref={heroRef}
@@ -160,14 +188,14 @@ export default function BlogIndex({ posts, categories, activeCategory }: Props) 
                         transition={{ duration: 0.6 }}
                         className="text-center max-w-3xl mx-auto"
                     >
-                        <Badge className="bg-blue-50 text-[#2563EB] border border-blue-100 rounded-full px-4 py-1.5 text-sm font-medium mb-6 inline-flex items-center gap-1.5">
+                        <Badge className="bg-blue-50 text-[#2563EB] border border-blue-100 rounded-full px-4 py-1.5 text-sm font-medium mb-4 inline-flex items-center gap-1.5">
                             <BookOpen className="h-3.5 w-3.5" />
                             Knowledge Hub
                         </Badge>
-                        <h1 className="text-4xl sm:text-5xl font-extrabold text-[#0F172A] mb-5 leading-tight tracking-tight">
+                        <h1 className="text-3xl sm:text-4xl font-extrabold text-[#0F172A] mb-3 leading-tight tracking-tight">
                             Insights &amp; Updates
                         </h1>
-                        <p className="text-lg text-[#0F172A]/60 leading-relaxed">
+                        <p className="text-base sm:text-lg text-[#0F172A]/60 leading-relaxed">
                             Expert perspectives on Tally automation, software development, and business technology for growing Indian businesses.
                         </p>
                     </motion.div>
@@ -177,7 +205,7 @@ export default function BlogIndex({ posts, categories, activeCategory }: Props) 
             {/* ── CATEGORY FILTER ── */}
             <section className="bg-white border-b border-gray-100 sticky top-16 z-20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center gap-2 py-4 overflow-x-auto scrollbar-none">
+                    <div className="flex items-center gap-2 py-3 overflow-x-auto scrollbar-none">
                         {/* All pill */}
                         <button
                             onClick={() => handleCategoryClick(undefined)}
@@ -214,10 +242,8 @@ export default function BlogIndex({ posts, categories, activeCategory }: Props) 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     {posts.data.length === 0 ? (
                         /* Empty state */
-                        <div className="text-center py-20">
-                            <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center mx-auto mb-4">
-                                <BookOpen className="h-8 w-8 text-blue-300" />
-                            </div>
+                        <div className="border-2 border-dashed border-gray-200 rounded-2xl py-20 text-center">
+                            <BookOpen className="h-8 w-8 text-[#0F172A]/30 mx-auto mb-3" />
                             <h3 className="font-semibold text-[#0F172A] mb-2">More Insights Coming Soon</h3>
                             <p className="text-[#0F172A]/50 text-sm max-w-md mx-auto">
                                 We're working on in-depth articles about Tally automation, software development, and business technology.
@@ -226,7 +252,12 @@ export default function BlogIndex({ posts, categories, activeCategory }: Props) 
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
                             {posts.data.map((post, index) => (
-                                <PostCard key={post.id} post={post} index={index} />
+                                <PostCard
+                                    key={post.id}
+                                    post={post}
+                                    index={index}
+                                    categoryColor={(post.category && categoryColorMap.get(post.category.id)) ?? CARD_COLORS[0]}
+                                />
                             ))}
                         </div>
                     )}
