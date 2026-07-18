@@ -1,32 +1,35 @@
 import { cn } from '@/lib/utils';
 
 interface BrandNameProps {
-    /** Applied to the outer span — control size/weight/base color here. */
+    /** Applied to the outer span — controls size/weight/base color for "Nobel". */
     className?: string;
-    /** Color used for "Technologies" when the accent is shown. Match to the surrounding background. */
+    /** Background context — picks the correct "IQ" accent color and muted "Technologies" tone. */
     variant?: 'onLight' | 'onDark';
-    /** Render "NobelIQ" only, without "Technologies" (e.g. compact sidebar lockups). */
+    /** Render "Nobel"+"IQ" only, without "Technologies". */
     short?: boolean;
-    /** Whether "Technologies" gets the blue accent color, like the logo lockup. Off for body-copy mentions. */
+    /** Give "Technologies" its own muted tone (logo/heading contexts). Off = inherits the surrounding text color, for inline body-copy mentions. */
     accent?: boolean;
 }
 
 /**
- * Renders the "NobelIQ Technologies" brand name in Plus Jakarta Sans.
- *
- * Inter (the site's body font) renders capital "I" and lowercase "l" as
- * near-identical vertical strokes, which makes "NobelIQ" hard to read at a
- * glance. Plus Jakarta Sans disambiguates them clearly, so every visible
- * rendering of the brand name should go through this component rather than
- * hardcoded text, to keep the fix centralized.
+ * Renders "NobelIQ Technologies" with "Nobel" and "IQ" in two different
+ * colors. Font choice alone (e.g. switching to Plus Jakarta Sans) doesn't
+ * fix the capital-I/lowercase-l ambiguity — in most sans-serif fonts,
+ * including Jakarta Sans at bold weight, both are just straight vertical
+ * strokes. Splitting "Nobel" and "IQ" into distinct colors (matching the
+ * uploaded logo files) makes the word boundary obvious regardless of the
+ * letterforms, which is what actually resolves the legibility issue.
  */
 export default function BrandName({ className, variant = 'onLight', short = false, accent = true }: BrandNameProps) {
+    const iqColor = variant === 'onDark' ? 'text-[#38BDF8]' : 'text-[#2563EB]';
+    const mutedColor = variant === 'onDark' ? 'text-white/60' : 'text-[#0F172A]/50';
+
     return (
-        <span className={cn('font-heading', className)}>
-            NobelIQ
+        <span className={cn(className)}>
+            Nobel<span className={iqColor}>IQ</span>
             {!short && (
                 accent ? (
-                    <span className={variant === 'onDark' ? 'text-blue-400' : 'text-[#2563EB]'}> Technologies</span>
+                    <span className={cn('font-normal', mutedColor)}> Technologies</span>
                 ) : (
                     ' Technologies'
                 )

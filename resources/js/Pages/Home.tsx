@@ -458,7 +458,7 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                     >
                         <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-20 h-20 sm:w-24 sm:h-24 object-contain" />
                         <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
-                            <BrandName accent={false} />
+                            <BrandName variant="onDark" />
                         </h2>
                     </motion.div>
 
@@ -636,7 +636,7 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                     {[...['Laravel', 'React', 'AI / ML', 'Statement2Books', 'Tally Integration', 'NobelIQ Technologies', 'Mobile Apps', 'Cloud Solutions', 'Custom Software', 'REST APIs', 'UI / UX Design'], ...['Laravel', 'React', 'AI / ML', 'Statement2Books', 'Tally Integration', 'NobelIQ Technologies', 'Mobile Apps', 'Cloud Solutions', 'Custom Software', 'REST APIs', 'UI / UX Design']].map((item, i) => (
                         <span key={i} className="flex items-center gap-3 mx-6 text-sm font-medium text-white/50 whitespace-nowrap">
                             <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB] flex-shrink-0" />
-                            {item === 'NobelIQ Technologies' ? <BrandName accent={false} className="text-inherit" /> : item}
+                            {item === 'NobelIQ Technologies' ? <BrandName variant="onDark" accent={false} className="text-inherit" /> : item}
                         </span>
                     ))}
                 </div>
