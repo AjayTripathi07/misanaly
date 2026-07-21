@@ -254,7 +254,7 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                                 transition={{ delay: 0.1, duration: dur ?? 0.5 }}
                             >
                                 <Badge className="mb-6 bg-blue-500/20 border border-blue-500/40 text-blue-300 hover:bg-blue-500/30 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-wider">
-                                    🤖 AI-Powered · 100% Offline · Tally Ready
+                                    🤖 100% Offline · Tally Ready
                                 </Badge>
                             </motion.div>
 
@@ -336,7 +336,7 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                                     ))}
                                 </div>
                                 <span className="text-sm text-gray-400">
-                                    <strong className="font-mono text-white">99+</strong> CA firms process statements daily
+                                    <strong className="font-mono text-white">1000+</strong> Process statements daily
                                 </span>
                             </motion.div>
 
@@ -636,7 +636,7 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                     {[...['Laravel', 'React', 'AI / ML', 'Statement2Books', 'Tally Integration', 'NobelIQ Technologies', 'Mobile Apps', 'Cloud Solutions', 'Custom Software', 'REST APIs', 'UI / UX Design'], ...['Laravel', 'React', 'AI / ML', 'Statement2Books', 'Tally Integration', 'NobelIQ Technologies', 'Mobile Apps', 'Cloud Solutions', 'Custom Software', 'REST APIs', 'UI / UX Design']].map((item, i) => (
                         <span key={i} className="flex items-center gap-3 mx-6 text-sm font-medium text-white/50 whitespace-nowrap">
                             <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB] flex-shrink-0" />
-                            {item === 'NobelIQ Technologies' ? <BrandName variant="onDark" accent={false} className="text-inherit" /> : item}
+                            {item === 'NobelIQ Technologies' ? <BrandName accent={false} className="text-inherit" /> : item}
                         </span>
                     ))}
                 </div>
