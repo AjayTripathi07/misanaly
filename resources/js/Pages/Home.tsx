@@ -367,7 +367,7 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                             transition={{ delay: 0.3, duration: dur ?? 0.7 }}
                             className="hidden lg:flex items-center justify-center"
                         >
-                            <StatementSimulatorPreview />
+                            <StatementSimulatorPreview variant="compact" />
                         </motion.div>
                     </div>
                 </div>
