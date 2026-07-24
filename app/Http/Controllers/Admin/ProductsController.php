@@ -4,19 +4,42 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Traits\Exportable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ProductsController extends Controller
 {
+    use Exportable;
+
     public function index(): Response
     {
         $products = Product::withCount('features')->orderBy('sort_order')->get();
 
         return Inertia::render('Admin/Products/Index', compact('products'));
+    }
+
+    public function export(): StreamedResponse
+    {
+        $products = Product::orderBy('sort_order')->get();
+
+        $rows = $products->map(fn (Product $p) => [
+            $p->name,
+            $p->slug,
+            $p->tagline,
+            $p->pricing_model,
+            $p->status,
+            $p->is_featured ? 'Yes' : 'No',
+            $p->created_at->format('Y-m-d H:i'),
+        ]);
+
+        return $this->exportCsv('products', [
+            'Name', 'Slug', 'Tagline', 'Pricing Model', 'Status', 'Featured', 'Created At',
+        ], $rows);
     }
 
     public function create(): Response

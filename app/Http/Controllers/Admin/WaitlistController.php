@@ -4,14 +4,17 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ProductWaitlist;
+use App\Traits\Exportable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Inertia\Inertia;
 
 class WaitlistController extends Controller
 {
+    use Exportable;
+
     public function index(Request $request): \Inertia\Response
     {
         $query = ProductWaitlist::with('product:id,name,slug')
@@ -48,27 +51,23 @@ class WaitlistController extends Controller
         return back()->with('success', 'Status updated.');
     }
 
-    public function export(): Response
+    public function export(): StreamedResponse
     {
         $entries = ProductWaitlist::with('product:id,name')->latest()->get();
 
-        $csv = "Name,Email,Phone,Company,Product,Status,Remark,Registered\n";
-        foreach ($entries as $e) {
-            $csv .= implode(',', [
-                '"' . str_replace('"', '""', $e->name) . '"',
-                '"' . $e->email . '"',
-                '"' . $e->phone . '"',
-                '"' . str_replace('"', '""', $e->company ?? '') . '"',
-                '"' . ($e->product->name ?? 'Statement2Books') . '"',
-                $e->status,
-                '"' . str_replace('"', '""', $e->remark ?? '') . '"',
-                '"' . $e->created_at->format('Y-m-d H:i') . '"',
-            ]) . "\n";
-        }
-
-        return response($csv, 200, [
-            'Content-Type'        => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="statement2books-waitlist-' . now()->format('Y-m-d') . '.csv"',
+        $rows = $entries->map(fn (ProductWaitlist $e) => [
+            $e->name,
+            $e->email,
+            $e->phone,
+            $e->company,
+            $e->product->name ?? 'Statement2Books',
+            $e->status,
+            $e->remark,
+            $e->created_at->format('Y-m-d H:i'),
         ]);
+
+        return $this->exportCsv('statement2books-waitlist', [
+            'Name', 'Email', 'Phone', 'Company', 'Product', 'Status', 'Remark', 'Registered',
+        ], $rows);
     }
 }

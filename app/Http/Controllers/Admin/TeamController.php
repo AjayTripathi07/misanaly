@@ -3,16 +3,36 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\TeamMember;
+use App\Traits\Exportable;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class TeamController extends Controller
 {
+    use Exportable;
+
     public function index()
     {
         return Inertia::render('Admin/Team/Index', [
             'members' => TeamMember::orderBy('sort_order')->get(),
         ]);
+    }
+
+    public function export(): StreamedResponse
+    {
+        $members = TeamMember::orderBy('sort_order')->get();
+
+        $rows = $members->map(fn (TeamMember $m) => [
+            $m->name,
+            $m->role,
+            $m->linkedin_url,
+            $m->sort_order,
+        ]);
+
+        return $this->exportCsv('team-members', [
+            'Name', 'Role', 'LinkedIn URL', 'Sort Order',
+        ], $rows);
     }
 
     public function create()

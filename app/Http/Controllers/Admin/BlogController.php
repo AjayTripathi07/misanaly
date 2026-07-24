@@ -5,14 +5,37 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\BlogCategory;
 use App\Models\BlogPost;
+use App\Traits\Exportable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class BlogController extends Controller
 {
+    use Exportable;
+
+    public function export(): StreamedResponse
+    {
+        $posts = BlogPost::with(['category', 'author'])->orderByDesc('created_at')->get();
+
+        $rows = $posts->map(fn (BlogPost $p) => [
+            $p->title,
+            $p->slug,
+            $p->category->name ?? '',
+            $p->status,
+            $p->author->name ?? '',
+            $p->published_at?->format('Y-m-d H:i'),
+            $p->created_at->format('Y-m-d H:i'),
+        ]);
+
+        return $this->exportCsv('blog-posts', [
+            'Title', 'Slug', 'Category', 'Status', 'Author', 'Published At', 'Created At',
+        ], $rows);
+    }
+
     public function index(Request $request): Response
     {
         $query = BlogPost::with(['category', 'author'])

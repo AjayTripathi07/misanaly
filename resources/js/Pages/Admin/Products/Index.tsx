@@ -3,7 +3,7 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
 import { Card, CardContent } from '@/Components/ui/card';
-import { Plus, Pencil, Trash2, Package, Star } from 'lucide-react';
+import { Plus, Pencil, Trash2, Package, Star, Download } from 'lucide-react';
 
 interface Product {
     id: number;
@@ -43,12 +43,20 @@ export default function Index({ products }: Props) {
 
             <div className="flex justify-between items-center mb-6">
                 <h1 className="font-bold text-xl text-[#0F172A]">Products Management</h1>
-                <Link href="/admin/products/create">
-                    <Button size="sm" className="bg-[#2563EB] hover:bg-[#1d4ed8] text-white">
-                        <Plus className="h-4 w-4 mr-1" />
-                        + Add Product
-                    </Button>
-                </Link>
+                <div className="flex items-center gap-2">
+                    <a href="/admin/products/export">
+                        <Button variant="outline" size="sm" className="gap-1.5">
+                            <Download className="h-4 w-4" />
+                            Export CSV
+                        </Button>
+                    </a>
+                    <Link href="/admin/products/create">
+                        <Button size="sm" className="bg-[#2563EB] hover:bg-[#1d4ed8] text-white">
+                            <Plus className="h-4 w-4 mr-1" />
+                            + Add Product
+                        </Button>
+                    </Link>
+                </div>
             </div>
 
             <Card className="bg-white border border-gray-100 shadow-sm overflow-x-auto">

@@ -64,12 +64,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     // Leads
     Route::get('/leads', [Admin\LeadsController::class, 'index'])->name('leads.index');
+    Route::get('/leads/export', [Admin\LeadsController::class, 'export'])->name('leads.export');
     Route::get('/leads/{lead}', [Admin\LeadsController::class, 'show'])->name('leads.show');
     Route::patch('/leads/{lead}/status', [Admin\LeadsController::class, 'updateStatus'])->name('leads.update-status');
     Route::patch('/leads/{lead}/notes', [Admin\LeadsController::class, 'updateNotes'])->name('leads.update-notes');
 
     // Services CRUD
     Route::get('/services', [Admin\ServicesController::class, 'index'])->name('services.index');
+    Route::get('/services/export', [Admin\ServicesController::class, 'export'])->name('services.export');
     Route::get('/services/create', [Admin\ServicesController::class, 'create'])->name('services.create');
     Route::post('/services', [Admin\ServicesController::class, 'store'])->name('services.store');
     Route::get('/services/{service}/edit', [Admin\ServicesController::class, 'edit'])->name('services.edit');
@@ -79,6 +81,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     // Products CRUD
     Route::get('/products', [Admin\ProductsController::class, 'index'])->name('products.index');
+    Route::get('/products/export', [Admin\ProductsController::class, 'export'])->name('products.export');
     Route::get('/products/create', [Admin\ProductsController::class, 'create'])->name('products.create');
     Route::post('/products', [Admin\ProductsController::class, 'store'])->name('products.store');
     Route::get('/products/{product}/edit', [Admin\ProductsController::class, 'edit'])->name('products.edit');
@@ -94,6 +97,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     // Blog CRUD
     Route::get('/blog', [Admin\BlogController::class, 'index'])->name('blog.index');
+    Route::get('/blog/export', [Admin\BlogController::class, 'export'])->name('blog.export');
     Route::get('/blog/create', [Admin\BlogController::class, 'create'])->name('blog.create');
     Route::post('/blog', [Admin\BlogController::class, 'store'])->name('blog.store');
     Route::get('/blog/{post}/edit', [Admin\BlogController::class, 'edit'])->name('blog.edit');
@@ -112,6 +116,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     // Team Members
     Route::get('/team', [Admin\TeamController::class, 'index'])->name('team.index');
+    Route::get('/team/export', [Admin\TeamController::class, 'export'])->name('team.export');
     Route::get('/team/create', [Admin\TeamController::class, 'create'])->name('team.create');
     Route::post('/team', [Admin\TeamController::class, 'store'])->name('team.store');
     Route::post('/team/reorder', [Admin\TeamController::class, 'reorder'])->name('team.reorder');
@@ -121,6 +126,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     // Testimonials
     Route::get('/testimonials', [Admin\TestimonialsController::class, 'index'])->name('testimonials.index');
+    Route::get('/testimonials/export', [Admin\TestimonialsController::class, 'export'])->name('testimonials.export');
     Route::get('/testimonials/create', [Admin\TestimonialsController::class, 'create'])->name('testimonials.create');
     Route::post('/testimonials', [Admin\TestimonialsController::class, 'store'])->name('testimonials.store');
     Route::get('/testimonials/{testimonial}/edit', [Admin\TestimonialsController::class, 'edit'])->name('testimonials.edit');
@@ -129,6 +135,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     // FAQs
     Route::get('/faqs', [Admin\FaqsController::class, 'index'])->name('faqs.index');
+    Route::get('/faqs/export', [Admin\FaqsController::class, 'export'])->name('faqs.export');
     Route::get('/faqs/create', [Admin\FaqsController::class, 'create'])->name('faqs.create');
     Route::post('/faqs', [Admin\FaqsController::class, 'store'])->name('faqs.store');
     Route::get('/faqs/{faq}/edit', [Admin\FaqsController::class, 'edit'])->name('faqs.edit');

@@ -1,5 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { HelpCircle, Plus, Pencil, Trash2 } from 'lucide-react';
+import { HelpCircle, Plus, Pencil, Trash2, Download } from 'lucide-react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Button } from '@/Components/ui/button';
 
@@ -52,12 +52,20 @@ export default function FaqsIndex({ faqs, filters }: Props) {
                     <h2 className="text-xl font-bold text-[#0F172A]">FAQs</h2>
                     <p className="text-sm text-[#0F172A]/50 mt-0.5">{faqs.length} question{faqs.length !== 1 ? 's' : ''}</p>
                 </div>
-                <Link href={route('admin.faqs.create')}>
-                    <Button size="sm" className="gap-2 bg-[#2563EB] hover:bg-[#1d4ed8] text-white">
-                        <Plus className="h-4 w-4" />
-                        Add FAQ
-                    </Button>
-                </Link>
+                <div className="flex items-center gap-2">
+                    <a href={route('admin.faqs.export')}>
+                        <Button variant="outline" size="sm" className="gap-1.5">
+                            <Download className="h-4 w-4" />
+                            Export CSV
+                        </Button>
+                    </a>
+                    <Link href={route('admin.faqs.create')}>
+                        <Button size="sm" className="gap-2 bg-[#2563EB] hover:bg-[#1d4ed8] text-white">
+                            <Plus className="h-4 w-4" />
+                            Add FAQ
+                        </Button>
+                    </Link>
+                </div>
             </div>
 
             {/* Category filter */}

@@ -1,5 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { Star, Plus, Pencil, Trash2 } from 'lucide-react';
+import { Star, Plus, Pencil, Trash2, Download } from 'lucide-react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Button } from '@/Components/ui/button';
 
@@ -69,12 +69,20 @@ export default function TestimonialsIndex({ testimonials }: Props) {
                     <h2 className="text-xl font-bold text-[#0F172A]">Testimonials</h2>
                     <p className="text-sm text-[#0F172A]/50 mt-0.5">{data.length} on this page</p>
                 </div>
-                <Link href={route('admin.testimonials.create')}>
-                    <Button size="sm" className="gap-2 bg-[#2563EB] hover:bg-[#1d4ed8] text-white">
-                        <Plus className="h-4 w-4" />
-                        Add Testimonial
-                    </Button>
-                </Link>
+                <div className="flex items-center gap-2">
+                    <a href={route('admin.testimonials.export')}>
+                        <Button variant="outline" size="sm" className="gap-1.5">
+                            <Download className="h-4 w-4" />
+                            Export CSV
+                        </Button>
+                    </a>
+                    <Link href={route('admin.testimonials.create')}>
+                        <Button size="sm" className="gap-2 bg-[#2563EB] hover:bg-[#1d4ed8] text-white">
+                            <Plus className="h-4 w-4" />
+                            Add Testimonial
+                        </Button>
+                    </Link>
+                </div>
             </div>
 
             <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">

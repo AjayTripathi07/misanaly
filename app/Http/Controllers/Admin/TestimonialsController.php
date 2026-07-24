@@ -5,11 +5,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Service;
 use App\Models\Testimonial;
+use App\Traits\Exportable;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class TestimonialsController extends Controller
 {
+    use Exportable;
+
     public function index()
     {
         return Inertia::render('Admin/Testimonials/Index', [
@@ -17,6 +21,24 @@ class TestimonialsController extends Controller
                 ->latest()
                 ->paginate(20),
         ]);
+    }
+
+    public function export(): StreamedResponse
+    {
+        $testimonials = Testimonial::with(['service:id,name', 'product:id,name'])->latest()->get();
+
+        $rows = $testimonials->map(fn (Testimonial $t) => [
+            $t->name,
+            $t->company,
+            $t->role,
+            $t->rating,
+            $t->service->name ?? $t->product->name ?? '',
+            $t->created_at->format('Y-m-d H:i'),
+        ]);
+
+        return $this->exportCsv('testimonials', [
+            'Name', 'Company', 'Role', 'Rating', 'Related Service/Product', 'Created At',
+        ], $rows);
     }
 
     public function create()

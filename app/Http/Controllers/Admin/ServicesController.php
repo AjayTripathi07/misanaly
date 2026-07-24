@@ -4,20 +4,43 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Service;
+use App\Traits\Exportable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ServicesController extends Controller
 {
+    use Exportable;
+
     public function index(): Response
     {
         $services = Service::withCount('features')->orderBy('sort_order')->get();
 
         return Inertia::render('Admin/Services/Index', compact('services'));
+    }
+
+    public function export(): StreamedResponse
+    {
+        $services = Service::orderBy('sort_order')->get();
+
+        $rows = $services->map(fn (Service $s) => [
+            $s->name,
+            $s->slug,
+            $s->tagline,
+            $s->starting_price,
+            $s->status,
+            $s->sort_order,
+            $s->created_at->format('Y-m-d H:i'),
+        ]);
+
+        return $this->exportCsv('services', [
+            'Name', 'Slug', 'Tagline', 'Starting Price', 'Status', 'Sort Order', 'Created At',
+        ], $rows);
     }
 
     public function create(): Response

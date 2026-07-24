@@ -4,7 +4,7 @@ import { Button } from '@/Components/ui/button';
 import { Card, CardContent } from '@/Components/ui/card';
 import { Input } from '@/Components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
-import { Eye, Search, X } from 'lucide-react';
+import { Eye, Search, X, Download } from 'lucide-react';
 import { useRef, useState } from 'react';
 
 interface Lead {
@@ -79,6 +79,11 @@ export default function Index({ leads, filters }: Props) {
 
     const hasFilters = !!(filters.search || filters.type || filters.status);
 
+    const exportQuery = new URLSearchParams(
+        Object.entries(filters).filter(([, v]) => !!v) as [string, string][]
+    ).toString();
+    const exportUrl = `/admin/leads/export${exportQuery ? `?${exportQuery}` : ''}`;
+
     const clearFilters = () => {
         setSearch('');
         router.get('/admin/leads', {}, { preserveState: true });
@@ -94,6 +99,12 @@ export default function Index({ leads, filters }: Props) {
                     <h1 className="text-xl font-bold text-[#0F172A]">All Leads</h1>
                     <p className="text-sm text-[#0F172A]/50">{leads.total} total leads</p>
                 </div>
+                <a href={exportUrl}>
+                    <Button variant="outline" size="sm" className="gap-1.5">
+                        <Download className="h-4 w-4" />
+                        Export CSV
+                    </Button>
+                </a>
             </div>
 
             {/* Filter bar */}

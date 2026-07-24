@@ -1,5 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { Plus, Pencil, Trash2, Eye, EyeOff, ChevronLeft, ChevronRight, FileText, Calendar } from 'lucide-react';
+import { Plus, Pencil, Trash2, Eye, EyeOff, ChevronLeft, ChevronRight, FileText, Calendar, Download } from 'lucide-react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
@@ -80,6 +80,14 @@ export default function AdminBlogIndex({ posts, categories, filters }: Props) {
                             <SelectItem value="draft">Draft</SelectItem>
                         </SelectContent>
                     </Select>
+
+                    {/* Export */}
+                    <a href="/admin/blog/export">
+                        <Button variant="outline" size="sm" className="gap-1.5">
+                            <Download className="h-4 w-4" />
+                            Export CSV
+                        </Button>
+                    </a>
 
                     {/* New post button */}
                     <Link href="/admin/blog/create">

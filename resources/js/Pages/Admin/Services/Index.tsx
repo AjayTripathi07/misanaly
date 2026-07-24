@@ -3,7 +3,7 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
 import { Card, CardContent } from '@/Components/ui/card';
-import { Plus, Pencil, ToggleLeft, ToggleRight, Trash2, Package } from 'lucide-react';
+import { Plus, Pencil, ToggleLeft, ToggleRight, Trash2, Package, Download } from 'lucide-react';
 
 interface Service {
     id: number;
@@ -39,12 +39,20 @@ export default function Index({ services }: Props) {
 
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-xl font-bold text-[#0F172A]">Services Management</h1>
-                <Link href="/admin/services/create">
-                    <Button size="sm" className="bg-[#2563EB] text-white hover:bg-[#1D4ED8] flex items-center gap-1">
-                        <Plus className="h-4 w-4" />
-                        Add Service
-                    </Button>
-                </Link>
+                <div className="flex items-center gap-2">
+                    <a href="/admin/services/export">
+                        <Button variant="outline" size="sm" className="gap-1.5">
+                            <Download className="h-4 w-4" />
+                            Export CSV
+                        </Button>
+                    </a>
+                    <Link href="/admin/services/create">
+                        <Button size="sm" className="bg-[#2563EB] text-white hover:bg-[#1D4ED8] flex items-center gap-1">
+                            <Plus className="h-4 w-4" />
+                            Add Service
+                        </Button>
+                    </Link>
+                </div>
             </div>
 
             <Card className="bg-white border border-gray-100 shadow-sm">

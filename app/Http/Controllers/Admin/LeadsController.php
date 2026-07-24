@@ -4,16 +4,56 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Lead;
+use App\Traits\Exportable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class LeadsController extends Controller
 {
+    use Exportable;
+
     public function index(Request $request): Response
     {
-        $query = Lead::with(['service:id,name', 'product:id,name'])->latest();
+        $query = $this->filtered($request)->with(['service:id,name', 'product:id,name'])->latest();
+
+        $leads   = $query->paginate(20)->withQueryString();
+        $filters = $request->only(['type', 'status', 'search']);
+
+        return Inertia::render('Admin/Leads/Index', compact('leads', 'filters'));
+    }
+
+    public function export(Request $request): StreamedResponse
+    {
+        $leads = $this->filtered($request)->with(['service:id,name', 'product:id,name'])->latest()->get();
+
+        $rows = $leads->map(fn (Lead $lead) => [
+            $lead->name,
+            $lead->email,
+            $lead->phone,
+            $lead->company,
+            $lead->lead_type,
+            $lead->service->name ?? $lead->product->name ?? '',
+            $lead->budget_range,
+            $lead->timeline,
+            $lead->message,
+            $lead->status,
+            $lead->notes,
+            $lead->created_at->format('Y-m-d H:i'),
+        ]);
+
+        return $this->exportCsv('leads', [
+            'Name', 'Email', 'Phone', 'Company', 'Lead Type', 'Service/Product',
+            'Budget Range', 'Timeline', 'Message', 'Status', 'Notes', 'Created At',
+        ], $rows);
+    }
+
+    private function filtered(Request $request): Builder
+    {
+        $query = Lead::query();
 
         if ($request->filled('type')) {
             $query->where('lead_type', $request->type);
@@ -28,10 +68,7 @@ class LeadsController extends Controller
             $query->where(fn ($q) => $q->where('name', 'like', "%{$s}%")->orWhere('email', 'like', "%{$s}%"));
         }
 
-        $leads   = $query->paginate(20)->withQueryString();
-        $filters = $request->only(['type', 'status', 'search']);
-
-        return Inertia::render('Admin/Leads/Index', compact('leads', 'filters'));
+        return $query;
     }
 
     public function show(Lead $lead): Response
