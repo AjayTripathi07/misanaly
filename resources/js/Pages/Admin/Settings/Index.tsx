@@ -110,7 +110,7 @@ export default function SettingsIndex({ settings }: Props) {
                                     type="email"
                                     value={data.email}
                                     onChange={(e) => setData('email', e.target.value)}
-                                    placeholder="hello@misanalytics.com"
+                                    placeholder="hello@nobeliqtechnologies.com"
                                 />
                                 {errors.email && <p className="text-xs text-red-500">{errors.email}</p>}
                             </div>
@@ -149,7 +149,7 @@ export default function SettingsIndex({ settings }: Props) {
                                 id="facebook"
                                 value={data.facebook}
                                 onChange={(e) => setData('facebook', e.target.value)}
-                                placeholder="https://facebook.com/misanalytics"
+                                placeholder="https://facebook.com/nobeliqtechnologies"
                             />
                             {errors.facebook && <p className="text-xs text-red-500">{errors.facebook}</p>}
                         </div>
@@ -159,7 +159,7 @@ export default function SettingsIndex({ settings }: Props) {
                                 id="twitter"
                                 value={data.twitter}
                                 onChange={(e) => setData('twitter', e.target.value)}
-                                placeholder="https://twitter.com/misanalytics"
+                                placeholder="https://twitter.com/nobeliqtechnologies"
                             />
                             {errors.twitter && <p className="text-xs text-red-500">{errors.twitter}</p>}
                         </div>
@@ -169,7 +169,7 @@ export default function SettingsIndex({ settings }: Props) {
                                 id="linkedin"
                                 value={data.linkedin}
                                 onChange={(e) => setData('linkedin', e.target.value)}
-                                placeholder="https://linkedin.com/company/misanalytics"
+                                placeholder="https://linkedin.com/company/nobeliqtechnologies"
                             />
                             {errors.linkedin && <p className="text-xs text-red-500">{errors.linkedin}</p>}
                         </div>
@@ -179,7 +179,7 @@ export default function SettingsIndex({ settings }: Props) {
                                 id="instagram"
                                 value={data.instagram}
                                 onChange={(e) => setData('instagram', e.target.value)}
-                                placeholder="https://instagram.com/misanalytics"
+                                placeholder="https://instagram.com/nobeliqtechnologies"
                             />
                             {errors.instagram && <p className="text-xs text-red-500">{errors.instagram}</p>}
                         </div>
@@ -207,7 +207,7 @@ export default function SettingsIndex({ settings }: Props) {
                                 id="og_image_url"
                                 value={data.og_image_url}
                                 onChange={(e) => setData('og_image_url', e.target.value)}
-                                placeholder="https://misanalytics.com/og-image.png"
+                                placeholder="https://nobeliqtechnologies.com/og-image.png"
                             />
                             {errors.og_image_url && <p className="text-xs text-red-500">{errors.og_image_url}</p>}
                         </div>

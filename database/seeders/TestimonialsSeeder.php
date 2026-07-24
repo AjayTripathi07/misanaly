@@ -13,7 +13,7 @@ class TestimonialsSeeder extends Seeder
                 'name'       => 'CA Suresh Gupta',
                 'company'    => 'Gupta & Associates',
                 'role'       => 'Managing Partner',
-                'quote'      => 'Tally Automation has completely transformed how our firm handles data entry. What used to take our team 3 hours every evening now gets done in 15 minutes. The accuracy of the auto-tagging rules is remarkable—we rarely need to make corrections.',
+                'quote'      => 'Statement2Books has completely transformed how our firm handles data entry. What used to take our team 3 hours every evening now gets done in 15 minutes. The accuracy of the auto-tagging rules is remarkable—we rarely need to make corrections.',
                 'photo'      => null,
                 'rating'     => 5,
                 'service_id' => null,
