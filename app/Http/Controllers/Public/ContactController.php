@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
+use App\Models\Faq;
 use App\Models\Product;
 use App\Models\Service;
 use Inertia\Inertia;
@@ -12,7 +13,11 @@ class ContactController extends Controller
 {
     public function show(): Response
     {
-        return Inertia::render('Contact');
+        $faqs = Faq::where('category', 'general')
+            ->orderBy('sort_order')
+            ->get();
+
+        return Inertia::render('Contact', compact('faqs'));
     }
 
     public function quote(): Response

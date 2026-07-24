@@ -17,11 +17,6 @@ class Product extends Model
         'is_featured' => 'boolean',
     ];
 
-    public function getRouteKeyName(): string
-    {
-        return 'slug';
-    }
-
     public function features(): HasMany
     {
         return $this->hasMany(ProductFeature::class)->orderBy('sort_order');

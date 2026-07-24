@@ -1,12 +1,12 @@
 import { Link } from '@inertiajs/react';
-import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { useRef, useState } from 'react';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
 import PublicLayout from '@/Layouts/PublicLayout';
 import SeoHead from '@/Components/SeoHead';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
 import { ServiceIcon } from '@/Components/ServiceIcon';
-import { CheckCircle2, ChevronRight, ArrowRight, ArrowLeft, Shield, Clock } from 'lucide-react';
+import { CheckCircle2, ChevronRight, ChevronDown, ArrowRight, ArrowLeft, Shield, Clock } from 'lucide-react';
 
 interface ServiceFeature {
     id: number;
@@ -42,9 +42,16 @@ interface RelatedService {
     icon: string;
 }
 
+interface Faq {
+    id: number;
+    question: string;
+    answer: string;
+}
+
 interface Props {
     service: Service;
     relatedServices: RelatedService[];
+    faqs: Faq[];
 }
 
 const fadeUp = {
@@ -64,7 +71,7 @@ const SERVICE_COLORS = [
     { bg: 'bg-amber-500/10', icon: 'text-[#F59E0B]', border: 'hover:border-amber-500/40' },
 ];
 
-export default function Show({ service, relatedServices }: Props) {
+export default function Show({ service, relatedServices, faqs }: Props) {
     const featuresRef = useRef(null);
     const featuresInView = useInView(featuresRef, { once: true, margin: '-100px' });
 
@@ -73,6 +80,10 @@ export default function Show({ service, relatedServices }: Props) {
 
     const relatedRef = useRef(null);
     const relatedInView = useInView(relatedRef, { once: true, margin: '-100px' });
+
+    const faqsRef = useRef(null);
+    const faqsInView = useInView(faqsRef, { once: true, margin: '-100px' });
+    const [openFaq, setOpenFaq] = useState<number | null>(null);
 
     const ctaRef = useRef(null);
     const ctaInView = useInView(ctaRef, { once: true, margin: '-100px' });
@@ -297,6 +308,60 @@ export default function Show({ service, relatedServices }: Props) {
                                 );
                             })}
                         </motion.div>
+                    </div>
+                </section>
+            )}
+
+            {/* FAQs */}
+            {faqs.length > 0 && (
+                <section className="py-20 bg-white" ref={faqsRef}>
+                    <div className="max-w-3xl mx-auto px-4">
+                        <div className="text-center mb-12">
+                            <Badge variant="secondary" className="mb-3 bg-blue-50 text-[#2563EB] border-0 text-xs font-semibold uppercase tracking-wider px-4 py-1.5">
+                                FAQ
+                            </Badge>
+                            <h2 className="text-3xl sm:text-4xl font-bold text-[#0F172A] tracking-tight">
+                                Frequently Asked Questions
+                            </h2>
+                        </div>
+
+                        <div className="space-y-3">
+                            {faqs.map((faq, i) => (
+                                <motion.div
+                                    key={faq.id}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={faqsInView ? { opacity: 1, y: 0 } : {}}
+                                    transition={{ delay: i * 0.05, duration: 0.4 }}
+                                    className="border border-gray-100 rounded-xl overflow-hidden"
+                                >
+                                    <button
+                                        onClick={() => setOpenFaq(openFaq === faq.id ? null : faq.id)}
+                                        className="w-full flex items-center justify-between px-6 py-4 text-left bg-[#F8FAFC] hover:bg-blue-50 transition-colors"
+                                    >
+                                        <span className="font-semibold text-[#0F172A]">{faq.question}</span>
+                                        <motion.div animate={{ rotate: openFaq === faq.id ? 180 : 0 }} transition={{ duration: 0.25 }}>
+                                            <ChevronDown className="h-5 w-5 text-[#0F172A]/50" />
+                                        </motion.div>
+                                    </button>
+
+                                    <AnimatePresence initial={false}>
+                                        {openFaq === faq.id && (
+                                            <motion.div
+                                                initial={{ height: 0, opacity: 0 }}
+                                                animate={{ height: 'auto', opacity: 1 }}
+                                                exit={{ height: 0, opacity: 0 }}
+                                                transition={{ duration: 0.3 }}
+                                                className="overflow-hidden"
+                                            >
+                                                <div className="px-6 py-4 bg-white text-[#0F172A]/65 text-sm leading-relaxed">
+                                                    {faq.answer}
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </motion.div>
+                            ))}
+                        </div>
                     </div>
                 </section>
             )}

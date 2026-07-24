@@ -16,6 +16,7 @@ class AdminUserSeeder extends Seeder
                 'email'             => 'admin@misanaly.in',
                 'password'          => Hash::make('Admin@123'),
                 'email_verified_at' => now(),
+                'is_admin'          => true,
             ],
         );
     }

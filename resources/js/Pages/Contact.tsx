@@ -1,4 +1,5 @@
 import { Link, useForm } from '@inertiajs/react';
+import { useState } from 'react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import SeoHead from '@/Components/SeoHead';
 import { Button } from '@/Components/ui/button';
@@ -7,10 +8,22 @@ import { Badge } from '@/Components/ui/badge';
 import { Input } from '@/Components/ui/input';
 import { Label } from '@/Components/ui/label';
 import { Textarea } from '@/Components/ui/textarea';
-import { Mail, Phone, MapPin, Send, CheckCircle2 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Mail, Phone, MapPin, Send, CheckCircle2, ChevronDown } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
-export default function Contact() {
+interface Faq {
+    id: number;
+    question: string;
+    answer: string;
+}
+
+interface Props {
+    faqs: Faq[];
+}
+
+export default function Contact({ faqs }: Props) {
+    const [openFaq, setOpenFaq] = useState<number | null>(null);
+
     const { data, setData, post, processing, errors, reset, recentlySuccessful } = useForm({
         name: '',
         email: '',
@@ -66,10 +79,16 @@ export default function Contact() {
                             <div>
                                 <p className="text-xs text-[#0F172A]/50 font-medium mb-1">Email</p>
                                 <a
-                                    href="mailto:info@misanaly.in"
-                                    className="text-[#0F172A] text-sm hover:text-[#2563EB] transition-colors"
+                                    href="mailto:info@nobeliq.in"
+                                    className="block text-[#0F172A] text-sm hover:text-[#2563EB] transition-colors"
                                 >
-                                    info@misanaly.in
+                                    info@nobeliq.in
+                                </a>
+                                <a
+                                    href="mailto:sales@nobeliq.in"
+                                    className="block text-[#0F172A] text-sm hover:text-[#2563EB] transition-colors"
+                                >
+                                    sales@nobeliq.in
                                 </a>
                             </div>
                         </div>
@@ -81,7 +100,9 @@ export default function Contact() {
                             </div>
                             <div>
                                 <p className="text-xs text-[#0F172A]/50 font-medium mb-1">Phone</p>
-                                <p className="text-[#0F172A] text-sm">+91-XXXXXXXXXX</p>
+                                <a href="tel:+917697827926" className="text-[#0F172A] text-sm hover:text-[#2563EB] transition-colors">
+                                    +91-7697827926
+                                </a>
                             </div>
                         </div>
 
@@ -92,7 +113,9 @@ export default function Contact() {
                             </div>
                             <div>
                                 <p className="text-xs text-[#0F172A]/50 font-medium mb-1">Location</p>
-                                <p className="text-[#0F172A] text-sm">Delhi, India</p>
+                                <p className="text-[#0F172A] text-sm">
+                                    In front of Omkar Hotel, Gaushala Chowk, Satna, Madhya Pradesh 485001
+                                </p>
                             </div>
                         </div>
 
@@ -204,6 +227,54 @@ export default function Contact() {
                     </div>
                 </div>
             </section>
+
+            {/* FAQs */}
+            {faqs.length > 0 && (
+                <section className="bg-white py-20">
+                    <div className="max-w-3xl mx-auto px-4">
+                        <div className="text-center mb-12">
+                            <Badge variant="secondary" className="mb-3 bg-blue-50 text-[#2563EB] border-0 text-xs font-semibold uppercase tracking-wider px-4 py-1.5">
+                                FAQ
+                            </Badge>
+                            <h2 className="text-3xl sm:text-4xl font-bold text-[#0F172A] tracking-tight">
+                                Frequently Asked Questions
+                            </h2>
+                        </div>
+
+                        <div className="space-y-3">
+                            {faqs.map(faq => (
+                                <div key={faq.id} className="border border-gray-100 rounded-xl overflow-hidden">
+                                    <button
+                                        onClick={() => setOpenFaq(openFaq === faq.id ? null : faq.id)}
+                                        className="w-full flex items-center justify-between px-6 py-4 text-left bg-[#F8FAFC] hover:bg-blue-50 transition-colors"
+                                    >
+                                        <span className="font-semibold text-[#0F172A]">{faq.question}</span>
+                                        <motion.div animate={{ rotate: openFaq === faq.id ? 180 : 0 }} transition={{ duration: 0.25 }}>
+                                            <ChevronDown className="h-5 w-5 text-[#0F172A]/50" />
+                                        </motion.div>
+                                    </button>
+
+                                    <AnimatePresence initial={false}>
+                                        {openFaq === faq.id && (
+                                            <motion.div
+                                                initial={{ height: 0, opacity: 0 }}
+                                                animate={{ height: 'auto', opacity: 1 }}
+                                                exit={{ height: 0, opacity: 0 }}
+                                                transition={{ duration: 0.3 }}
+                                                className="overflow-hidden"
+                                            >
+                                                <div className="px-6 py-4 bg-white text-[#0F172A]/65 text-sm leading-relaxed">
+                                                    {faq.answer}
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
         </PublicLayout>
     );
 }

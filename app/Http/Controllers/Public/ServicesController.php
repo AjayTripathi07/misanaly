@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
+use App\Models\Faq;
 use App\Models\Service;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Inertia\Inertia;
@@ -37,6 +38,11 @@ class ServicesController extends Controller
             ->limit(3)
             ->get(['id', 'slug', 'name', 'tagline', 'icon']);
 
-        return Inertia::render('Services/Show', compact('service', 'relatedServices'));
+        $faqs = Faq::where('category', 'service')
+            ->where('related_id', $service->id)
+            ->orderBy('sort_order')
+            ->get();
+
+        return Inertia::render('Services/Show', compact('service', 'relatedServices', 'faqs'));
     }
 }

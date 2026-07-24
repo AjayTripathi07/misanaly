@@ -16,11 +16,6 @@ class Service extends Model
         'sort_order' => 'integer',
     ];
 
-    public function getRouteKeyName(): string
-    {
-        return 'slug';
-    }
-
     public function features(): HasMany
     {
         return $this->hasMany(ServiceFeature::class)->orderBy('sort_order');
