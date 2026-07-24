@@ -21,7 +21,7 @@ Our team has reviewed your message and will be in touch shortly with the informa
 
 In the meantime, you can explore our services and products at [misanaly.in]({{ config('app.url') }}).
 
-If you have any urgent questions, feel free to reply to this email or reach us at **info@misanaly.in**.
+If you have any urgent questions, feel free to reply to this email or reach us at **info@nobeliq.in**.
 
 @component('mail::button', ['url' => config('app.url'), 'color' => 'blue'])
 Visit NobelIQ Technologies

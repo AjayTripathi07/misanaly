@@ -64,7 +64,7 @@ export default function StatementSimulatorPreview({ variant = 'default' }: State
             <motion.div
                 animate={{ y: prefersReduced ? 0 : [0, -8, 0] }}
                 transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
-                className="absolute -top-4 -right-4 z-10 bg-white text-[#0F172A] text-xs font-semibold rounded-full px-4 py-2 shadow-xl flex items-center gap-1.5"
+                className="absolute -top-5 -right-4 z-20 bg-white text-[#0F172A] text-xs font-semibold rounded-full px-4 py-2 shadow-xl flex items-center gap-1.5"
             >
                 {isCompact && <span aria-hidden className="absolute -inset-3 -z-10 rounded-full bg-[#38BDF8]/50 blur-lg" />}
                 ⏱ Time Saved · <span className="font-mono text-[#2563EB]">3 hrs/day</span>

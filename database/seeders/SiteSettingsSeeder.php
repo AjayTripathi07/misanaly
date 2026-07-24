@@ -11,9 +11,9 @@ class SiteSettingsSeeder extends Seeder
         $settings = [
             'site_name'    => 'NobelIQ Technologies',
             'tagline'      => 'Innovative IT Solutions & Products',
-            'email'        => 'info@misanaly.in',
-            'phone'        => '+91-XXXXXXXXXX',
-            'address'      => 'Delhi, India',
+            'email'        => 'info@nobeliq.in',
+            'phone'        => '+91-7697827926',
+            'address'      => 'In front of Omkar Hotel, Gaushala Chowk, Satna, Madhya Pradesh 485001',
             'facebook'     => '',
             'twitter'      => '',
             'linkedin'     => '',

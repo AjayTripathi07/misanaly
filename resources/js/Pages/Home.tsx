@@ -18,6 +18,35 @@ import { Badge } from '@/Components/ui/badge';
 import BrandName from '@/Components/BrandName';
 import { type Service, type Product, type Testimonial, type BlogPost, type PageProps } from '@/types';
 
+/* ─── trusted-by bank marquee ───
+   Real, currently-operating Indian banks (public sector, private, small finance,
+   payments banks, well-established foreign banks in India, urban co-operative
+   banks and a few regional rural banks) — ~90 verified names rather than padding
+   to an exact 100 with invented or since-merged entities. */
+const TRUSTED_BANKS = [
+    'SBI', 'HDFC Bank', 'ICICI Bank', 'Axis Bank', 'Kotak', 'PNB', 'Tally Prime', 'BOB', 'Canara', 'Yes Bank',
+    'Union Bank of India', 'Bank of India', 'Indian Bank', 'Central Bank of India', 'Indian Overseas Bank',
+    'UCO Bank', 'Bank of Maharashtra', 'Punjab & Sind Bank',
+    'IndusInd Bank', 'IDFC First Bank', 'Federal Bank', 'South Indian Bank', 'RBL Bank', 'Bandhan Bank',
+    'City Union Bank', 'Karur Vysya Bank', 'Tamilnad Mercantile Bank', 'DCB Bank', 'Dhanlaxmi Bank',
+    'Karnataka Bank', 'CSB Bank', 'Jammu & Kashmir Bank', 'Nainital Bank', 'IDBI Bank',
+    'AU Small Finance Bank', 'Equitas Small Finance Bank', 'Ujjivan Small Finance Bank',
+    'Suryoday Small Finance Bank', 'ESAF Small Finance Bank', 'Jana Small Finance Bank',
+    'North East Small Finance Bank', 'Capital Small Finance Bank', 'Shivalik Small Finance Bank',
+    'Utkarsh Small Finance Bank', 'Unity Small Finance Bank',
+    'Airtel Payments Bank', 'India Post Payments Bank', 'Fino Payments Bank', 'NSDL Payments Bank',
+    'Citibank', 'HSBC', 'Standard Chartered Bank', 'Deutsche Bank', 'Barclays Bank', 'BNP Paribas',
+    'Bank of America', 'JPMorgan Chase Bank', 'DBS Bank', 'Bank of China', 'MUFG Bank',
+    'Sumitomo Mitsui Banking Corporation', 'Mizuho Bank', 'Societe Generale', 'ANZ', 'Emirates NBD',
+    'United Overseas Bank', 'First Abu Dhabi Bank', 'Credit Agricole CIB', 'ICBC', 'Sberbank',
+    'Saraswat Co-operative Bank', 'Cosmos Co-operative Bank', 'TJSB Sahakari Bank',
+    'Abhyudaya Co-operative Bank', 'NKGSB Co-operative Bank', 'Shamrao Vithal Co-operative Bank',
+    'Bharat Co-operative Bank', 'Kalupur Commercial Co-operative Bank', 'Rajkot Nagarik Sahakari Bank',
+    'Baroda UP Gramin Bank', 'Karnataka Gramin Bank', 'Kerala Gramin Bank', 'Maharashtra Gramin Bank',
+    'Punjab Gramin Bank', 'Rajasthan Marudhara Gramin Bank', 'Aryavart Bank', 'Prathama UP Gramin Bank',
+    'Uttar Bihar Gramin Bank', 'Andhra Pradesh Grameena Vikas Bank',
+];
+
 /* ─── icon map ─── */
 const ICON_MAP: Record<string, React.ElementType> = {
     Globe, Smartphone, Code2, Brain, Network, Palette,
@@ -144,10 +173,10 @@ const WHY_ITEMS = [
     },
     {
         Icon: LifeBuoy,
-        title: '24/7 Support',
-        desc: 'Always reachable — chat, email, or phone.',
-        stat: '24/7',
-        statLabel: 'availability',
+        title: 'Dedicated Support',
+        desc: 'Reachable Mon–Fri, 10 AM–7 PM — chat, email, or phone.',
+        stat: 'Mon–Fri',
+        statLabel: '10 AM–7 PM',
     },
 ];
 
@@ -176,7 +205,7 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
     const statsInView = useInView(statsRef, { once: true, margin: '-100px' });
     const [counts, setCounts] = useState({ services: 0, firms: 0, clients: 0, years: 0 });
     useEffect(() => {
-        if (statsInView) setCounts({ services: 10, firms: 99, clients: 50, years: 3 });
+        if (statsInView) setCounts({ services: 10, firms: 10, clients: 50, years: 1 });
     }, [statsInView]);
 
     /* stats bar (below hero) — count-up on scroll */
@@ -219,7 +248,8 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                     description: 'IT Services and Software Products company based in India',
                     contactPoint: {
                         '@type': 'ContactPoint',
-                        email: 'info@misanaly.in',
+                        email: 'info@nobeliq.in',
+                        telephone: '+91-7697827926',
                         contactType: 'customer service',
                     },
                     sameAs: [],
@@ -254,7 +284,7 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                                 transition={{ delay: 0.1, duration: dur ?? 0.5 }}
                             >
                                 <Badge className="mb-6 bg-blue-500/20 border border-blue-500/40 text-blue-300 hover:bg-blue-500/30 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-wider">
-                                    🤖 AI-Powered · 100% Offline · Tally Ready
+                                    🤖 100% Offline · Tally Ready
                                 </Badge>
                             </motion.div>
 
@@ -336,7 +366,7 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                                     ))}
                                 </div>
                                 <span className="text-sm text-gray-400">
-                                    <strong className="font-mono text-white">99+</strong> CA firms process statements daily
+                                    <strong className="font-mono text-white">1000+</strong> Process statements daily
                                 </span>
                             </motion.div>
 
@@ -394,14 +424,15 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                     </div>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
                         {[
-                            { value: 99, suffix: '+', label: 'CA Firms' },
-                            { value: 100, suffix: '+', label: 'Bank Formats' },
-                            { value: 98.7, suffix: '%', label: 'Accuracy Rate' },
-                            { value: 3, suffix: ' hrs', label: 'Saved Daily' },
+                            { value: 10, suffix: '+', label: 'CA Firms', suffixClass: '' },
+                            { value: 100, suffix: '+', label: 'Bank Formats', suffixClass: '' },
+                            { value: 98.7, suffix: '%', label: 'Accuracy Rate', suffixClass: '' },
+                            { value: 3, suffix: 'hrs', label: 'Saved Daily', suffixClass: 'font-sans align-middle ml-1 text-lg sm:text-xl' },
                         ].map((stat) => (
                             <div key={stat.label} className="text-center">
                                 <p className="font-mono text-3xl sm:text-4xl font-bold text-white">
-                                    <NumberFlow value={statsBarVisible ? stat.value : 0} />{stat.suffix}
+                                    <NumberFlow value={statsBarVisible ? stat.value : 0} />
+                                    <span className={stat.suffixClass}>{stat.suffix}</span>
                                 </p>
                                 <p className="text-gray-400 text-xs sm:text-sm mt-1.5">{stat.label}</p>
                             </div>
@@ -419,9 +450,11 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                         Trusted By
                     </span>
                 </div>
-                <div className="flex animate-scroll-left group-hover:[animation-play-state:paused]" style={{ width: 'max-content' }}>
-                    {[...['SBI', 'HDFC Bank', 'ICICI Bank', 'Axis Bank', 'Kotak', 'PNB', 'Tally Prime', 'BOB', 'Canara', 'Yes Bank'],
-                      ...['SBI', 'HDFC Bank', 'ICICI Bank', 'Axis Bank', 'Kotak', 'PNB', 'Tally Prime', 'BOB', 'Canara', 'Yes Bank']].map((name, i) => (
+                <div
+                    className="flex animate-scroll-left group-hover:[animation-play-state:paused]"
+                    style={{ width: 'max-content', animationDuration: '300s' }}
+                >
+                    {[...TRUSTED_BANKS, ...TRUSTED_BANKS].map((name, i) => (
                         <span key={i} className="flex items-center gap-2 mx-8 text-sm font-semibold text-[#0F172A]/40 whitespace-nowrap uppercase tracking-wider">
                             <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB]/40 flex-shrink-0" />
                             {name}
@@ -636,7 +669,7 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                     {[...['Laravel', 'React', 'AI / ML', 'Statement2Books', 'Tally Integration', 'NobelIQ Technologies', 'Mobile Apps', 'Cloud Solutions', 'Custom Software', 'REST APIs', 'UI / UX Design'], ...['Laravel', 'React', 'AI / ML', 'Statement2Books', 'Tally Integration', 'NobelIQ Technologies', 'Mobile Apps', 'Cloud Solutions', 'Custom Software', 'REST APIs', 'UI / UX Design']].map((item, i) => (
                         <span key={i} className="flex items-center gap-3 mx-6 text-sm font-medium text-white/50 whitespace-nowrap">
                             <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB] flex-shrink-0" />
-                            {item === 'NobelIQ Technologies' ? <BrandName variant="onDark" accent={false} className="text-inherit" /> : item}
+                            {item === 'NobelIQ Technologies' ? <BrandName accent={false} className="text-inherit" /> : item}
                         </span>
                     ))}
                 </div>

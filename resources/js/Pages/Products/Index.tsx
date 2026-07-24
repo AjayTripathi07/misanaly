@@ -26,10 +26,10 @@ const stagger = {
 };
 
 const FLAGSHIP_STATS = [
-    { value: 99, suffix: '+', label: 'CA Firms' },
-    { value: 100, suffix: '+', label: 'Bank Formats' },
-    { value: 98.7, suffix: '%', label: 'Accuracy Rate' },
-    { value: 3, suffix: ' hrs', label: 'Saved Daily' },
+    { value: 10, suffix: '+', label: 'CA Firms', suffixClass: '' },
+    { value: 100, suffix: '+', label: 'Bank Formats', suffixClass: '' },
+    { value: 98.7, suffix: '%', label: 'Accuracy Rate', suffixClass: '' },
+    { value: 3, suffix: 'hrs', label: 'Saved Daily', suffixClass: 'font-sans align-middle ml-1 text-lg sm:text-xl' },
 ];
 
 export default function ProductsIndex({ products }: Props) {
@@ -152,7 +152,8 @@ export default function ProductsIndex({ products }: Props) {
                                 {FLAGSHIP_STATS.map((stat) => (
                                     <div key={stat.label} className="text-center">
                                         <p className="font-mono text-2xl sm:text-3xl font-bold text-white">
-                                            <NumberFlow value={statsVisible ? stat.value : 0} />{stat.suffix}
+                                            <NumberFlow value={statsVisible ? stat.value : 0} />
+                                            <span className={stat.suffixClass}>{stat.suffix}</span>
                                         </p>
                                         <p className="text-gray-400 text-xs sm:text-sm mt-1.5">{stat.label}</p>
                                     </div>

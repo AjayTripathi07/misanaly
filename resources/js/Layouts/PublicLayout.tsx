@@ -147,7 +147,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                     <div className="flex items-center justify-between h-16">
                         {/* Logo */}
                         <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-                            <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-11 h-11 object-contain" />
+                            <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-20 h-20 object-contain" />
                             <BrandName className="text-[#0F172A] font-bold text-lg leading-none" />
                         </Link>
 
@@ -218,7 +218,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                                 onClick={() => setMobileOpen(false)}
                                 className="flex items-center gap-2"
                             >
-                                <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-10 h-10 object-contain" />
+                                <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-20 h-20 object-contain" />
                                 <BrandName className="text-[#0F172A] font-bold text-base" />
                             </Link>
                             <SheetClose className="rounded-sm opacity-70 hover:opacity-100 transition-opacity">
@@ -257,7 +257,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                                 </Button>
                             </Link>
                             <p className="mt-3 text-center text-xs text-gray-400">
-                                info@misanaly.in
+                                info@nobeliq.in
                             </p>
                         </div>
                     </div>
@@ -274,7 +274,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                         {/* Company */}
                         <div className="lg:col-span-1">
                             <Link href="/" className="flex items-center gap-2 mb-4">
-                                <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-11 h-11 object-contain" />
+                                <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-20 h-20 object-contain" />
                                 <BrandName variant="onDark" className="text-white font-bold text-lg" />
                             </Link>
                             <p className="text-gray-400 text-sm leading-relaxed mb-5">
@@ -346,19 +346,27 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                             <ul className="space-y-3">
                                 <li className="flex items-start gap-3">
                                     <Mail className="h-4 w-4 text-[#2563EB] mt-0.5 flex-shrink-0" />
-                                    <a href="mailto:info@misanaly.in" className="text-gray-400 hover:text-[#60A5FA] text-sm transition-colors">
-                                        info@misanaly.in
+                                    <a href="mailto:info@nobeliq.in" className="text-gray-400 hover:text-[#60A5FA] text-sm transition-colors">
+                                        info@nobeliq.in
+                                    </a>
+                                </li>
+                                <li className="flex items-start gap-3">
+                                    <Mail className="h-4 w-4 text-[#2563EB] mt-0.5 flex-shrink-0" />
+                                    <a href="mailto:sales@nobeliq.in" className="text-gray-400 hover:text-[#60A5FA] text-sm transition-colors">
+                                        sales@nobeliq.in
                                     </a>
                                 </li>
                                 <li className="flex items-start gap-3">
                                     <Phone className="h-4 w-4 text-[#2563EB] mt-0.5 flex-shrink-0" />
-                                    <a href="tel:+91XXXXXXXXXX" className="text-gray-400 hover:text-[#60A5FA] text-sm transition-colors">
-                                        +91-XXXXXXXXXX
+                                    <a href="tel:+917697827926" className="text-gray-400 hover:text-[#60A5FA] text-sm transition-colors">
+                                        +91-7697827926
                                     </a>
                                 </li>
                                 <li className="flex items-start gap-3">
                                     <MapPin className="h-4 w-4 text-[#2563EB] mt-0.5 flex-shrink-0" />
-                                    <span className="text-gray-400 text-sm">Delhi, India</span>
+                                    <span className="text-gray-400 text-sm">
+                                        In front of Omkar Hotel, Gaushala Chowk, Satna, Madhya Pradesh 485001
+                                    </span>
                                 </li>
                             </ul>
                         </div>

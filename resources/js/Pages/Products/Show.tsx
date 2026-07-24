@@ -16,7 +16,7 @@ import {
     ChevronUp, ChevronRight, Zap, Database, FileText,
     Rocket, Mail, Phone, Building2, CheckCheck, UserCircle, X,
     Clock, AlertTriangle, Landmark, Briefcase, ScanLine, ListTree,
-    Layers, Send, Sheet as SheetIcon, FileCheck2, Target, Brain, ClipboardCheck,
+    Layers, Send, Sheet as SheetIcon, FileCheck2, Target, Brain, ClipboardCheck, RotateCcw,
 } from 'lucide-react';
 
 // ─── Interfaces ───────────────────────────────────────────────────────────────
@@ -71,7 +71,7 @@ interface Props {
 
 const FEATURE_ICON_MAP: Record<string, typeof CheckCircle2> = {
     Brain, FileText, ScanLine, ListTree, ClipboardCheck, Building2,
-    Layers, Send, Sheet: SheetIcon, FileCheck2, Shield, Target,
+    Layers, Send, Sheet: SheetIcon, FileCheck2, Shield, Target, RotateCcw,
 };
 
 const HOW_IT_WORKS = [
@@ -326,8 +326,10 @@ export default function ProductShow({ product, faqs }: Props) {
                                     ))}
                                 </div>
                                 <span className="text-gray-400 text-sm">
-                                    <strong className="text-white">99+</strong> CA firms process statements daily
+                                    <strong className="text-white">1000+</strong> Statements process daily
                                 </span>
+                            
+                        
                             </motion.div>
                         </div>
 
@@ -354,14 +356,15 @@ export default function ProductShow({ product, faqs }: Props) {
             <section ref={statsBarRef} className="py-12 bg-[#0F172A] border-t border-white/5">
                 <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 sm:grid-cols-4 gap-6">
                     {[
-                        { value: 99, suffix: '+', label: 'CA Firms' },
-                        { value: 100, suffix: '+', label: 'Bank Formats' },
-                        { value: 98.7, suffix: '%', label: 'Accuracy Rate' },
-                        { value: 3, suffix: ' hrs', label: 'Saved Daily' },
+                        { value: 10, suffix: '+', label: 'CA Firms', suffixClass: '' },
+                        { value: 100, suffix: '+', label: 'Bank Formats', suffixClass: '' },
+                        { value: 98.7, suffix: '%', label: 'Accuracy Rate', suffixClass: '' },
+                        { value: 3, suffix: 'hrs', label: 'Saved Daily', suffixClass: 'font-sans align-middle ml-1 text-lg sm:text-xl' },
                     ].map((stat) => (
                         <div key={stat.label} className="text-center">
                             <p className="font-mono text-3xl sm:text-4xl font-bold text-white">
-                                <NumberFlow value={statsBarVisible ? stat.value : 0} />{stat.suffix}
+                                <NumberFlow value={statsBarVisible ? stat.value : 0} />
+                                <span className={stat.suffixClass}>{stat.suffix}</span>
                             </p>
                             <p className="text-gray-400 text-xs sm:text-sm mt-1.5">{stat.label}</p>
                         </div>
@@ -383,6 +386,83 @@ export default function ProductShow({ product, faqs }: Props) {
                     ))}
                 </div>
             </div>
+
+            {/* ═══════════════════════════════════════════════════════════════
+                SECTION — MANUAL vs STATEMENT2BOOKS
+            ═══════════════════════════════════════════════════════════════ */}
+            <section className="py-20 bg-white">
+                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-12">
+                        <Badge variant="secondary" className="mb-3 bg-blue-50 text-[#2563EB] border-0 text-xs font-semibold uppercase tracking-wider px-4 py-1.5">
+                            The Difference
+                        </Badge>
+                        <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-[#0F172A] tracking-tight mt-3">
+                            Manual Entry vs Statement2Books
+                        </h2>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Manual side */}
+                        <div className="rounded-2xl border-2 border-red-100 bg-red-50/40 p-8">
+                            <div className="flex items-center gap-2 mb-6">
+                                <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center">
+                                    <X className="h-4 w-4 text-red-500" />
+                                </div>
+                                <h3 className="font-bold text-[#0F172A] text-lg">The Manual Way</h3>
+                            </div>
+                            {[
+                                'Download bank statement PDF/Excel',
+                                'Open Tally, navigate to vouchers',
+                                'Manually type each transaction',
+                                'Double-check every entry for errors',
+                                'Repeat for every bank, every month',
+                                '3–6 hours per client, per month',
+                            ].map((item, i) => (
+                                <motion.div key={i} className="flex items-start gap-3 mb-3"
+                                    initial={{ opacity: 0, x: -20 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: i * 0.08, duration: 0.4 }}
+                                >
+                                    <X className="h-4 w-4 text-red-400 mt-0.5 flex-shrink-0" />
+                                    <span className="text-[#0F172A]/70 text-sm">{item}</span>
+                                </motion.div>
+                            ))}
+                        </div>
+                        {/* Statement2Books side */}
+                        <div className="rounded-2xl border-2 border-emerald-200 bg-emerald-50/40 p-8">
+                            <div className="flex items-center gap-2 mb-6">
+                                <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
+                                    <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                                </div>
+                                <h3 className="font-bold text-[#0F172A] text-lg">With Statement2Books</h3>
+                            </div>
+                            {[
+                                'Upload statement (PDF/Excel/CSV)',
+                                'AI reads & categorises instantly',
+                                '160+ auto-tagging rules applied',
+                                'Review on screen — edit if needed',
+                                'Export directly to Tally in 1 click',
+                                'Done in under 60 seconds ✓',
+                            ].map((item, i) => (
+                                <motion.div key={i} className="flex items-start gap-3 mb-3"
+                                    initial={{ opacity: 0, x: 20 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: i * 0.08, duration: 0.4 }}
+                                >
+                                    <CheckCircle2 className="h-4 w-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                                    <span className="text-[#0F172A]/70 text-sm">{item}</span>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="text-center mt-8">
+                        <button onClick={scrollToWaitlist} className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-3 rounded-full text-base shadow-lg shadow-orange-900/20 transition-colors inline-flex items-center gap-2">
+                            <Rocket className="h-4 w-4" /> Start Saving Time — Join Waitlist
+                        </button>
+                    </div>
+                </div>
+            </section>
 
             {/* ═══════════════════════════════════════════════════════════════
                 SECTION — THE PROBLEM
@@ -562,83 +642,6 @@ export default function ProductShow({ product, faqs }: Props) {
                                 </motion.div>
                             ))}
                         </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* ═══════════════════════════════════════════════════════════════
-                SECTION — MANUAL vs STATEMENT2BOOKS
-            ═══════════════════════════════════════════════════════════════ */}
-            <section className="py-20 bg-white">
-                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-12">
-                        <Badge variant="secondary" className="mb-3 bg-blue-50 text-[#2563EB] border-0 text-xs font-semibold uppercase tracking-wider px-4 py-1.5">
-                            The Difference
-                        </Badge>
-                        <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-[#0F172A] tracking-tight mt-3">
-                            Manual Entry vs Statement2Books
-                        </h2>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Manual side */}
-                        <div className="rounded-2xl border-2 border-red-100 bg-red-50/40 p-8">
-                            <div className="flex items-center gap-2 mb-6">
-                                <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center">
-                                    <X className="h-4 w-4 text-red-500" />
-                                </div>
-                                <h3 className="font-bold text-[#0F172A] text-lg">The Manual Way</h3>
-                            </div>
-                            {[
-                                'Download bank statement PDF/Excel',
-                                'Open Tally, navigate to vouchers',
-                                'Manually type each transaction',
-                                'Double-check every entry for errors',
-                                'Repeat for every bank, every month',
-                                '3–6 hours per client, per month',
-                            ].map((item, i) => (
-                                <motion.div key={i} className="flex items-start gap-3 mb-3"
-                                    initial={{ opacity: 0, x: -20 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: i * 0.08, duration: 0.4 }}
-                                >
-                                    <X className="h-4 w-4 text-red-400 mt-0.5 flex-shrink-0" />
-                                    <span className="text-[#0F172A]/70 text-sm">{item}</span>
-                                </motion.div>
-                            ))}
-                        </div>
-                        {/* Statement2Books side */}
-                        <div className="rounded-2xl border-2 border-emerald-200 bg-emerald-50/40 p-8">
-                            <div className="flex items-center gap-2 mb-6">
-                                <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
-                                    <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                                </div>
-                                <h3 className="font-bold text-[#0F172A] text-lg">With Statement2Books</h3>
-                            </div>
-                            {[
-                                'Upload statement (PDF/Excel/CSV)',
-                                'AI reads & categorises instantly',
-                                '160+ auto-tagging rules applied',
-                                'Review on screen — edit if needed',
-                                'Export directly to Tally in 1 click',
-                                'Done in under 60 seconds ✓',
-                            ].map((item, i) => (
-                                <motion.div key={i} className="flex items-start gap-3 mb-3"
-                                    initial={{ opacity: 0, x: 20 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: i * 0.08, duration: 0.4 }}
-                                >
-                                    <CheckCircle2 className="h-4 w-4 text-emerald-500 mt-0.5 flex-shrink-0" />
-                                    <span className="text-[#0F172A]/70 text-sm">{item}</span>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </div>
-                    <div className="text-center mt-8">
-                        <button onClick={scrollToWaitlist} className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-3 rounded-full text-base shadow-lg shadow-orange-900/20 transition-colors inline-flex items-center gap-2">
-                            <Rocket className="h-4 w-4" /> Start Saving Time — Join Waitlist
-                        </button>
                     </div>
                 </div>
             </section>
