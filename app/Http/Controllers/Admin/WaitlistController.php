@@ -51,23 +51,28 @@ class WaitlistController extends Controller
         return back()->with('success', 'Status updated.');
     }
 
-    public function export(): StreamedResponse
+    public function export(Request $request): StreamedResponse
     {
-        $entries = ProductWaitlist::with('product:id,name')->latest()->get();
+        $query = ProductWaitlist::latest();
+
+        if ($status = $request->get('status')) {
+            $query->where('status', $status);
+        }
+
+        $entries = $query->get();
 
         $rows = $entries->map(fn (ProductWaitlist $e) => [
             $e->name,
             $e->email,
             $e->phone,
             $e->company,
-            $e->product->name ?? 'Statement2Books',
-            $e->status,
             $e->remark,
+            $e->status,
             $e->created_at->format('Y-m-d H:i'),
         ]);
 
-        return $this->exportCsv('statement2books-waitlist', [
-            'Name', 'Email', 'Phone', 'Company', 'Product', 'Status', 'Remark', 'Registered',
+        return $this->exportXlsx('waitlist', [
+            'Name', 'Email', 'Phone', 'Company', 'Remark', 'Status', 'Date Registered',
         ], $rows);
     }
 }

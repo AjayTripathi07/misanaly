@@ -42,12 +42,13 @@ class LeadsController extends Controller
             $lead->message,
             $lead->status,
             $lead->notes,
+            $lead->source,
             $lead->created_at->format('Y-m-d H:i'),
         ]);
 
-        return $this->exportCsv('leads', [
-            'Name', 'Email', 'Phone', 'Company', 'Lead Type', 'Service/Product',
-            'Budget Range', 'Timeline', 'Message', 'Status', 'Notes', 'Created At',
+        return $this->exportXlsx('leads', [
+            'Name', 'Email', 'Phone', 'Company', 'Type', 'Related Service/Product',
+            'Budget Range', 'Timeline', 'Message', 'Status', 'Notes', 'Source', 'Date Received',
         ], $rows);
     }
 

@@ -4,7 +4,7 @@ import { Button } from '@/Components/ui/button';
 import { Card, CardContent } from '@/Components/ui/card';
 import { Input } from '@/Components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
-import { Eye, Search, X, Download } from 'lucide-react';
+import { Eye, Search, X, FileSpreadsheet } from 'lucide-react';
 import { useRef, useState } from 'react';
 
 interface Lead {
@@ -101,8 +101,8 @@ export default function Index({ leads, filters }: Props) {
                 </div>
                 <a href={exportUrl}>
                     <Button variant="outline" size="sm" className="gap-1.5">
-                        <Download className="h-4 w-4" />
-                        Export CSV
+                        <FileSpreadsheet className="h-4 w-4" />
+                        Export to Excel
                     </Button>
                 </a>
             </div>

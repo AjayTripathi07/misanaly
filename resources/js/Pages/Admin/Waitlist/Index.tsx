@@ -1,5 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { Users, CheckCircle2, Phone, Building2, Download, ChevronLeft, ChevronRight, Clock } from 'lucide-react';
+import { Users, CheckCircle2, Phone, Building2, FileSpreadsheet, ChevronLeft, ChevronRight, Clock } from 'lucide-react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
@@ -59,6 +59,8 @@ export default function WaitlistIndex({ entries, stats, filters }: Props) {
         router.patch(`/admin/waitlist/${id}/status`, { status }, { preserveScroll: true });
     }
 
+    const exportUrl = `/admin/waitlist/export${filters.status ? `?status=${encodeURIComponent(filters.status)}` : ''}`;
+
     return (
         <AdminLayout title="Statement2Books Waitlist">
             <Head title="Waitlist — Admin" />
@@ -88,10 +90,10 @@ export default function WaitlistIndex({ entries, stats, filters }: Props) {
                         </SelectContent>
                     </Select>
 
-                    <a href="/admin/waitlist/export">
+                    <a href={exportUrl}>
                         <Button variant="outline" size="sm" className="gap-1.5">
-                            <Download className="h-4 w-4" />
-                            Export CSV
+                            <FileSpreadsheet className="h-4 w-4" />
+                            Export to Excel
                         </Button>
                     </a>
                 </div>
