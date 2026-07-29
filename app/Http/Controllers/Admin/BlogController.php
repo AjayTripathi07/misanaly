@@ -8,6 +8,7 @@ use App\Models\BlogPost;
 use App\Traits\Exportable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -67,15 +68,22 @@ class BlogController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'title'        => ['required', 'string', 'max:255'],
-            'slug'         => ['required', 'string', 'max:255', 'unique:blog_posts,slug'],
-            'excerpt'      => ['required', 'string', 'max:500'],
-            'body'         => ['required', 'string'],
-            'cover_image'  => ['nullable', 'string', 'max:1000'],
-            'status'       => ['required', 'in:draft,published'],
-            'published_at' => ['nullable', 'date'],
-            'category_id'  => ['nullable', 'exists:blog_categories,id'],
+            'title'             => ['required', 'string', 'max:255'],
+            'slug'              => ['required', 'string', 'max:255', 'unique:blog_posts,slug'],
+            'excerpt'           => ['required', 'string', 'max:500'],
+            'body'              => ['required', 'string'],
+            'cover_image'       => ['nullable', 'string', 'max:1000'],
+            'cover_image_file'  => ['nullable', 'image', 'max:2048'],
+            'status'            => ['required', 'in:draft,published'],
+            'published_at'      => ['nullable', 'date'],
+            'category_id'       => ['nullable', 'exists:blog_categories,id'],
         ]);
+
+        if ($request->hasFile('cover_image_file')) {
+            $path = $request->file('cover_image_file')->store('blog', 'public');
+            $validated['cover_image'] = '/storage/' . $path;
+        }
+        unset($validated['cover_image_file']);
 
         if ($validated['status'] === 'published' && empty($validated['published_at'])) {
             $validated['published_at'] = now();
@@ -101,15 +109,26 @@ class BlogController extends Controller
     public function update(Request $request, BlogPost $post): RedirectResponse
     {
         $validated = $request->validate([
-            'title'        => ['required', 'string', 'max:255'],
-            'slug'         => ['required', 'string', 'max:255', "unique:blog_posts,slug,{$post->id}"],
-            'excerpt'      => ['required', 'string', 'max:500'],
-            'body'         => ['required', 'string'],
-            'cover_image'  => ['nullable', 'string', 'max:1000'],
-            'status'       => ['required', 'in:draft,published'],
-            'published_at' => ['nullable', 'date'],
-            'category_id'  => ['nullable', 'exists:blog_categories,id'],
+            'title'             => ['required', 'string', 'max:255'],
+            'slug'              => ['required', 'string', 'max:255', "unique:blog_posts,slug,{$post->id}"],
+            'excerpt'           => ['required', 'string', 'max:500'],
+            'body'              => ['required', 'string'],
+            'cover_image'       => ['nullable', 'string', 'max:1000'],
+            'cover_image_file'  => ['nullable', 'image', 'max:2048'],
+            'status'            => ['required', 'in:draft,published'],
+            'published_at'      => ['nullable', 'date'],
+            'category_id'       => ['nullable', 'exists:blog_categories,id'],
         ]);
+
+        if ($request->hasFile('cover_image_file')) {
+            $this->deleteLocalCoverImage($post->cover_image);
+            $path = $request->file('cover_image_file')->store('blog', 'public');
+            $validated['cover_image'] = '/storage/' . $path;
+        } elseif (($validated['cover_image'] ?? null) !== $post->cover_image) {
+            // Admin switched away from a local upload to a different/blank URL — clean up the orphaned file.
+            $this->deleteLocalCoverImage($post->cover_image);
+        }
+        unset($validated['cover_image_file']);
 
         if ($validated['status'] === 'published' && $post->published_at === null && empty($validated['published_at'])) {
             $validated['published_at'] = now();
@@ -122,9 +141,17 @@ class BlogController extends Controller
 
     public function destroy(BlogPost $post): RedirectResponse
     {
+        $this->deleteLocalCoverImage($post->cover_image);
         $post->delete();
 
         return redirect()->route('admin.blog.index')->with('success', 'Post deleted.');
+    }
+
+    private function deleteLocalCoverImage(?string $path): void
+    {
+        if ($path && str_starts_with($path, '/storage/blog/')) {
+            Storage::disk('public')->delete(Str::after($path, '/storage/'));
+        }
     }
 
     public function togglePublish(BlogPost $post): RedirectResponse

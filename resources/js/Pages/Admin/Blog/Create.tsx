@@ -3,6 +3,7 @@ import { Head, Link, useForm } from '@inertiajs/react';
 import { ArrowLeft, Plus, Loader2 } from 'lucide-react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import TiptapEditor from '@/Components/TiptapEditor';
+import CoverImageInput from '@/Components/Admin/CoverImageInput';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
 import { Label } from '@/Components/ui/label';
@@ -28,12 +29,13 @@ export default function AdminBlogCreate({ categories: initialCategories }: Props
     const [savingCat, setSavingCat] = useState(false);
     const [catError, setCatError] = useState('');
 
-    const { data, setData, post, processing, errors } = useForm({
+    const { data, setData, post, processing, progress, errors } = useForm({
         title: '',
         slug: '',
         excerpt: '',
         body: '',
         cover_image: '',
+        cover_image_file: null as File | null,
         status: 'draft' as 'draft' | 'published',
         published_at: '',
         category_id: '' as string | number,
@@ -341,32 +343,15 @@ export default function AdminBlogCreate({ categories: initialCategories }: Props
                         </div>
 
                         {/* Cover image */}
-                        <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
-                            <h3 className="font-semibold text-[#0F172A] mb-4">Cover Image</h3>
-                            <Label htmlFor="cover_image" className="text-sm font-medium text-[#0F172A] mb-1 block">
-                                Image URL
-                            </Label>
-                            <Input
-                                id="cover_image"
-                                type="url"
-                                value={data.cover_image}
-                                onChange={(e) => setData('cover_image', e.target.value)}
-                                placeholder="https://example.com/image.jpg"
-                            />
-                            {data.cover_image && (
-                                <div className="mt-3 rounded-xl overflow-hidden border border-gray-100">
-                                    <img
-                                        src={data.cover_image}
-                                        alt="Cover preview"
-                                        className="w-full h-28 object-cover"
-                                        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-                                    />
-                                </div>
-                            )}
-                            {errors.cover_image && (
-                                <p className="text-red-500 text-xs mt-1">{errors.cover_image}</p>
-                            )}
-                        </div>
+                        <CoverImageInput
+                            urlValue={data.cover_image}
+                            onUrlChange={(val) => setData('cover_image', val)}
+                            file={data.cover_image_file}
+                            onFileChange={(file) => setData('cover_image_file', file)}
+                            error={errors.cover_image || errors.cover_image_file}
+                            uploading={processing}
+                            progressPercentage={progress?.percentage ?? null}
+                        />
                     </div>
                 </div>
             </form>
