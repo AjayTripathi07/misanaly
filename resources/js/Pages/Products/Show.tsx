@@ -7,6 +7,7 @@ import PublicLayout from '@/Layouts/PublicLayout';
 import StatementSimulator from '@/Components/Products/StatementSimulator';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import { lenisScrollTo } from '@/lib/lenis';
+import { parseStatValue, statSuffixClass } from '@/lib/utils';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
 import { Card, CardContent } from '@/Components/ui/card';
@@ -62,9 +63,15 @@ interface Product {
     screenshots: ProductScreenshot[];
 }
 
+interface ProductStat {
+    number: string;
+    label: string;
+}
+
 interface Props {
     product: Product;
     faqs: Faq[];
+    stats: ProductStat[];
 }
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -110,7 +117,7 @@ const stagger = {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export default function ProductShow({ product, faqs }: Props) {
+export default function ProductShow({ product, faqs, stats }: Props) {
     const prefersReduced = useReducedMotion();
     const dur = (n: number) => (prefersReduced ? 0 : n);
 
@@ -355,20 +362,18 @@ export default function ProductShow({ product, faqs }: Props) {
             ═══════════════════════════════════════════════════════════════ */}
             <section ref={statsBarRef} className="py-12 bg-[#0F172A] border-t border-white/5">
                 <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 sm:grid-cols-4 gap-6">
-                    {[
-                        { value: 10, suffix: '+', label: 'CA Firms', suffixClass: '' },
-                        { value: 100, suffix: '+', label: 'Bank Formats', suffixClass: '' },
-                        { value: 98.7, suffix: '%', label: 'Accuracy Rate', suffixClass: '' },
-                        { value: 3, suffix: 'hrs', label: 'Saved Daily', suffixClass: 'font-sans align-middle ml-1 text-lg sm:text-xl' },
-                    ].map((stat) => (
-                        <div key={stat.label} className="text-center">
-                            <p className="font-mono text-3xl sm:text-4xl font-bold text-white">
-                                <NumberFlow value={statsBarVisible ? stat.value : 0} />
-                                <span className={stat.suffixClass}>{stat.suffix}</span>
-                            </p>
-                            <p className="text-gray-400 text-xs sm:text-sm mt-1.5">{stat.label}</p>
-                        </div>
-                    ))}
+                    {stats.map((stat) => {
+                        const { value, suffix } = parseStatValue(stat.number);
+                        return (
+                            <div key={stat.label} className="text-center">
+                                <p className="font-mono text-3xl sm:text-4xl font-bold text-white">
+                                    <NumberFlow value={statsBarVisible ? value : 0} />
+                                    <span className={statSuffixClass(suffix)}>{suffix}</span>
+                                </p>
+                                <p className="text-gray-400 text-xs sm:text-sm mt-1.5">{stat.label}</p>
+                            </div>
+                        );
+                    })}
                 </div>
             </section>
 

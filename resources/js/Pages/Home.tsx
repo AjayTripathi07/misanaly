@@ -17,6 +17,7 @@ import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
 import BrandName from '@/Components/BrandName';
 import { type Service, type Product, type Testimonial, type BlogPost, type PageProps } from '@/types';
+import { parseStatValue, statSuffixClass } from '@/lib/utils';
 
 /* ─── trusted-by bank marquee ───
    Real, currently-operating Indian banks (public sector, private, small finance,
@@ -59,6 +60,11 @@ function ServiceIcon({ name, className }: { name: string; className?: string }) 
 }
 
 /* ─── props ─── */
+interface HomeStat {
+    number: string;
+    label: string;
+}
+
 interface Props {
     services: Service[];
     hasMoreServices: boolean;
@@ -66,6 +72,7 @@ interface Props {
     testimonials: Testimonial[];
     avgRating: number;
     latestPosts: BlogPost[];
+    stats: HomeStat[];
 }
 
 /* ─── star rating ─── */
@@ -174,14 +181,14 @@ const WHY_ITEMS = [
     {
         Icon: LifeBuoy,
         title: 'Dedicated Support',
-        desc: 'Reachable Mon–Fri, 10 AM–7 PM — chat, email, or phone.',
+        desc: 'Reachable Mon–Fri 9 AM–6 PM, Sat 10 AM–2 PM — chat, email, or phone.',
         stat: 'Mon–Fri',
-        statLabel: '10 AM–7 PM',
+        statLabel: '9 AM–6 PM',
     },
 ];
 
 /* ─── main component ─── */
-export default function Home({ services, hasMoreServices, featuredProduct, testimonials, avgRating, latestPosts }: Props) {
+export default function Home({ services, hasMoreServices, featuredProduct, testimonials, avgRating, latestPosts, stats }: Props) {
     const { props: pageProps } = usePage<PageProps<{ siteSettings?: { udyam_number: string } }>>();
     const udyamNumber = pageProps.siteSettings?.udyam_number;
     const prefersReduced = useReducedMotion();
@@ -423,20 +430,18 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                         </span>
                     </div>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-                        {[
-                            { value: 10, suffix: '+', label: 'CA Firms', suffixClass: '' },
-                            { value: 100, suffix: '+', label: 'Bank Formats', suffixClass: '' },
-                            { value: 98.7, suffix: '%', label: 'Accuracy Rate', suffixClass: '' },
-                            { value: 3, suffix: 'hrs', label: 'Saved Daily', suffixClass: 'font-sans align-middle ml-1 text-lg sm:text-xl' },
-                        ].map((stat) => (
-                            <div key={stat.label} className="text-center">
-                                <p className="font-mono text-3xl sm:text-4xl font-bold text-white">
-                                    <NumberFlow value={statsBarVisible ? stat.value : 0} />
-                                    <span className={stat.suffixClass}>{stat.suffix}</span>
-                                </p>
-                                <p className="text-gray-400 text-xs sm:text-sm mt-1.5">{stat.label}</p>
-                            </div>
-                        ))}
+                        {stats.map((stat) => {
+                            const { value, suffix } = parseStatValue(stat.number);
+                            return (
+                                <div key={stat.label} className="text-center">
+                                    <p className="font-mono text-3xl sm:text-4xl font-bold text-white">
+                                        <NumberFlow value={statsBarVisible ? value : 0} />
+                                        <span className={statSuffixClass(suffix)}>{suffix}</span>
+                                    </p>
+                                    <p className="text-gray-400 text-xs sm:text-sm mt-1.5">{stat.label}</p>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </section>
@@ -489,7 +494,7 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                         viewport={{ once: true, margin: '-100px' }}
                         transition={{ duration: dur ?? 0.6, delay: 0.1 }}
                     >
-                        <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-20 h-20 sm:w-24 sm:h-24 object-contain" />
+                        <img src="/images/branding/Icon-navbar.png" alt="NobelIQ Technologies" className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 object-contain" />
                         <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
                             <BrandName variant="onDark" />
                         </h2>

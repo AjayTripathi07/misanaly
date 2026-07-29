@@ -1,7 +1,7 @@
 import { useState, useEffect, ReactNode } from 'react';
 import { Link, usePage } from '@inertiajs/react';
 import { Menu, X, Phone, Mail, MapPin, ChevronRight, Rocket } from 'lucide-react';
-import { LinkedinIcon, TwitterIcon, FacebookIcon, InstagramIcon } from '@/Components/icons/SocialIcons';
+import { LinkedinIcon, TwitterIcon, FacebookIcon, InstagramIcon, YoutubeIcon } from '@/Components/icons/SocialIcons';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Button } from '@/Components/ui/button';
 import { Sheet, SheetContent, SheetClose } from '@/Components/ui/sheet';
@@ -9,6 +9,7 @@ import { Separator } from '@/Components/ui/separator';
 import { cn } from '@/lib/utils';
 import BackToTop from '@/Components/BackToTop';
 import BrandName from '@/Components/BrandName';
+import WhatsAppButton from '@/Components/WhatsAppButton';
 import { type PageProps } from '@/types';
 
 interface PublicLayoutProps {
@@ -20,6 +21,18 @@ interface SiteSettings {
     gst_number: string;
     cin_number: string;
     udyam_number: string;
+    facebook: string;
+    twitter: string;
+    linkedin: string;
+    instagram: string;
+    youtube_url: string;
+    whatsapp_number: string;
+    footer_description: string;
+    footer_copyright_text: string;
+    email: string;
+    phone: string;
+    address: string;
+    business_hours: string;
 }
 
 interface FavoriteProduct {
@@ -56,12 +69,15 @@ function buildNavItems(favoriteProduct?: FavoriteProduct | null): NavItem[] {
     return items;
 }
 
-const socialLinks = [
-    { name: 'LinkedIn', icon: LinkedinIcon, href: '#' },
-    { name: 'Twitter', icon: TwitterIcon, href: '#' },
-    { name: 'Facebook', icon: FacebookIcon, href: '#' },
-    { name: 'Instagram', icon: InstagramIcon, href: '#' },
-];
+function buildSocialLinks(settings?: SiteSettings) {
+    return [
+        { name: 'LinkedIn', icon: LinkedinIcon, href: settings?.linkedin },
+        { name: 'Twitter', icon: TwitterIcon, href: settings?.twitter },
+        { name: 'Facebook', icon: FacebookIcon, href: settings?.facebook },
+        { name: 'Instagram', icon: InstagramIcon, href: settings?.instagram },
+        { name: 'YouTube', icon: YoutubeIcon, href: settings?.youtube_url },
+    ].filter((link): link is { name: string; icon: typeof LinkedinIcon; href: string } => !!link.href);
+}
 
 const serviceLinks = [
     { label: 'Website Development', href: '/services/website-development' },
@@ -77,6 +93,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
     const siteSettings = props.siteSettings;
     const favoriteProduct = props.favoriteProduct;
     const navItems = buildNavItems(favoriteProduct);
+    const socialLinks = buildSocialLinks(siteSettings);
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const [scrollProgress, setScrollProgress] = useState(0);
@@ -146,8 +163,8 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-16">
                         {/* Logo */}
-                        <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-                            <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-20 h-20 object-contain" />
+                        <Link href="/" className="flex items-center gap-1.5 flex-shrink-0">
+                            <img src="/images/branding/Icon-navbar.png" alt="NobelIQ Technologies" className="w-12 h-12 object-contain" />
                             <BrandName className="text-[#0F172A] font-bold text-lg leading-none" />
                         </Link>
 
@@ -216,9 +233,9 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                             <Link
                                 href="/"
                                 onClick={() => setMobileOpen(false)}
-                                className="flex items-center gap-2"
+                                className="flex items-center gap-1.5"
                             >
-                                <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-20 h-20 object-contain" />
+                                <img src="/images/branding/Icon-navbar.png" alt="NobelIQ Technologies" className="w-10 h-10 object-contain" />
                                 <BrandName className="text-[#0F172A] font-bold text-base" />
                             </Link>
                             <SheetClose className="rounded-sm opacity-70 hover:opacity-100 transition-opacity">
@@ -273,26 +290,30 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
                         {/* Company */}
                         <div className="lg:col-span-1">
-                            <Link href="/" className="flex items-center gap-2 mb-4">
-                                <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-20 h-20 object-contain" />
+                            <Link href="/" className="flex items-center gap-1.5 mb-4">
+                                <img src="/images/branding/Icon-navbar.png" alt="NobelIQ Technologies" className="w-12 h-12 object-contain" />
                                 <BrandName variant="onDark" className="text-white font-bold text-lg" />
                             </Link>
                             <p className="text-gray-400 text-sm leading-relaxed mb-5">
-                                Innovative IT solutions and software products designed to transform businesses through technology.
+                                {siteSettings?.footer_description || 'Innovative IT solutions and software products designed to transform businesses through technology.'}
                             </p>
                             {/* Social links */}
-                            <div className="flex gap-3">
-                                {socialLinks.map(({ name, icon: Icon, href }) => (
-                                    <a
-                                        key={name}
-                                        href={href}
-                                        aria-label={`Follow us on ${name}`}
-                                        className="w-10 h-10 rounded-full bg-white/10 border border-white/10 hover:bg-white hover:border-white flex items-center justify-center text-gray-300 hover:text-[#0F172A] transition-all duration-200 hover:scale-110"
-                                    >
-                                        <Icon className="h-5 w-5" />
-                                    </a>
-                                ))}
-                            </div>
+                            {socialLinks.length > 0 && (
+                                <div className="flex gap-3">
+                                    {socialLinks.map(({ name, icon: Icon, href }) => (
+                                        <a
+                                            key={name}
+                                            href={href}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            aria-label={`Follow us on ${name}`}
+                                            className="w-10 h-10 rounded-full bg-white/10 border border-white/10 hover:bg-white hover:border-white flex items-center justify-center text-gray-300 hover:text-[#0F172A] transition-all duration-200 hover:scale-110"
+                                        >
+                                            <Icon className="h-5 w-5" />
+                                        </a>
+                                    ))}
+                                </div>
+                            )}
                         </div>
 
                         {/* Quick Links */}
@@ -346,26 +367,20 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                             <ul className="space-y-3">
                                 <li className="flex items-start gap-3">
                                     <Mail className="h-4 w-4 text-[#2563EB] mt-0.5 flex-shrink-0" />
-                                    <a href="mailto:info@nobeliq.in" className="text-gray-400 hover:text-[#60A5FA] text-sm transition-colors">
-                                        info@nobeliq.in
-                                    </a>
-                                </li>
-                                <li className="flex items-start gap-3">
-                                    <Mail className="h-4 w-4 text-[#2563EB] mt-0.5 flex-shrink-0" />
-                                    <a href="mailto:sales@nobeliq.in" className="text-gray-400 hover:text-[#60A5FA] text-sm transition-colors">
-                                        sales@nobeliq.in
+                                    <a href={`mailto:${siteSettings?.email || 'info@nobeliq.in'}`} className="text-gray-400 hover:text-[#60A5FA] text-sm transition-colors">
+                                        {siteSettings?.email || 'info@nobeliq.in'}
                                     </a>
                                 </li>
                                 <li className="flex items-start gap-3">
                                     <Phone className="h-4 w-4 text-[#2563EB] mt-0.5 flex-shrink-0" />
-                                    <a href="tel:+917697827926" className="text-gray-400 hover:text-[#60A5FA] text-sm transition-colors">
-                                        +91-7697827926
+                                    <a href={`tel:${siteSettings?.phone || '+917697827926'}`} className="text-gray-400 hover:text-[#60A5FA] text-sm transition-colors">
+                                        {siteSettings?.phone || '+91-7697827926'}
                                     </a>
                                 </li>
                                 <li className="flex items-start gap-3">
                                     <MapPin className="h-4 w-4 text-[#2563EB] mt-0.5 flex-shrink-0" />
                                     <span className="text-gray-400 text-sm">
-                                        In front of Omkar Hotel, Gaushala Chowk, Satna, Madhya Pradesh 485001
+                                        {siteSettings?.address || 'In front of Omkar Hotel, Gaushala Chowk, Satna, Madhya Pradesh 485001'}
                                     </span>
                                 </li>
                             </ul>
@@ -397,7 +412,11 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                     <Separator className="bg-white/10 mb-6" />
 
                     <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-gray-500">
-                        <p>© {new Date().getFullYear()} <BrandName variant="onDark" accent={false} />. All rights reserved.</p>
+                        <p>
+                            {siteSettings?.footer_copyright_text
+                                ? siteSettings.footer_copyright_text.replace('{year}', String(new Date().getFullYear()))
+                                : <>© {new Date().getFullYear()} <BrandName variant="onDark" accent={false} />. All rights reserved.</>}
+                        </p>
                         <div className="flex gap-4">
                             <Link href="/privacy" className="hover:text-gray-300 transition-colors">Privacy Policy</Link>
                             <Link href="/terms" className="hover:text-gray-300 transition-colors">Terms of Service</Link>
@@ -406,6 +425,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                 </div>
             </footer>
             <BackToTop raised={showStickyCta && !stickyBarDismissed && !onStatement2BooksPage} />
+            <WhatsAppButton number={siteSettings?.whatsapp_number} />
 
             {/* ── STICKY BOTTOM CTA ── */}
             <AnimatePresence>

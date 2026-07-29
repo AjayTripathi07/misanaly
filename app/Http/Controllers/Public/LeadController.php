@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\LeadConfirmation;
 use App\Mail\NewLeadNotification;
 use App\Models\Lead;
+use App\Models\SiteSetting;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -33,7 +34,7 @@ class LeadController extends Controller
 
         // Notify admin
         try {
-            $adminEmail = env('ADMIN_NOTIFICATION_EMAIL', 'admin@misanaly.in');
+            $adminEmail = SiteSetting::get('admin_notification_email') ?: env('ADMIN_NOTIFICATION_EMAIL', 'admin@misanaly.in');
             Mail::to($adminEmail)->send(new NewLeadNotification($lead));
         } catch (\Throwable $e) {
             Log::error('Failed to send admin lead notification', [

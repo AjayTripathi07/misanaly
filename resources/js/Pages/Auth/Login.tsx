@@ -1,7 +1,7 @@
 import { Head, Link, useForm } from '@inertiajs/react';
 import { FormEventHandler, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Lock, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, AlertCircle, CheckCircle, BarChart3, Rocket, ShieldCheck } from 'lucide-react';
 import BrandName from '@/Components/BrandName';
 
 export default function Login({
@@ -37,10 +37,23 @@ export default function Login({
                     <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-indigo-500/10 rounded-full blur-2xl animate-pulse" style={{ animationDuration: '5s', animationDelay: '1s' }} />
 
                     <div className="relative z-10 max-w-md w-full">
-                        <div className="flex items-center gap-3 mb-12">
-                            <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-20 h-20 object-contain" />
-                            <BrandName variant="onDark" className="text-white font-bold text-xl" />
-                        </div>
+                        <motion.div
+                            initial={{ opacity: 0, y: -12 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, ease: 'easeOut' }}
+                            className="flex items-center gap-4 mb-12"
+                        >
+                            <motion.img
+                                src="/images/branding/Icon-navbar.png"
+                                alt="NobelIQ Technologies"
+                                className="w-16 h-16 object-contain drop-shadow-[0_0_18px_rgba(59,130,246,0.35)]"
+                                initial={{ scale: 0.85, rotate: -8 }}
+                                animate={{ scale: 1, rotate: 0 }}
+                                transition={{ duration: 0.7, ease: 'easeOut' }}
+                                whileHover={{ scale: 1.06, rotate: 4 }}
+                            />
+                            <BrandName variant="onDark" className="text-white font-bold text-2xl" />
+                        </motion.div>
 
                         <h1 className="text-4xl xl:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4">
                             Welcome<br />
@@ -52,19 +65,20 @@ export default function Login({
 
                         <div className="space-y-3 mb-16">
                             {[
-                                { icon: '📊', label: 'Real-time Analytics', color: 'from-blue-500/20 to-blue-600/10' },
-                                { icon: '🚀', label: 'Statement2Books — Early Access', color: 'from-violet-500/20 to-violet-600/10' },
-                                { icon: '🔒', label: 'Secure & Private', color: 'from-emerald-500/20 to-emerald-600/10' },
-                            ].map((item, i) => (
+                                { Icon: BarChart3, label: 'Real-time Analytics', color: 'from-blue-500/20 to-blue-600/10' },
+                                { Icon: Rocket, label: 'Statement2Books — Early Access', color: 'from-violet-500/20 to-violet-600/10' },
+                                { Icon: ShieldCheck, label: 'Secure & Private', color: 'from-emerald-500/20 to-emerald-600/10' },
+                            ].map(({ Icon, label, color }, i) => (
                                 <motion.div
-                                    key={item.label}
+                                    key={label}
                                     initial={{ opacity: 0, x: -30 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: 0.3 + i * 0.15, duration: 0.5 }}
-                                    className={`flex items-center gap-3 bg-gradient-to-r ${item.color} border border-white/10 rounded-xl px-4 py-3 backdrop-blur-sm`}
+                                    whileHover={{ x: 4 }}
+                                    className={`flex items-center gap-3 bg-gradient-to-r ${color} border border-white/10 rounded-xl px-4 py-3 backdrop-blur-sm transition-colors`}
                                 >
-                                    <span className="text-xl">{item.icon}</span>
-                                    <span className="text-white/80 text-sm font-medium">{item.label}</span>
+                                    <Icon className="h-5 w-5 text-white/80" strokeWidth={1.75} />
+                                    <span className="text-white/80 text-sm font-medium">{label}</span>
                                 </motion.div>
                             ))}
                         </div>
@@ -87,9 +101,9 @@ export default function Login({
                         transition={{ duration: 0.5, delay: 0.1 }}
                         className="w-full max-w-sm"
                     >
-                        <div className="flex items-center gap-2 mb-8 lg:hidden">
-                            <img src="/images/branding/Icon.png" alt="NobelIQ Technologies" className="w-20 h-20 object-contain" />
-                            <BrandName className="font-bold text-[#0F172A] text-lg" />
+                        <div className="flex items-center gap-3 mb-8 lg:hidden">
+                            <img src="/images/branding/Icon-navbar.png" alt="NobelIQ Technologies" className="w-14 h-14 object-contain" />
+                            <BrandName className="font-bold text-[#0F172A] text-xl" />
                         </div>
 
                         <h2 className="text-2xl font-extrabold text-[#0F172A] mb-1">Sign In</h2>

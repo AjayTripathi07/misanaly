@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\BlogPost;
 use App\Models\Product;
 use App\Models\Service;
+use App\Models\SiteSetting;
 use App\Models\Testimonial;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -42,6 +43,7 @@ class HomeController extends Controller
             'testimonials'    => $testimonials,
             'avgRating'       => $avgRating,
             'latestPosts'     => $latestPosts,
+            'stats'           => SiteSetting::homepageStats(),
         ]);
     }
 }

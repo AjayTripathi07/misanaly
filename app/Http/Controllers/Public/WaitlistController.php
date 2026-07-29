@@ -7,6 +7,7 @@ use App\Mail\WaitlistAdminNotification;
 use App\Mail\WaitlistConfirmation;
 use App\Models\Product;
 use App\Models\ProductWaitlist;
+use App\Models\SiteSetting;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -53,8 +54,8 @@ class WaitlistController extends Controller
 
         // Admin notification
         try {
-            Mail::to(env('ADMIN_NOTIFICATION_EMAIL', 'admin@misanaly.in'))
-                ->send(new WaitlistAdminNotification($entry));
+            $adminEmail = SiteSetting::get('admin_notification_email') ?: env('ADMIN_NOTIFICATION_EMAIL', 'admin@misanaly.in');
+            Mail::to($adminEmail)->send(new WaitlistAdminNotification($entry));
         } catch (\Throwable $e) {
             Log::error('Waitlist admin notification failed', ['id' => $entry->id, 'error' => $e->getMessage()]);
         }
