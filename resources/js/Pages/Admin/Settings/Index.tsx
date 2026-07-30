@@ -50,6 +50,7 @@ interface FormFields {
     // SEO & Tracking
     default_meta_description: string;
     og_image_url: string;
+    gtm_container_id: string;
     google_analytics_id: string;
     meta_pixel_id: string;
     // Site Behavior
@@ -101,6 +102,7 @@ export default function SettingsIndex({ settings }: Props) {
         business_hours: settings.business_hours ?? '',
         default_meta_description: settings.default_meta_description ?? '',
         og_image_url: settings.og_image_url ?? '',
+        gtm_container_id: settings.gtm_container_id ?? '',
         google_analytics_id: settings.google_analytics_id ?? '',
         meta_pixel_id: settings.meta_pixel_id ?? '',
         maintenance_mode: settings.maintenance_mode ?? '0',
@@ -319,11 +321,17 @@ export default function SettingsIndex({ settings }: Props) {
                                         <Input {...field('og_image_url')} placeholder="https://nobeliqtechnologies.com/og-image.png" />
                                         {errors.og_image_url && <p className="text-xs text-red-500">{errors.og_image_url}</p>}
                                     </div>
+                                    <div className="space-y-1.5">
+                                        <Label htmlFor="gtm_container_id">Google Tag Manager Container ID</Label>
+                                        <Input {...field('gtm_container_id')} placeholder="GTM-XXXXXXX" />
+                                        <p className="text-xs text-[#0F172A]/40">GTM container ID. Injects the head script and body noscript tag. Leave blank to skip GTM.</p>
+                                        {errors.gtm_container_id && <p className="text-xs text-red-500">{errors.gtm_container_id}</p>}
+                                    </div>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div className="space-y-1.5">
                                             <Label htmlFor="google_analytics_id">Google Analytics ID</Label>
                                             <Input {...field('google_analytics_id')} placeholder="G-XXXXXXX" />
-                                            <p className="text-xs text-[#0F172A]/40">GA4 measurement ID. Leave blank to skip loading analytics.</p>
+                                            <p className="text-xs text-[#0F172A]/40">GA4 measurement ID (standalone gtag.js). Can be used alongside or instead of GTM. Leave blank to skip.</p>
                                             {errors.google_analytics_id && <p className="text-xs text-red-500">{errors.google_analytics_id}</p>}
                                         </div>
                                         <div className="space-y-1.5">

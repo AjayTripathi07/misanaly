@@ -48,6 +48,7 @@ class SiteSettingsController extends Controller
             // SEO & Tracking
             'default_meta_description'   => '',
             'og_image_url'               => '',
+            'gtm_container_id'           => '',
             'google_analytics_id'        => '',
             'meta_pixel_id'              => '',
             // Site Behavior
@@ -97,6 +98,7 @@ class SiteSettingsController extends Controller
             // SEO & Tracking
             'default_meta_description' => ['nullable', 'string', 'max:500'],
             'og_image_url'             => ['nullable', 'string', 'max:500'],
+            'gtm_container_id'         => ['nullable', 'string', 'max:50', 'regex:/^(GTM-[A-Z0-9]+)?$/'],
             'google_analytics_id'      => ['nullable', 'string', 'max:50'],
             'meta_pixel_id'            => ['nullable', 'string', 'max:50'],
             // Site Behavior

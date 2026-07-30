@@ -45,7 +45,8 @@ class SiteSettingsSeeder extends Seeder
             // SEO & Tracking
             'default_meta_description' => '',
             'og_image_url'             => '',
-            'google_analytics_id'      => '',
+            'gtm_container_id'         => 'GTM-TL2V782R',
+            'google_analytics_id'      => 'G-HX1M5TT1YJ',
             'meta_pixel_id'            => '',
             // Site Behavior
             'maintenance_mode'         => '0',
