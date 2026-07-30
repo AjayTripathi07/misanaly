@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RobotsController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\Public\AboutController;
 use App\Http\Controllers\Public\BlogController;
@@ -36,6 +37,9 @@ Route::post('/waitlist', [WaitlistController::class, 'store'])->name('waitlist.s
 
 // Sitemap
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+
+// Robots
+Route::get('/robots.txt', [RobotsController::class, 'index'])->name('robots');
 
 // Placeholder pages
 Route::get('/portfolio', fn () => Inertia::render('Placeholder', ['page' => 'Portfolio']))->name('portfolio');
