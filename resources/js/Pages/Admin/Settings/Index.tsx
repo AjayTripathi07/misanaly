@@ -175,7 +175,7 @@ export default function SettingsIndex({ settings }: Props) {
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div className="space-y-1.5">
                                             <Label htmlFor="email">Email</Label>
-                                            <Input type="email" {...field('email')} placeholder="hello@nobeliqtechnologies.com" />
+                                            <Input type="email" {...field('email')} placeholder="hello@nobeliq.in" />
                                             {errors.email && <p className="text-xs text-red-500">{errors.email}</p>}
                                         </div>
                                         <div className="space-y-1.5">
@@ -318,7 +318,7 @@ export default function SettingsIndex({ settings }: Props) {
                                     </div>
                                     <div className="space-y-1.5">
                                         <Label htmlFor="og_image_url">OG Image URL</Label>
-                                        <Input {...field('og_image_url')} placeholder="https://nobeliqtechnologies.com/og-image.png" />
+                                        <Input {...field('og_image_url')} placeholder="https://nobeliq.in/og-image.png" />
                                         {errors.og_image_url && <p className="text-xs text-red-500">{errors.og_image_url}</p>}
                                     </div>
                                     <div className="space-y-1.5">
