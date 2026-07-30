@@ -34,7 +34,7 @@ class LeadController extends Controller
 
         // Notify admin
         try {
-            $adminEmail = SiteSetting::get('admin_notification_email') ?: env('ADMIN_NOTIFICATION_EMAIL', 'admin@misanaly.in');
+            $adminEmail = SiteSetting::get('admin_notification_email') ?: env('ADMIN_NOTIFICATION_EMAIL', 'info@nobeliq.in');
             Mail::to($adminEmail)->send(new NewLeadNotification($lead));
         } catch (\Throwable $e) {
             Log::error('Failed to send admin lead notification', [

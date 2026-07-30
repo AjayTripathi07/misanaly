@@ -13,7 +13,7 @@ return new class extends Migration {
         });
 
         DB::table('users')
-            ->where('email', 'admin@misanaly.in')
+            ->where('email', 'info@nobeliq.in')
             ->update(['is_admin' => true]);
     }
 

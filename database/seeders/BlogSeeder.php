@@ -12,7 +12,7 @@ class BlogSeeder extends Seeder
 {
     public function run(): void
     {
-        $admin = User::where('email', 'admin@misanaly.in')->firstOrFail();
+        $admin = User::where('email', 'info@nobeliq.in')->firstOrFail();
 
         // Categories
         $tally = BlogCategory::updateOrCreate(

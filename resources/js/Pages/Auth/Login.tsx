@@ -127,7 +127,7 @@ export default function Login({
                                         onChange={(e) => setData('email', e.target.value)}
                                         autoComplete="username"
                                         required
-                                        placeholder="admin@misanaly.in"
+                                        placeholder="info@nobeliq.in"
                                         className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm text-[#0F172A] placeholder-[#0F172A]/30 focus:outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20 transition-all"
                                     />
                                 </div>

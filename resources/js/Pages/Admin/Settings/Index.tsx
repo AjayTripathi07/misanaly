@@ -296,7 +296,7 @@ export default function SettingsIndex({ settings }: Props) {
                                     <h3 className="text-sm font-semibold text-[#0F172A] pb-3 border-b border-gray-100">Contact & Communication</h3>
                                     <div className="space-y-1.5">
                                         <Label htmlFor="admin_notification_email">Admin Notification Email</Label>
-                                        <Input type="email" {...field('admin_notification_email')} placeholder="admin@misanaly.in" />
+                                        <Input type="email" {...field('admin_notification_email')} placeholder="info@nobeliq.in" />
                                         <p className="text-xs text-[#0F172A]/40">Where new lead and waitlist notifications are sent. Leave blank to use the server default.</p>
                                         {errors.admin_notification_email && <p className="text-xs text-red-500">{errors.admin_notification_email}</p>}
                                     </div>

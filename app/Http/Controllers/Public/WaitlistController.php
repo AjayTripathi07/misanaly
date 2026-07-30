@@ -54,7 +54,7 @@ class WaitlistController extends Controller
 
         // Admin notification
         try {
-            $adminEmail = SiteSetting::get('admin_notification_email') ?: env('ADMIN_NOTIFICATION_EMAIL', 'admin@misanaly.in');
+            $adminEmail = SiteSetting::get('admin_notification_email') ?: env('ADMIN_NOTIFICATION_EMAIL', 'info@nobeliq.in');
             Mail::to($adminEmail)->send(new WaitlistAdminNotification($entry));
         } catch (\Throwable $e) {
             Log::error('Waitlist admin notification failed', ['id' => $entry->id, 'error' => $e->getMessage()]);

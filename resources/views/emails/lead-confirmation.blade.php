@@ -19,7 +19,7 @@ Our team has reviewed your message and will be in touch shortly with the informa
 3. We schedule a call or demo at your convenience
 @endcomponent
 
-In the meantime, you can explore our services and products at [misanaly.in]({{ config('app.url') }}).
+In the meantime, you can explore our services and products at [nobeliq.in]({{ config('app.url') }}).
 
 If you have any urgent questions, feel free to reply to this email or reach us at **info@nobeliq.in**.
 
@@ -32,5 +32,5 @@ Warm regards,
 
 ---
 
-*You received this email because you submitted an enquiry on misanaly.in. If this wasn't you, please ignore this email.*
+*You received this email because you submitted an enquiry on nobeliq.in. If this wasn't you, please ignore this email.*
 @endcomponent
