@@ -28,6 +28,9 @@ interface Service {
     name: string;
     tagline: string;
     description: string;
+    seo_title: string | null;
+    seo_description: string | null;
+    seo_keywords: string | null;
     icon: string;
     starting_price: string | null;
     features: ServiceFeature[];
@@ -91,8 +94,9 @@ export default function Show({ service, relatedServices, faqs }: Props) {
     return (
         <PublicLayout>
             <SeoHead
-                title={service.name}
-                description={service.tagline}
+                title={service.seo_title || service.name}
+                description={service.seo_description || service.tagline}
+                keywords={service.seo_keywords ?? undefined}
             />
 
             {/* Compact Hero */}

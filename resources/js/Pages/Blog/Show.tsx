@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { Head, Link } from '@inertiajs/react';
-import SeoHead from '@/Components/SeoHead';
+import SeoHead, { getSiteOrigin } from '@/Components/SeoHead';
 import { motion, useInView } from 'framer-motion';
 import {
     CalendarDays,
@@ -111,7 +111,7 @@ export default function BlogShow({ post, related }: Props) {
                     publisher: {
                         '@type': 'Organization',
                         name: 'NobelIQ Technologies',
-                        url: 'https://misanaly.in',
+                        url: getSiteOrigin(),
                     },
                     ...(post.cover_image ? { image: post.cover_image } : {}),
                 })}</script>

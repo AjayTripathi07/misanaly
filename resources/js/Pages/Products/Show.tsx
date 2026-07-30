@@ -56,6 +56,9 @@ interface Product {
     name: string;
     tagline: string;
     description: string;
+    seo_title: string | null;
+    seo_description: string | null;
+    seo_keywords: string | null;
     pricing_model: string;
     demo_url: string | null;
     features: ProductFeature[];
@@ -194,8 +197,9 @@ export default function ProductShow({ product, faqs, stats }: Props) {
     return (
         <PublicLayout>
             <SeoHead
-                title={product.name}
-                description={product.tagline}
+                title={product.seo_title || product.name}
+                description={product.seo_description || product.tagline}
+                keywords={product.seo_keywords ?? undefined}
             />
             <Head>
                 <script type="application/ld+json">{JSON.stringify({

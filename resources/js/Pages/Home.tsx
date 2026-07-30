@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
-import SeoHead from '@/Components/SeoHead';
+import SeoHead, { getSiteOrigin } from '@/Components/SeoHead';
 import {
     Globe, Smartphone, Code2, Brain, Network, Palette,
     Cloud, Wrench, HeadphonesIcon, Building2, Star, Quote,
@@ -251,7 +251,7 @@ export default function Home({ services, hasMoreServices, featuredProduct, testi
                     '@context': 'https://schema.org',
                     '@type': 'Organization',
                     name: 'NobelIQ Technologies',
-                    url: 'https://misanaly.in',
+                    url: getSiteOrigin(),
                     description: 'IT Services and Software Products company based in India',
                     contactPoint: {
                         '@type': 'ContactPoint',

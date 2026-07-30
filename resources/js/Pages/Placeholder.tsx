@@ -1,6 +1,7 @@
-import { Head, Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import { Construction, ArrowLeft } from 'lucide-react';
 import PublicLayout from '@/Layouts/PublicLayout';
+import SeoHead from '@/Components/SeoHead';
 import { Button } from '@/Components/ui/button';
 
 interface Props {
@@ -10,7 +11,10 @@ interface Props {
 export default function Placeholder({ page }: Props) {
     return (
         <PublicLayout>
-            <Head title={page} />
+            <SeoHead
+                title={page}
+                description={`${page} — NobelIQ Technologies is preparing this page. Check back soon.`}
+            />
             <section className="min-h-[70vh] flex items-center justify-center bg-[#F8FAFC]">
                 <div className="text-center px-4">
                     <div className="w-20 h-20 rounded-2xl bg-blue-100 flex items-center justify-center mx-auto mb-6">

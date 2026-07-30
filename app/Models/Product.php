@@ -8,6 +8,7 @@ class Product extends Model
 {
     protected $fillable = [
         'slug', 'name', 'tagline', 'description',
+        'seo_title', 'seo_description', 'seo_keywords',
         'status', 'pricing_model', 'demo_url', 'sort_order', 'is_featured',
     ];
 

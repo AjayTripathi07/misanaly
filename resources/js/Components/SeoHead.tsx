@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 
 interface SeoHeadProps {
     title: string;
@@ -12,6 +12,15 @@ const SITE_NAME = 'NobelIQ Technologies';
 const DEFAULT_OG_IMAGE = '/images/og-default.jpg';
 // Place a 1200×630 px image at public/images/og-default.jpg to activate the default OG image.
 
+/**
+ * Current deployment's origin (protocol + host), read from the browser at render
+ * time. No SSR is configured, so this always resolves to the domain the page was
+ * actually served from — local, staging, or production — with nothing hardcoded.
+ */
+export function getSiteOrigin(): string {
+    return typeof window !== 'undefined' ? window.location.origin : '';
+}
+
 export default function SeoHead({
     title,
     description,
@@ -19,15 +28,18 @@ export default function SeoHead({
     ogImage,
     canonicalUrl,
 }: SeoHeadProps) {
+    const { url } = usePage();
     const fullTitle = `${title} | ${SITE_NAME}`;
     const image = ogImage ?? DEFAULT_OG_IMAGE;
+    const origin = getSiteOrigin();
+    const resolvedCanonical = canonicalUrl ?? (origin ? `${origin}${url.split('?')[0]}` : undefined);
 
     return (
         <Head>
             <title>{fullTitle}</title>
             <meta name="description" content={description} />
             {keywords && <meta name="keywords" content={keywords} />}
-            {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+            {resolvedCanonical && <link rel="canonical" href={resolvedCanonical} />}
 
             {/* Open Graph */}
             <meta property="og:type" content="website" />
@@ -35,7 +47,7 @@ export default function SeoHead({
             <meta property="og:title" content={fullTitle} />
             <meta property="og:description" content={description} />
             <meta property="og:image" content={image} />
-            {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+            {resolvedCanonical && <meta property="og:url" content={resolvedCanonical} />}
 
             {/* Twitter Card */}
             <meta name="twitter:card" content="summary_large_image" />

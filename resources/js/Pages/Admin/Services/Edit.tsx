@@ -25,6 +25,9 @@ interface ServiceData {
     slug: string;
     tagline: string;
     description: string;
+    seo_title: string | null;
+    seo_description: string | null;
+    seo_keywords: string | null;
     icon: string;
     starting_price: string | null;
     status: 'active' | 'inactive';
@@ -48,6 +51,9 @@ export default function Edit({ service }: Props) {
         slug: service.slug,
         tagline: service.tagline,
         description: service.description,
+        seo_title: service.seo_title ?? '',
+        seo_description: service.seo_description ?? '',
+        seo_keywords: service.seo_keywords ?? '',
         icon: service.icon,
         starting_price: service.starting_price ?? '',
         status: service.status,
@@ -228,6 +234,47 @@ export default function Edit({ service }: Props) {
                                             <p className="text-red-500 text-xs mt-1">{errors.starting_price}</p>
                                         )}
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* SEO Card */}
+                        <div className="bg-white border border-gray-100 rounded-xl p-6">
+                            <h2 className="font-semibold text-[#0F172A] mb-5">SEO</h2>
+                            <div className="space-y-4">
+                                <div>
+                                    <Label htmlFor="seo_title" className="text-sm font-medium text-[#0F172A]">SEO Title</Label>
+                                    <Input
+                                        id="seo_title"
+                                        value={data.seo_title}
+                                        onChange={(e) => setData('seo_title', e.target.value)}
+                                        className="mt-1"
+                                        placeholder="Falls back to Name if left blank"
+                                    />
+                                    {errors.seo_title && <p className="text-red-500 text-xs mt-1">{errors.seo_title}</p>}
+                                </div>
+                                <div>
+                                    <Label htmlFor="seo_description" className="text-sm font-medium text-[#0F172A]">SEO Description</Label>
+                                    <Textarea
+                                        id="seo_description"
+                                        value={data.seo_description}
+                                        onChange={(e) => setData('seo_description', e.target.value)}
+                                        rows={2}
+                                        className="mt-1"
+                                        placeholder="Falls back to Tagline if left blank"
+                                    />
+                                    {errors.seo_description && <p className="text-red-500 text-xs mt-1">{errors.seo_description}</p>}
+                                </div>
+                                <div>
+                                    <Label htmlFor="seo_keywords" className="text-sm font-medium text-[#0F172A]">SEO Keywords</Label>
+                                    <Input
+                                        id="seo_keywords"
+                                        value={data.seo_keywords}
+                                        onChange={(e) => setData('seo_keywords', e.target.value)}
+                                        className="mt-1"
+                                        placeholder="Comma-separated keywords"
+                                    />
+                                    {errors.seo_keywords && <p className="text-red-500 text-xs mt-1">{errors.seo_keywords}</p>}
                                 </div>
                             </div>
                         </div>

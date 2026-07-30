@@ -31,6 +31,9 @@ export default function Create() {
         slug: '',
         tagline: '',
         description: '',
+        seo_title: '',
+        seo_description: '',
+        seo_keywords: '',
         pricing_model: 'one-time',
         demo_url: '',
         status: 'active' as 'active' | 'inactive',
@@ -174,6 +177,47 @@ export default function Create() {
                                         />
                                         {errors.demo_url && <p className="text-red-500 text-xs mt-1">{errors.demo_url}</p>}
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* SEO Card */}
+                        <div className="bg-white border rounded-xl p-6">
+                            <h2 className="font-semibold text-[#0F172A] mb-5">SEO</h2>
+                            <div className="space-y-4">
+                                <div>
+                                    <Label htmlFor="seo_title" className="text-sm font-medium text-[#0F172A]">SEO Title</Label>
+                                    <Input
+                                        id="seo_title"
+                                        value={data.seo_title}
+                                        onChange={e => setData('seo_title', e.target.value)}
+                                        className="mt-1"
+                                        placeholder="Falls back to Name if left blank"
+                                    />
+                                    {errors.seo_title && <p className="text-red-500 text-xs mt-1">{errors.seo_title}</p>}
+                                </div>
+                                <div>
+                                    <Label htmlFor="seo_description" className="text-sm font-medium text-[#0F172A]">SEO Description</Label>
+                                    <Textarea
+                                        id="seo_description"
+                                        value={data.seo_description}
+                                        onChange={e => setData('seo_description', e.target.value)}
+                                        rows={2}
+                                        className="mt-1"
+                                        placeholder="Falls back to Tagline if left blank"
+                                    />
+                                    {errors.seo_description && <p className="text-red-500 text-xs mt-1">{errors.seo_description}</p>}
+                                </div>
+                                <div>
+                                    <Label htmlFor="seo_keywords" className="text-sm font-medium text-[#0F172A]">SEO Keywords</Label>
+                                    <Input
+                                        id="seo_keywords"
+                                        value={data.seo_keywords}
+                                        onChange={e => setData('seo_keywords', e.target.value)}
+                                        className="mt-1"
+                                        placeholder="Comma-separated keywords"
+                                    />
+                                    {errors.seo_keywords && <p className="text-red-500 text-xs mt-1">{errors.seo_keywords}</p>}
                                 </div>
                             </div>
                         </div>
