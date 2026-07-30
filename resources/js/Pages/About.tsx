@@ -40,7 +40,7 @@ const whyUsItems = [
     { icon: Award, title: 'Proven Track Record', desc: '50+ projects delivered successfully across industries.' },
     { icon: Lightbulb, title: 'Innovation First', desc: "We stay ahead of technology trends so you don't have to." },
     { icon: Clock, title: 'On-Time Delivery', desc: 'We respect your deadlines with agile, milestone-driven delivery.' },
-    { icon: LifeBuoy, title: 'Dedicated Support', desc: 'Reachable Mon–Fri, 10 AM–7 PM for critical systems.' },
+    { icon: LifeBuoy, title: 'Dedicated Support', desc: 'Reachable Mon–Fri 9 AM–6 PM, Sat 10 AM–2 PM for critical systems.' },
     { icon: Target, title: 'Goal-Oriented', desc: 'Every decision we make is aligned with your business objectives.' },
     { icon: Heart, title: 'Client-Centric', desc: 'Your success is our success. We go the extra mile, every time.' },
     { icon: Handshake, title: 'Long-term Partnership', desc: 'We build relationships, not just software.' },
